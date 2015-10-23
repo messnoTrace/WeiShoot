@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">微摄</string>
+    <string name="app_name">每日舌尖</string>
     <string name="title_activity_registered">RegisteredActivity</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
@@ -11,5 +11,6 @@
     <string name="about_weishoot"> 微摄是基于移动互联网终端技术的一个应用平台，能够为全球摄影爱好者提供实时的互动式交流并提供各种增值服务，通过严密的设计流程，摄影爱好者不仅可以获得包括摄影技术在内的各种互动体验，更重要的是能够通过微摄app进行图片的交易，从而实现图片的财富价值</string>
     <string name="title_activity_find_people">FindPeopleActivity</string>
     <string name="title_activity_look_around">LookAroundActivity</string>
+    <string name="title_activity_topic_detail">TopicDetailActivity</string>
 
 </resources>

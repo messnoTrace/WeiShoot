@@ -1,10 +1,5 @@
 package com.NationalPhotograpy.weishoot;
 
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ListView;
-
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.adapter.HomeAdapter;
 import com.NationalPhotograpy.weishoot.bean.TopicBean;
@@ -25,9 +20,15 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
-public class LookAroundActivity extends BaseActivity {
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ListView;
+
+public class TopicDetailActivity extends BaseActivity {
+
 	
-    private PullToRefreshListView lv_pulltorefresh;
+	private PullToRefreshListView lv_pulltorefresh;
     private String lastDataTime = "";
     
     private ListView homeListView;
@@ -42,17 +43,17 @@ public class LookAroundActivity extends BaseActivity {
     
 
     private TopicData resultTopicBean;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_look_around);
+		setContentView(R.layout.activity_topic_detail);
+		
 		findview();
 		bindListener();
 		initData();
-
 	}
 
+	
 	private void findview(){
 		
 		 lv_pulltorefresh = (PullToRefreshListView) findViewById(R.id.lv_pulltorefresh);
@@ -66,51 +67,56 @@ public class LookAroundActivity extends BaseActivity {
 				finish();
 			}
 		});
-		 
+		
+	}
+	private void bindListener(){
 		 findViewById(R.id.iv_back).setOnClickListener(new OnClickListener() {
-			
+				
 			@Override
 			public void onClick(View v) {
 
 				finish();
 			}
 		});
-		
-	}
-	private void bindListener(){
-		
-		
-        lv_pulltorefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2() {
 
-            @Override
-            public void onPullDownToRefresh() {
-                // 刷新
-                lastDataTime = "";
-                requestGetTopic();
-            }
+		 
+	      lv_pulltorefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2() {
 
-            @Override
-            public void onPullUpToRefresh() {
-                // 加载
-                requestGetTopic();
-            }
-        });
+	            @Override
+	            public void onPullDownToRefresh() {
+	                // 刷新
+	                lastDataTime = "";
+	                lv_pulltorefresh.onRefreshComplete();
+	            }
+
+	            @Override
+	            public void onPullUpToRefresh() {
+	                // 加载
+	            	 lv_pulltorefresh.onRefreshComplete();
+	            }
+	        });
 		
 	}
 	private void initData(){
-		
-		 requestGetTopic();
+		String ucode=getIntent().getStringExtra("ucode");
+		String tcode=getIntent().getStringExtra("tcode");
+		 requestGetTopic(ucode,tcode);
 	}
 	
 	
-	 private void requestGetTopic() {
+	 private void requestGetTopic(String ucode,String tcode) {
 	        HttpUtils httpUtils = new HttpUtils(1000 * 20);
 	        RequestParams params = new RequestParams();
-	        params.addBodyParameter("UCode", UserInfo.getInstance(this).getUserUCode());
+	        params.addBodyParameter("UCode", ucode);
 	        params.addBodyParameter("PageSize", "5");
 	        params.addBodyParameter("DisplayCom", "5");
 	        params.addBodyParameter("DisplayGood", "5");
-	        params.addBodyParameter("CurrentUCode", UserInfo.getInstance(this).getUserUCode());
+	        params.addBodyParameter("TCode", tcode);
+	        params.addBodyParameter("IsPerson", "1");
+	      
+	        if(UserInfo.getInstance(this).getUserUCode()!=null){
+	            params.addBodyParameter("CurrentUCode", UserInfo.getInstance(this).getUserUCode());
+	        }
 	        // params.addBodyParameter("TType", "");
 	        params.addBodyParameter("CreateDate", lastDataTime);
 	        params.addBodyParameter("TokenKey", HttpUrl.tokenkey);
@@ -121,7 +127,7 @@ public class LookAroundActivity extends BaseActivity {
 	                e.printStackTrace();
 	         
 	                lv_pulltorefresh.onRefreshComplete();
-	                WeiShootToast.makeErrorText(LookAroundActivity.this, getString(R.string.http_timeout),
+	                WeiShootToast.makeErrorText(TopicDetailActivity.this, getString(R.string.http_timeout),
 	                        WeiShootToast.LENGTH_SHORT).show();
 	            }
 
@@ -134,7 +140,7 @@ public class LookAroundActivity extends BaseActivity {
 	                }.getType());
 	                if (topicBean != null && topicBean.result != null) {
 	                    if ("200".equals(topicBean.result.ResultCode)) {
-	                        SharePreManager.getInstance(LookAroundActivity.this).setString("home_topic_json",
+	                        SharePreManager.getInstance(TopicDetailActivity.this).setString("home_topic_json",
 	                                temp);
 	                        if (homeAdapter != null && "".equals(lastDataTime)) {// 刷新操作
 	                            homeAdapter.data.clear();
@@ -146,7 +152,7 @@ public class LookAroundActivity extends BaseActivity {
 	                                    isFinish);
 	                            resultTopicBean = null;
 	                        } else {
-	                            homeAdapter = new HomeAdapter(LookAroundActivity.this, topicBean.data,
+	                            homeAdapter = new HomeAdapter(TopicDetailActivity.this, topicBean.data,
 	                                    homeListView);
 	                            homeListView.setAdapter(homeAdapter);
 	                        }
@@ -155,15 +161,16 @@ public class LookAroundActivity extends BaseActivity {
 	                                    .get(topicBean.data.size() - 1).CreateDate);
 	                        }
 	                    } else {
-	                        WeiShootToast.makeErrorText(LookAroundActivity.this, topicBean.result.ResultMsg,
+	                        WeiShootToast.makeErrorText(TopicDetailActivity.this, topicBean.result.ResultMsg,
 	                                WeiShootToast.LENGTH_SHORT).show();
 	                    }
 	                } else {
-	                    WeiShootToast.makeErrorText(LookAroundActivity.this, getString(R.string.http_timeout),
+	                    WeiShootToast.makeErrorText(TopicDetailActivity.this, getString(R.string.http_timeout),
 	                            WeiShootToast.LENGTH_SHORT).show();
 	                }
 	            }
 	        });
 
 	    }
+
 }

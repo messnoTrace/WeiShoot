@@ -21,6 +21,7 @@ public class BannerBean {
 		public String Title;
 		public String Ucode;
 		public String Url;
+		public String Tcode;
 		
 	}
 	

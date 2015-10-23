@@ -511,7 +511,7 @@ public class FragmentHome extends Fragment implements OnClickListener, OnItemSel
      */
     private void requestAddTopic(final ReqUploadBean uploadBean) {
         progressLoading();
-        HttpUtils httpUtils = new HttpUtils(1000 * 60 * 2);
+        HttpUtils httpUtils = new HttpUtils(1000 * 200 * 2);
         RequestParams params = new RequestParams();
         params.addBodyParameter("UCode", UserInfo.getInstance(getActivity()).getUserUCode());
         params.addBodyParameter("Title", uploadBean.str_Title);

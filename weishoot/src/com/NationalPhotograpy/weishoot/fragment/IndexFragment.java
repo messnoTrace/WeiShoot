@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.NationalPhotograpy.weishoot.R;
+import com.NationalPhotograpy.weishoot.TopicDetailActivity;
 import com.NationalPhotograpy.weishoot.activity.shouye.UserInfoDetialActivity;
 import com.NationalPhotograpy.weishoot.adapter.CommomAdapter;
 import com.NationalPhotograpy.weishoot.adapter.CommomViewHolder;
@@ -153,6 +154,7 @@ public class IndexFragment  extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+            	startActivity(new Intent(mContext,TopicDetailActivity.class).putExtra("ucode", list_photo.get((int)id).Ucode).putExtra("tcode",  list_photo.get((int)id).Tcode));
             }
         });
     }

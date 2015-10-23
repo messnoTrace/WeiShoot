@@ -189,11 +189,12 @@ public class RegisteredActivity extends BaseActivity implements OnClickListener,
                     WeiShootToast.makeErrorText(this, "验证码不能为空", WeiShootToast.LENGTH_SHORT).show();
                     return;
                 }
-                if (totalTime == 60) {
-                    WeiShootToast.makeErrorText(this, "请获取验证码", WeiShootToast.LENGTH_SHORT).show();
-                    return;
-                }
-                SMSSDK.submitVerificationCode("86", phone, code);
+//                if (totalTime == 60) {
+//                    WeiShootToast.makeErrorText(this, "请获取验证码", WeiShootToast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                SMSSDK.submitVerificationCode("86", phone, code);
+                requestRegist(passwordAgain);
                 dialog.show();
 
                 break;

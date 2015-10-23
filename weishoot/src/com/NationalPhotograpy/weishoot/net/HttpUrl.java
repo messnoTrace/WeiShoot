@@ -188,4 +188,6 @@ public class HttpUrl {
     
     public static final String GetRCMDPhotoInfo=url_base+"/Photo/GetRCMDPhotoInfo";
     
+    public static final String GetTopicByTCode=url_base+"/Topic/GetTopicByTCode";
+    
 }

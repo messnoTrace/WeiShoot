@@ -10,7 +10,7 @@
     >
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="#fff"
+        android:background="@color/album_blue"
         android:layout_height="48dp">
 
         <TextView
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:text="每日舌尖"
             android:textSize="20sp"
-            android:textColor="#000"
+            android:textColor="#fff"
 
             android:layout_centerInParent="true"
             />
