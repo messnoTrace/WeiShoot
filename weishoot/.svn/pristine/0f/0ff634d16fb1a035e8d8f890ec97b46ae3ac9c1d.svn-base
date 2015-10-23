@@ -1,0 +1,185 @@
+
+package com.NationalPhotograpy.weishoot.adapter.photograph;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+
+import com.NationalPhotograpy.weishoot.R;
+import com.NationalPhotograpy.weishoot.utils.ImageLoader;
+import com.NationalPhotograpy.weishoot.utils.ImageLoader.Type;
+import com.NationalPhotograpy.weishoot.utils.WeiShootToast;
+
+public class SelectPicAdapter extends BaseAdapter {
+
+    public final int OPEN_CAMERA = 1;
+
+    public final int OPEN_GALLERY = 2;
+
+    private Context mContext;
+
+    // 图片名
+    private List<String> mDatas;
+
+    private String photoGraphType;
+
+    private SelectSinglePicClickListener listener;
+
+    private UploadClickListener uploadListener;
+
+    private OnClickListener openCameraListener;
+
+    private ArrayList<String> mSelectedImage;
+
+    public SelectPicAdapter(Context context, ArrayList<String> mSelectedImage, List<String> mDatas,
+            String photoGraphType) {
+        this.mContext = context;
+        this.mDatas = mDatas;
+        this.mSelectedImage = mSelectedImage;
+        this.photoGraphType = photoGraphType;
+    }
+
+    /**
+     * 选择单张图片
+     */
+    public void setSelectSinglePicClickListener(SelectSinglePicClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface SelectSinglePicClickListener {
+        void singlePicClick(String picPath);
+    }
+
+    /**
+     * 选择多张图片
+     */
+    public void setUploadClickListener(UploadClickListener listener) {
+        this.uploadListener = listener;
+    }
+
+    public interface UploadClickListener {
+        void getPathsClick(ArrayList<String> paths);
+    }
+
+    public void setOpenCameraOnClickListener(OnClickListener listener) {
+        this.openCameraListener = listener;
+    }
+
+    @Override
+    public int getCount() {
+        return mDatas.size() + 1;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.grid_item, null);
+            holder = new ViewHolder();
+            holder.id_item_image = (ImageView) convertView.findViewById(R.id.id_item_image);
+            holder.id_item_select = (ImageButton) convertView.findViewById(R.id.id_item_select);
+            holder.id_item_camera = (ImageView) convertView.findViewById(R.id.id_item_camera);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        if (position == 0) {
+            holder.id_item_camera.setVisibility(View.VISIBLE);
+            holder.id_item_camera.setOnClickListener(openCameraListener);
+        } else {
+            holder.id_item_camera.setVisibility(View.GONE);
+            if ("upload".equals(photoGraphType)) {
+                holder.id_item_select.setVisibility(View.VISIBLE);
+            } else {
+                holder.id_item_select.setVisibility(View.INVISIBLE);
+            }
+            holder.id_item_image.setColorFilter(null);
+            holder.id_item_image.setImageResource(R.drawable.pictures_no);
+            holder.id_item_select.setImageResource(R.drawable.picture_unselected);
+            ImageLoader.getInstance(3, Type.LIFO).loadImage(mDatas.get(position - 1),
+                    holder.id_item_image);
+            /**
+             * 已经选择过的图片，显示出选择过的效果
+             */
+            if (mSelectedImage.contains(mDatas.get(position - 1))) {
+                holder.id_item_select.setImageResource(R.drawable.pictures_selected);
+                holder.id_item_image.setColorFilter(Color.parseColor("#77000000"));
+            } else {
+                holder.id_item_select.setImageResource(R.drawable.picture_unselected);
+                holder.id_item_image.setColorFilter(null);
+            }
+            setListener(holder, position - 1);
+        }
+        return convertView;
+    }
+
+    class ViewHolder {
+        ImageView id_item_image, id_item_camera;
+
+        ImageButton id_item_select;
+
+    }
+
+    private void setListener(final ViewHolder holder, final int position) {
+        holder.id_item_image.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                // 选择单张图片
+                if (!"upload".equals(photoGraphType)) {
+                    listener.singlePicClick(mDatas.get(position));
+                    return;
+                }
+                if (mSelectedImage != null && mSelectedImage.size() == 10) {
+                    WeiShootToast.makeErrorText(mContext, "最多选择10张照片", WeiShootToast.LENGTH_SHORT)
+                            .show();
+                    return;
+                }
+                // 已经选择过该图片
+                if (mSelectedImage.contains(mDatas.get(position))) {
+                    mSelectedImage.remove(mDatas.get(position));
+                    holder.id_item_select.setImageResource(R.drawable.picture_unselected);
+                    holder.id_item_image.setColorFilter(null);
+                } else {// 未选择该图片
+                    mSelectedImage.add(mDatas.get(position));
+                    holder.id_item_select.setImageResource(R.drawable.pictures_selected);
+                    holder.id_item_image.setColorFilter(Color.parseColor("#77000000"));
+                }
+                // 选择多张图片
+                if ("UPLOAD".equals(photoGraphType)) {
+                    uploadListener.getPathsClick(mSelectedImage);
+                }
+
+            }
+        });
+    }
+
+    public void setClearList() {
+        if (mSelectedImage != null) {
+            mSelectedImage.clear();
+        }
+        if (mDatas != null) {
+            mDatas.clear();
+        }
+    }
+}

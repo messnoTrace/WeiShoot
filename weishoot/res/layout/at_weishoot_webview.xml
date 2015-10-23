@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutForShare"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg_blue" >
+
+        <LinearLayout
+            android:id="@+id/layout_back"
+            android:layout_width="60dip"
+            android:layout_height="40dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="11dip"
+                android:layout_height="22dip"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/btn_left" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dip"
+                android:text="返回"
+                android:textColor="@color/white"
+                android:textSize="18dip" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="37dip"
+            android:layout_toLeftOf="@+id/btn_right"
+            android:layout_toRightOf="@+id/layout_back"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="20dip" />
+
+        <Button
+            android:id="@+id/btn_right"
+            android:layout_width="23dip"
+            android:layout_height="23dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/webview_more" />
+    </RelativeLayout>
+
+    <WebView
+        android:id="@+id/mwebview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+</LinearLayout>

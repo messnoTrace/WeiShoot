@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/black" >
+
+    <com.NationalPhotograpy.weishoot.adapter.photograph.AlbumViewPagerLocat
+        android:id="@+id/popViewPager"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <RelativeLayout
+        android:id="@+id/layout_poptop"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="#303434" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dip"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/ibn_popback"
+                android:layout_width="35dip"
+                android:layout_height="35dip"
+                android:layout_gravity="center_vertical"
+                android:background="@color/transparent"
+                android:padding="10dip"
+                android:visibility="invisible"
+                android:src="@drawable/btn_left" />
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="9dip"
+                android:layout_marginTop="9dip"
+                android:background="@color/line_gray" />
+
+            <TextView
+                android:id="@+id/tv_picCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dip"
+                android:singleLine="true"
+                android:text="7/79"
+                android:textColor="@color/white"
+                android:textSize="18dip" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_popok"
+            android:layout_width="70dip"
+            android:layout_height="35dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/icon_ok_green"
+            android:gravity="center"
+            android:text="完成(1/9)"
+            android:textColor="@color/white"
+            android:textSize="14dip" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_popbottom"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#303434" >
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/icon_delete1"
+            android:padding="8dip" />
+    </RelativeLayout>
+
+</RelativeLayout>

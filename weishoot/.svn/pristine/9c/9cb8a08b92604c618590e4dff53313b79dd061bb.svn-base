@@ -1,0 +1,106 @@
+
+package com.NationalPhotograpy.weishoot.activity.find;
+
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+
+import com.NationalPhotograpy.weishoot.R;
+import com.NationalPhotograpy.weishoot.activity.BaseActivity;
+import com.NationalPhotograpy.weishoot.adapter.find.RecommendedListAdapter;
+import com.NationalPhotograpy.weishoot.bean.RecommendBean;
+import com.NationalPhotograpy.weishoot.net.HttpUrl;
+import com.NationalPhotograpy.weishoot.storage.SharePreManager;
+import com.NationalPhotograpy.weishoot.utils.WeiShootToast;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+
+public class RecommendedActivity extends BaseActivity {
+
+    private LinearLayout layout_back;
+
+    private ListView lv_recommended;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.at_recommended_users);
+        initView();
+        initData();
+        setListener();
+    }
+
+    private void initView() {
+        layout_back = (LinearLayout) findViewById(R.id.layout_back);
+        lv_recommended = (ListView) findViewById(R.id.lv_recommended);
+    }
+
+    private void initData() {
+        requestGetRecommendedUsers();
+    }
+
+    private void setListener() {
+        layout_back.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    /**
+     * 获取推荐用户
+     */
+    private void requestGetRecommendedUsers() {
+        HttpUtils httpUtils = new HttpUtils(1000 * 20);
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("UCode", SharePreManager.getInstance(this).getUserUCode());
+        params.addBodyParameter("DisplayNum", "20");
+        params.addBodyParameter("TokenKey", HttpUrl.tokenkey);
+        httpUtils.send(HttpMethod.POST, HttpUrl.GetRecommendedUsers, params,
+                new RequestCallBack<Object>() {
+
+                    @Override
+                    public void onFailure(HttpException e, String s) {
+                        e.printStackTrace();
+                        WeiShootToast.makeErrorText(RecommendedActivity.this,
+                                getString(R.string.http_timeout), WeiShootToast.LENGTH_SHORT)
+                                .show();
+                    }
+
+                    @Override
+                    public void onSuccess(ResponseInfo<Object> objectResponseInfo) {
+                        String temp = (String) objectResponseInfo.result;
+                        RecommendBean userBean = new Gson().fromJson(temp,
+                                new TypeToken<RecommendBean>() {
+                                }.getType());
+                        if (userBean != null && userBean.result != null) {
+                            if ("200".equals(userBean.result.ResultCode)) {
+                                RecommendedListAdapter recommAdapter = new RecommendedListAdapter(
+                                        RecommendedActivity.this);
+                                recommAdapter.setData(userBean.data);
+                                lv_recommended.setAdapter(recommAdapter);
+                            } else {
+                                WeiShootToast.makeErrorText(RecommendedActivity.this,
+                                        userBean.result.ResultMsg, WeiShootToast.LENGTH_SHORT)
+                                        .show();
+                            }
+                        } else {
+                            WeiShootToast.makeErrorText(RecommendedActivity.this,
+                                    getString(R.string.http_timeout), WeiShootToast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
+                });
+
+    }
+}

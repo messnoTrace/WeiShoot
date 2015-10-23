@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <com.NationalPhotograpy.weishoot.view.pullrefresh.PullToRefreshListView
+        xmlns:leju="http://schemas.android.com/apk/res-auto/com.handmark.pulltorefresh.library"
+        android:id="@+id/lv_pulltorefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="-10dp"
+        android:background="@color/find_gray"
+        leju:ptrMode="both" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="50dp" >
+
+        <Button
+            android:id="@+id/btn_left"
+            android:layout_width="10dip"
+            android:layout_height="18dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="5dip"
+            android:background="@drawable/btn_left" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/btn_left"
+            android:text="发现"
+            android:textColor="@color/white"
+            android:textSize="18dip" />
+    </RelativeLayout>
+
+</FrameLayout>

@@ -1,0 +1,134 @@
+
+package com.NationalPhotograpy.weishoot.utils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.drawable.Drawable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
+
+public class StringsUtil {
+
+    /**
+     * 时间格式化
+     */
+    public static String getStringDate(String date) {
+        if (date != null && date.length() >= 20) {
+            // "CreateDate": "/Date(1438587524897)/"
+            long temp = Long.parseLong(date.substring(6, date.length() - 2));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            return sdf.format(new Date(temp));
+        } else {
+            return "";
+        }
+    }
+
+    // 显示时间格式
+    public static String getTimeFormat(String date) {
+        if (date != null && date.length() >= 20) {
+            // "CreateDate": "/Date(1438587524897)/"
+            long oldtime = Long.parseLong(date.substring(6, date.length() - 2));
+            long nowtime = System.currentTimeMillis();
+            long temp = nowtime - oldtime;
+            if (temp / 1000 < 1) {
+                return "刚刚";
+            } else if (temp / 1000 < 60) {
+                return temp / 1000 + "秒前";
+            } else if (temp / 1000 < 3600) {
+                return temp / 1000 / 60 + "分钟前";
+            } else if (temp / 1000 < 86400) {
+                return temp / 1000 / 3600 + "小时前";
+            } else if (temp / 1000 < 604800) {
+                return temp / 1000 / 86400 + "天前";
+            } else if (temp / 1000 < 2419200) {
+                return temp / 1000 / 604800 + "周前";
+            } else {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+                return sdf.format(new Date(oldtime));
+            }
+        } else {
+            return date;
+        }
+    }
+
+    // 获取系统时间戳
+    public static String getTimeFormat() {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        return dateFormat.format(date);
+    }
+
+    /**
+     * 根据文本替换成图片
+     */
+    public static CharSequence strToSmiley(Context context, CharSequence text) {
+        SpannableStringBuilder builder = new SpannableStringBuilder(text);
+        Pattern mPattern = Pattern.compile("\\[em_\\d*\\]");
+        Matcher matcher = mPattern.matcher(text);
+        while (matcher.find()) {
+            Drawable drawable = context.getResources().getDrawable(
+                    context.getResources().getIdentifier(
+                            matcher.group().substring(1, matcher.group().length() - 1), "drawable",
+                            "com.NationalPhotograpy.weishoot"));
+            drawable.setBounds(0, 0, 30, 30);// 这里设置图片的大小
+            ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
+            builder.setSpan(imageSpan, matcher.start(), matcher.end(),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return builder;
+    }
+
+    /**
+     * 汉字转换为汉语拼音首字母，英文字符不变
+     */
+    public static String converterToFirstSpell(String chines) {
+        String pinyinName = "";
+        char[] nameChar = chines.toCharArray();
+        HanyuPinyinOutputFormat defaultFormat = new HanyuPinyinOutputFormat();
+        defaultFormat.setCaseType(HanyuPinyinCaseType.UPPERCASE);
+        defaultFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+        for (int i = 0; i < nameChar.length; i++) {
+            if (nameChar[i] > 128) {
+                try {
+                    pinyinName += PinyinHelper.toHanyuPinyinStringArray(nameChar[i], defaultFormat)[0]
+                            .charAt(0);
+                } catch (BadHanyuPinyinOutputFormatCombination e) {
+                    e.printStackTrace();
+                }
+            } else {
+                pinyinName += nameChar[i];
+            }
+        }
+        return pinyinName;
+    }
+
+    /**
+     * 获取当前应用程序的版本号
+     */
+    public static String getVersionName(Context context) {
+        // 获取系统的包管理的服务
+        PackageManager pm = context.getPackageManager();
+        try {
+            // 得到当前包的相关信息
+            PackageInfo info = pm.getPackageInfo(context.getPackageName(), 0);
+            return info.versionName;
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+            // 不可能发生.
+            return "1";
+        }
+    }
+}

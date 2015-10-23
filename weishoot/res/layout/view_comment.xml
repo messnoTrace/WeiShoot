@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF" >
+
+    <ImageView
+        android:id="@+id/iv_com_head"
+        android:layout_width="30dip"
+        android:layout_height="30dip"
+        android:layout_marginLeft="15dip"
+        android:layout_marginTop="8dip"
+        android:background="@drawable/default_head" />
+
+    <TextView
+        android:id="@+id/tv_com_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginTop="8dip"
+        android:layout_toRightOf="@+id/iv_com_head"
+        android:text="老黄牛"
+        android:textColor="@color/textview_blue"
+        android:textSize="14dip" />
+
+    <TextView
+        android:id="@+id/tv_com_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_com_name"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="10dip"
+        android:layout_toRightOf="@+id/iv_com_head"
+        android:text="北冰洋是一片浩瀚的冰封海洋，周围的气候终年寒冷"
+        android:textColor="#808080"
+        android:textSize="14dip" />
+
+    <TextView
+        android:id="@+id/tv_com_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="8dip"
+        android:text="2月28日 11:35"
+        android:textColor="@color/textview_gray"
+        android:textSize="11dip" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/tv_com_content"
+        android:layout_marginTop="8dip"
+        android:background="@color/line_gray" />
+
+</RelativeLayout>

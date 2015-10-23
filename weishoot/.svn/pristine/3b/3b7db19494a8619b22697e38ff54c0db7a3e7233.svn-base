@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg_blue" >
+
+        <Button
+            android:id="@+id/btn_left"
+            android:layout_width="10dip"
+            android:layout_height="18dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="5dip"
+            android:background="@drawable/btn_left" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/btn_left"
+            android:textColor="@color/white"
+            android:textSize="18dip" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="设置"
+            android:textColor="@color/white"
+            android:textSize="20dip" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/layout_new_push"
+                android:layout_width="match_parent"
+                android:layout_height="55dp" >
+
+                <TextView
+                    android:id="@+id/tv_new_push_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="25dp"
+                    android:text="最新推送"
+                    android:textColor="#000000"
+                    android:textSize="17dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_new_push"
+                    android:layout_width="40dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/bg_check_selector"
+                    android:button="@null" />
+            </RelativeLayout>
+
+            <include layout="@layout/dividing_line" />
+
+            <RelativeLayout
+                android:id="@+id/layout_circle_push"
+                android:layout_width="match_parent"
+                android:layout_height="55dp" >
+
+                <TextView
+                    android:id="@+id/tv_new_circle_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="25dp"
+                    android:text="圈子推送"
+                    android:textColor="#000000"
+                    android:textSize="17dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_circle_push"
+                    android:layout_width="40dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/bg_check_selector"
+                    android:button="@null" />
+            </RelativeLayout>
+
+            <include layout="@layout/dividing_line" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#fafafa" />
+
+            <RelativeLayout
+                android:id="@+id/layout_clear_cache"
+                android:layout_width="match_parent"
+                android:layout_height="55dp" >
+
+                <TextView
+                    android:id="@+id/tv_clear_cache_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="25dp"
+                    android:text="清除缓存"
+                    android:textColor="#000000"
+                    android:textSize="17dp" />
+
+                <ImageView
+                    android:id="@+id/img_clear_cache_corner"
+                    android:layout_width="18dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/right_gray" />
+            </RelativeLayout>
+
+            <include layout="@layout/dividing_line" />
+
+            <RelativeLayout
+                android:id="@+id/layout_about_weishoot"
+                android:layout_width="match_parent"
+                android:layout_height="55dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="25dp"
+                    android:text="关于微摄"
+                    android:textColor="#000000"
+                    android:textSize="17dp" />
+
+                <ImageView
+                    android:id="@+id/img_about_weishoot_corner"
+                    android:layout_width="18dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/right_gray" />
+            </RelativeLayout>
+
+            <include layout="@layout/dividing_line" />
+
+            <RelativeLayout
+                android:id="@+id/layout_help"
+                android:layout_width="match_parent"
+                android:layout_height="55dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="25dp"
+                    android:text="帮助中心"
+                    android:textColor="#000000"
+                    android:textSize="17dp" />
+
+                <ImageView
+                    android:id="@+id/img_help_corner"
+                    android:layout_width="18dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/right_gray" />
+            </RelativeLayout>
+
+            <include layout="@layout/dividing_line" />
+
+            <RelativeLayout
+                android:id="@+id/layout_advice"
+                android:layout_width="match_parent"
+                android:layout_height="55dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="25dp"
+                    android:text="给点建议"
+                    android:textColor="#000000"
+                    android:textSize="17dp" />
+
+                <ImageView
+                    android:id="@+id/img_advice_corner"
+                    android:layout_width="18dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/right_gray" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btn_exit"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="35dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_exit"
+                android:text="安全退出"
+                android:textColor="@color/white"
+                android:textSize="18dp" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

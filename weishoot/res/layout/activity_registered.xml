@@ -1,0 +1,238 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg_blue" >
+
+        <Button
+            android:id="@+id/btn_left"
+            android:layout_width="10dip"
+            android:layout_height="18dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="5dip"
+            android:background="@drawable/btn_left" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/btn_left"
+            android:text="登录"
+            android:textColor="@color/white"
+            android:textSize="18dip" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="注册"
+            android:textColor="@color/white"
+            android:textSize="20dip" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/edt_phone"
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@null"
+            android:hint="请输入您的手机号"
+            android:inputType="phone"
+            android:textColor="#000000"
+            android:textColorHint="@color/textview_gray"
+            android:textCursorDrawable="@null"
+            android:textSize="18dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#dcdcdc" />
+
+        <EditText
+            android:id="@+id/edt_setpassword"
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@null"
+            android:hint="请设置密码"
+            android:inputType="textPassword"
+            android:textColor="#000000"
+            android:textColorHint="@color/textview_gray"
+            android:textCursorDrawable="@null"
+            android:textSize="18dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#dcdcdc" />
+
+        <EditText
+            android:id="@+id/edt_setpassword_again"
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@null"
+            android:hint="请再次输入密码"
+            android:inputType="textPassword"
+            android:textColor="#000000"
+            android:textColorHint="@color/textview_gray"
+            android:textCursorDrawable="@null"
+            android:textSize="18dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#dcdcdc" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/edt_verification_code"
+                android:layout_width="0dp"
+                android:layout_height="45dip"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="请输入收到的验证码"
+                android:textColor="#000000"
+                android:textColorHint="@color/textview_gray"
+                android:textCursorDrawable="@null"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/tv_get_verification_code"
+                android:layout_width="wrap_content"
+                android:layout_height="45dip"
+                android:background="@drawable/tv_get_verification_code"
+                android:gravity="center"
+                android:text="获取验证码"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#dcdcdc" />
+
+        <Button
+            android:id="@+id/btn_registered"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/btn_registered"
+            android:gravity="center"
+            android:text="注册"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="35dip"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:text="注册代表您同意微摄网络使用协议和隐私条款"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/layout_QQ"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="50dip"
+                android:layout_height="50dip"
+                android:scaleType="centerInside"
+                android:src="@drawable/reg_qq" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="QQ注册"
+                android:textColor="#dcdcdc" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_weibo"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/layout_QQ"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="50dip"
+                android:layout_height="50dip"
+                android:scaleType="centerInside"
+                android:src="@drawable/reg_weibo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="微博注册"
+                android:textColor="#dcdcdc" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_wechat"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/layout_QQ"
+            android:clickable="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="50dip"
+                android:layout_height="50dip"
+                android:scaleType="centerInside"
+                android:src="@drawable/reg_wechat" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="微信注册"
+                android:textColor="#dcdcdc" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

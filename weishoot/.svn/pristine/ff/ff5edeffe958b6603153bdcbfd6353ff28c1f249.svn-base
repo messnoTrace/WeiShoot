@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FAFAFA"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg_blue" >
+
+        <LinearLayout
+            android:id="@+id/layout_back"
+            android:layout_width="60dip"
+            android:layout_height="40dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="11dip"
+                android:layout_height="22dip"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/btn_left" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dip"
+                android:text="取消"
+                android:textColor="@color/white"
+                android:textSize="18dip" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dip"
+            android:text="制作影片"
+            android:textColor="@color/white"
+            android:textSize="18dip" />
+
+        <TextView
+            android:id="@+id/tv_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title"
+            android:layout_centerHorizontal="true"
+            android:text="张三"
+            android:textColor="@color/white"
+            android:textSize="14dip" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_movie"
+        android:layout_width="fill_parent"
+        android:layout_height="200dip" >
+
+        <ImageView
+            android:id="@+id/iv_movie"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="fitXY" />
+
+        <LinearLayout
+            android:id="@+id/view_top"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:background="@color/black"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:id="@+id/view_bottom"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_alignParentBottom="true"
+            android:background="@color/black"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:id="@+id/layout_caption"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/view_bottom"
+            android:layout_marginBottom="15dip"
+            android:layout_marginLeft="15dip"
+            android:layout_marginRight="5dip"
+            android:background="@drawable/icon_caption"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_caption"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-1dip"
+                android:gravity="center"
+                android:shadowColor="#000000"
+                android:shadowDx="0"
+                android:shadowDy="-1"
+                android:shadowRadius="1"
+                android:singleLine="true"
+                android:text="点击此处添加字幕"
+                android:textColor="@color/white"
+                android:textSize="10dip" />
+
+            <TextView
+                android:id="@+id/tv_translation"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dip"
+                android:gravity="center"
+                android:shadowColor="#000000"
+                android:shadowDx="0"
+                android:shadowDy="-1"
+                android:shadowRadius="1"
+                android:singleLine="true"
+                android:text="Tap here to add your subtitle"
+                android:textColor="@color/white"
+                android:textSize="8dip" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_pass_manager"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:background="@color/white" >
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_alignParentTop="true"
+            android:background="#EFEFEF" />
+
+        <ImageView
+            android:id="@+id/iv_01"
+            android:layout_width="20dip"
+            android:layout_height="20dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:background="@drawable/icon_zhezhao" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:layout_toRightOf="@+id/iv_01"
+            android:text="使用遮幅"
+            android:textColor="@color/textview_black"
+            android:textSize="17dip" />
+
+        <Button
+            android:id="@+id/click_on_off"
+            android:layout_width="34dip"
+            android:layout_height="20dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dip"
+            android:background="@drawable/bg_check_selector" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_label"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:background="@color/white" >
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_alignParentTop="true"
+            android:background="#EFEFEF" />
+
+        <ImageView
+            android:id="@+id/iv_01"
+            android:layout_width="20dip"
+            android:layout_height="20dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:background="@drawable/icon_biaoqian" />
+
+        <TextView
+            android:id="@+id/tv_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:layout_toRightOf="@+id/iv_01"
+            android:text="添加标签"
+            android:textColor="@color/textview_black"
+            android:textSize="15dip" />
+
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="30dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dip"
+            android:layout_toLeftOf="@+id/iv_label"
+            android:layout_toRightOf="@+id/tv_label"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:id="@+id/layout_label"
+                android:layout_width="wrap_content"
+                android:layout_height="30dip"
+                android:gravity="center_vertical"
+                android:minWidth="300dp"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+
+        <ImageView
+            android:id="@+id/iv_label"
+            android:layout_width="26dip"
+            android:layout_height="30dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dip"
+            android:padding="5dip"
+            android:src="@drawable/icon_right" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:background="@color/white" >
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_alignParentTop="true"
+            android:background="#EFEFEF" />
+
+        <ImageView
+            android:id="@+id/iv_01"
+            android:layout_width="20dip"
+            android:layout_height="20dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:background="@drawable/icon_weizhi" />
+
+        <TextView
+            android:id="@+id/tv_locat_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:layout_toRightOf="@+id/iv_01"
+            android:text="添加位置"
+            android:textColor="@color/textview_black"
+            android:textSize="15dip" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="fill_parent"
+            android:layout_height="30dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="25dip"
+            android:layout_marginTop="12dip"
+            android:layout_toRightOf="@+id/tv_locat_hint"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="13dip" />
+
+        <ImageView
+            android:id="@+id/iv_location"
+            android:layout_width="26dip"
+            android:layout_height="30dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dip"
+            android:padding="5dip"
+            android:src="@drawable/icon_right" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <Button
+            android:id="@+id/btn_complete"
+            android:layout_width="fill_parent"
+            android:layout_height="45dip"
+            android:layout_alignParentBottom="true"
+            android:background="@color/textview_orange"
+            android:gravity="center"
+            android:text="发布"
+            android:textColor="@color/white"
+            android:textSize="18dip" />
+    </RelativeLayout>
+
+</LinearLayout>

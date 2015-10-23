@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="drawable" name="cities_list_divider">@color/cities_list_divider</item>
+    <item type="drawable" name="white_drwable">@color/white</item>
+    <item type="drawable" name="ff7d44_drwable">#ff7d44</item>
+    <item type="drawable" name="f8f8f8_drwable">#ffffff</item>
+    <item type="drawable" name="f0f0f0_drwable">#f0f0f0</item>
+</resources>

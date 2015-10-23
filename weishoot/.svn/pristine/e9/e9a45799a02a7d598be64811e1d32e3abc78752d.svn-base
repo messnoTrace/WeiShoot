@@ -1,0 +1,192 @@
+
+package com.NationalPhotograpy.weishoot.utils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.os.Environment;
+import android.view.View;
+
+public class BitmapUtils1 {
+
+    /**
+     * 以最省内存的方式读取本地资源的图片
+     * 
+     * @see imageButton_fav.setImageResource(R.drawable.guide_fav_1)
+     *      </br>修改为</br>
+     *      imageButton_fav.setImageBitmap(BitmapUtils.readBitMap(this,
+     *      R.drawable.guide_fav_1));
+     * @param context
+     * @param resId
+     * @return
+     */
+    public static Bitmap readBitMap(Context context, int resId) {
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inPreferredConfig = Bitmap.Config.RGB_565;
+        opt.inPurgeable = true;
+        opt.inInputShareable = true;
+        // 获取资源图片
+        try {
+            InputStream is = context.getResources().openRawResource(resId);
+            return BitmapFactory.decodeStream(is, null, opt);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Bitmap getViewBitmap(View v) {
+        v.clearFocus();
+        v.setPressed(false);
+        boolean willNotCache = v.willNotCacheDrawing();
+        v.setWillNotCacheDrawing(false);
+        int color = v.getDrawingCacheBackgroundColor();
+        v.setDrawingCacheBackgroundColor(0);
+        if (color != 0) {
+            v.destroyDrawingCache();
+        }
+        v.buildDrawingCache();
+        Bitmap cacheBitmap = v.getDrawingCache();
+        if (cacheBitmap == null) {
+            return null;
+        }
+        Bitmap bitmap = Bitmap.createBitmap(cacheBitmap);
+        v.destroyDrawingCache();
+        v.setWillNotCacheDrawing(willNotCache);
+        v.setDrawingCacheBackgroundColor(color);
+        return bitmap;
+    }
+
+    /**
+     * 保存bitmap到本地
+     */
+    public static String saveBitmap(Bitmap bm) {
+        String picName = getPhotoFileName();
+        String fileStr = "";
+        File file = null;
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            fileStr = Environment.getExternalStorageDirectory() + "/weishoot/picture/";
+            file = new File(Environment.getExternalStorageDirectory() + "/weishoot/picture/",
+                    picName);
+        } else {
+            fileStr = "/data/data/weishoot/picture/";
+            file = new File("/data/data/weishoot/picture/", picName);
+        }
+        if (!file.exists()) {
+            checkOrSaveDir(fileStr);
+        }
+        if (file.exists()) {
+            file.delete();
+        }
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+            bm.recycle();
+            return file.toString();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 多层目录创建
+     * 
+     * @param path
+     */
+    public static void checkOrSaveDir(String path) {
+        String[] dir = path.split("/");
+        String dist = dir[0];
+        for (int i = 1; i < dir.length; i++) {
+            dist += "/" + dir[i];
+            File mkdir = new File(dist);
+            if (mkdir.exists()) {
+            } else {
+                mkdir.mkdir();
+            }
+        }
+
+    }
+
+    /**
+     * @param folder 例："/weishoot/cache/"
+     * @param picName 例："yingpian1.png"
+     */
+    public static File createCameraPath(String folder, String picName) {
+        String fileStr = "";
+        File file = null;
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            fileStr = Environment.getExternalStorageDirectory() + folder;
+            file = new File(Environment.getExternalStorageDirectory() + folder, picName);
+        } else {
+            fileStr = "/data/data" + folder;
+            file = new File("/data/data" + folder, picName);
+        }
+        if (!file.exists()) {
+            checkOrSaveDir(fileStr);
+        }
+        if (file.exists()) {
+            file.delete();
+        }
+        return file;
+    }
+
+    /**
+     * 图片反转
+     * 
+     * @param img
+     * @return
+     */
+    public Bitmap toturn(Bitmap img) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90); /* 翻转90度 */
+        int width = img.getWidth();
+        int height = img.getHeight();
+        img = Bitmap.createBitmap(img, 0, 0, width, height, matrix, true);
+        return img;
+    }
+
+    /**
+     * 图片缩放
+     * 
+     * @param bigimage
+     * @param newWidth
+     * @param newHeight
+     * @return
+     */
+    public Bitmap tochange(Bitmap bigimage, int newWidth, int newHeight) {
+        // 获取这个图片的宽和高
+        int width = bigimage.getWidth();
+        int height = bigimage.getHeight();
+        // 创建操作图片用的matrix对象
+        Matrix matrix = new Matrix();
+        // 计算缩放率，新尺寸除原始尺寸
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // 缩放图片动作
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap bitmap = Bitmap.createBitmap(bigimage, 0, 0, width, height, matrix, true);
+        return bitmap;
+    }
+
+    // 使用系统当前日期加以调整作为照片的名称
+    public static String getPhotoFileName() {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("'IMG'_yyyyMMdd_HHmmss");
+        return dateFormat.format(date) + ".jpeg";
+    }
+
+}

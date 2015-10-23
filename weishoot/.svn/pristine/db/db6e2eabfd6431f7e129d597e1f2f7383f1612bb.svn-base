@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/layout_top"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg_blue" >
+
+        <LinearLayout
+            android:id="@+id/layout_back"
+            android:layout_width="60dip"
+            android:layout_height="40dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="11dip"
+                android:layout_height="22dip"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/btn_left" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dip"
+                android:text="返回"
+                android:textColor="@color/white"
+                android:textSize="18dip" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="通讯录"
+            android:textColor="@color/white"
+            android:textSize="20dip" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_edittext"
+        android:layout_width="fill_parent"
+        android:layout_height="60dip"
+        android:layout_below="@+id/layout_top"
+        android:background="@color/find_gray"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="40dip"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:layout_marginTop="10dip" >
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="fill_parent"
+                android:layout_height="40dip"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/edittext"
+                android:gravity="center_vertical"
+                android:imeOptions="actionSearch"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@null"
+                android:textSize="18dip" />
+
+            <LinearLayout
+                android:id="@+id/layout_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/icon_search" />
+
+                <TextView
+                    android:id="@+id/tv_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dip"
+                    android:text="搜索"
+                    android:textColor="@color/textview_gray"
+                    android:textSize="14dip" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lvContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layout_edittext"
+        android:background="@color/find_gray" />
+
+    <com.NationalPhotograpy.weishoot.adapter.quanzi.SideBar
+        android:id="@+id/sideBar"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/layout_edittext"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="20dip"
+        android:layout_marginTop="26dp"
+        android:background="@drawable/mm_text_bg_trans" />
+
+</RelativeLayout>

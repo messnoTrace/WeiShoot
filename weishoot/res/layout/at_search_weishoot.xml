@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/find_gray"
+        android:orientation="vertical" >
+
+        <com.NationalPhotograpy.weishoot.view.pullrefresh.PullToRefreshListView
+            xmlns:leju="http://schemas.android.com/apk/res-auto/com.handmark.pulltorefresh.library"
+            android:id="@+id/lv_pulltorefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-10dip"
+            leju:ptrMode="both" />
+    </LinearLayout>
+
+</RelativeLayout>

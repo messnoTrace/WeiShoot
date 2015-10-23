@@ -1,0 +1,525 @@
+package com.NationalPhotograpy.weishoot.view;
+
+import android.content.Context;
+import android.graphics.*;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.util.AttributeSet;
+import android.util.FloatMath;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ImageView;
+
+/**
+ * 使用方法跟普通的ImageView类似.<br/>
+ * <br/>
+ * 
+ * 如果需要切矩形, 需要调用setRect(float width, float height)方法, 设置剪切的矩形宽高.<br/>
+ * 如果需要切圆形, 需要调用setCircle(float diameter)方法, 设置剪切的直径.<br/>
+ * <br/>
+ * 
+ * 保存剪切的图片, 需要调用saveImage(String path)|saveImage(String path, int width)方法.
+ * 该方法只有在设置了剪切矩形或者剪切圆形后才有效.<br/>
+ * 
+ * @author jingtao.wang
+ * 
+ */
+public class ScaleImageView extends ImageView {
+	public static final String CROP_TYPE = "crop_type";// 剪切类型
+	public static final String CROP_RATIO = "crop_ratio";// 所占比例
+
+	public static final int CROP_TYPE_RECT = 1;// 矩形剪切
+	public static final int CROP_TYPE_CIRCLE = 2;// 圆形剪切
+
+	private int cropType = 0;// 剪切类型
+	private static final int cropBgColor = 0x77000000;
+	private static final int cropLineColor = 0xffffffff;
+
+	// We can be in one of these 3 states
+	private static final int NONE = 0;
+	private static final int DRAG = 1;
+	private static final int ZOOM = 2;
+	private int mode = NONE;
+
+	private float bWidth;// 图片宽
+	private float bHeight;// 图片高
+	private float vWidth;// 当前View宽
+	private float vHeight;// 当前view高
+
+	private float currentScale = 1;
+	private float maxScale = 3;// 最大放大比例
+	private float minScale = 0.04f;
+	private float minWidth = 100;// 图片最小宽度
+	private float minHeight = 100;// 图片最小高度
+
+	// These matrices will be used to move and zoom image
+	private Matrix matrix = new Matrix();
+	private Matrix savedMatrix = new Matrix();
+
+	private PointF downPoint = new PointF();
+	private PointF start = new PointF();
+	private PointF mid = new PointF();
+	private float oldDist = 1f;
+
+	Paint paint = new Paint();
+	Path path = new Path();
+	Path pathUp = new Path(); // 上半部分的圆
+	Path pathDown = new Path();// 下半部分的圆
+
+	private long downTime = 0;
+	private OnClickListener listener;
+
+	public ScaleImageView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		init();
+	}
+
+	public ScaleImageView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		init();
+	}
+
+	public ScaleImageView(Context context) {
+		super(context);
+		init();
+	}
+
+	private void init() {
+		setScaleType(ScaleType.MATRIX);
+		setLongClickable(true);
+	}
+
+	/**
+	 * 设置剪切的矩形
+	 * 
+	 * @param width
+	 *            矩形的宽(px)
+	 * @param height
+	 *            矩形的高(px)
+	 */
+	public void setRect(float width, float height) {
+		cropType = CROP_TYPE_RECT;
+		this.minWidth = width;
+		this.minHeight = height;
+		invalidate();
+	}
+
+	/**
+	 * 设置剪切的圆形
+	 * 
+	 * @param diameter
+	 *            直径(px)
+	 */
+	public void setCircle(float diameter) {
+		cropType = CROP_TYPE_CIRCLE;
+		this.minWidth = diameter;
+		this.minHeight = diameter;
+		invalidate();
+	}
+
+	/**
+	 * 设置图片缩放后的最小宽高, 默认最小宽为100px, 高为100px
+	 * 
+	 * @param minWidth
+	 * @param minHeight
+	 */
+	public void setMin(float minWidth, float minHeight) {
+		this.minWidth = minWidth;
+		this.minHeight = minHeight;
+	}
+
+	/**
+	 * 保存图片(同步)
+	 * 
+	 * @param path
+	 *            保存图片的路径
+	 * @return
+	 */
+	public boolean saveImage(String path) {
+		if (cropType == 0 || mode != NONE)
+			return false;
+
+		return ImageUtil.saveBitmap(getCroppedBitmap(), path, true);
+	}
+
+	/**
+	 * 保存图片(同步)
+	 * 
+	 * @param path
+	 *            保存图片的路径
+	 * @param expectedWidth
+	 *            输出图片的期望宽度
+	 * @return
+	 */
+	public boolean saveImage(String path, int expectedWidth) {
+		if (cropType == 0 || mode != NONE)
+			return false;
+		Bitmap croped = getCroppedBitmap();
+		if(croped == null)
+			return false;
+		
+		int height = croped.getHeight() * expectedWidth / croped.getWidth();
+		Bitmap dest = Bitmap.createScaledBitmap(croped, expectedWidth, height,
+				false);
+		if (dest != croped) {
+			croped.recycle();
+		}
+		
+		boolean result = ImageUtil.saveBitmap(dest, path, true);
+		//ImageUtil.scanMedia(getContext(), path);
+		return result;
+	}
+
+	private Bitmap getCroppedBitmap() {
+		Bitmap bmp = getImageBitmap();
+		if (bmp == null)
+			return null;
+
+		float[] values = new float[9];
+		matrix.getValues(values);
+		float scale = values[Matrix.MSCALE_X];
+		float dx = values[Matrix.MTRANS_X];
+		float dy = values[Matrix.MTRANS_Y];
+
+		float destW = minWidth / scale;
+		float destH = minHeight / scale;
+		float destL = Math.max(0, ((vWidth - minWidth) / 2 - dx) / scale);
+		float destT = Math.max(0, ((vHeight - minHeight) / 2 - dy) / scale);
+		try {
+			return Bitmap.createBitmap(bmp, (int) destL, (int) destT,
+					(int) destW, (int) destH);
+		} catch (RuntimeException e) {
+
+		}
+		return null;
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		switch (event.getAction() & MotionEvent.ACTION_MASK) {
+		case MotionEvent.ACTION_DOWN:
+			downTime = System.currentTimeMillis();
+			start.set(event.getX(), event.getY());
+			downPoint.set(event.getX(), event.getY());
+			mode = DRAG;
+			break;
+
+		case MotionEvent.ACTION_POINTER_DOWN:
+			oldDist = spacing(event);
+			if (oldDist > 10f) {
+				midPoint(mid, event);
+				mode = ZOOM;
+			}
+			break;
+
+		case MotionEvent.ACTION_UP:
+			long c = System.currentTimeMillis();
+			PointF upPoint = new PointF(event.getX(), event.getY());
+			if (downTime != 0 && c - downTime < 300) {
+				if (spacing(downPoint, upPoint) <20) {
+					click();
+				}
+			}
+		case MotionEvent.ACTION_POINTER_UP:
+			mode = NONE;
+			check();
+			break;
+
+		case MotionEvent.ACTION_MOVE:
+			if (mode == DRAG) {
+				float x = event.getX();
+				float y = event.getY();
+				postTranslate(x - start.x, y - start.y);
+				start.set(x, y);
+
+			} else if (mode == ZOOM) {
+				float newDist = spacing(event);
+				if (Math.abs(newDist - oldDist) > 5f) {
+					float scale = newDist / oldDist;
+					postScale(scale, mid.x, mid.y);
+					oldDist = newDist;
+				}
+			}
+			break;
+		}
+
+		this.setImageMatrix(matrix);
+		postInvalidate();
+		// check();
+		return true; // indicate event was handled
+	}
+
+	@Override
+	protected void onDraw(final Canvas canvas) {
+		super.onDraw(canvas);
+
+		if (vWidth <= 0 || vHeight <= 0 || bWidth <= 0 || bHeight <= 0) {
+			initSize();
+			invalidate();
+			return;
+		}
+
+		// 绘制矩形
+		if (cropType == CROP_TYPE_RECT) {
+			canvas.save();
+			paint.setColor(cropBgColor);
+			paint.setStyle(Paint.Style.FILL);
+			path.moveTo(0, 0); // 起点
+			path.lineTo(vWidth, 0);
+			path.lineTo(vWidth, vHeight);
+			path.lineTo(0, vHeight);
+
+			path.lineTo((vWidth - minWidth) / 2, (vHeight + minHeight) / 2);
+			path.lineTo((vWidth + minWidth) / 2, (vHeight + minHeight) / 2);
+			path.lineTo((vWidth + minWidth) / 2, (vHeight - minHeight) / 2);
+			path.lineTo((vWidth - minWidth) / 2, (vHeight - minHeight) / 2);
+			path.lineTo((vWidth - minWidth) / 2, (vHeight + minHeight) / 2);
+			path.lineTo(0, vHeight);
+			path.close(); // 闭合到起点
+			canvas.drawPath(path, paint);
+
+			paint.setColor(cropLineColor);
+			paint.setStyle(Paint.Style.STROKE);
+			canvas.drawRect((vWidth - minWidth) / 2, (vHeight - minHeight) / 2,
+					(vWidth + minWidth) / 2, (vHeight + minHeight) / 2, paint);
+
+			canvas.restore();
+		} else if (cropType == CROP_TYPE_CIRCLE) {
+//			canvas.save();
+//
+//			// 上半部分的圆
+//			pathUp.moveTo((vWidth - minWidth) / 2, vHeight / 2);
+//			RectF rect = new RectF((vWidth - minWidth) / 2,
+//					(vHeight - minHeight) / 2, (vWidth + minWidth) / 2,
+//					(vHeight + minHeight) / 2);
+//			pathUp.addArc(rect, 180, 180);
+//			pathUp.lineTo(vWidth, vHeight / 2);
+//			pathUp.lineTo(vWidth, 0);
+//			pathUp.lineTo(0, 0);
+//			pathUp.lineTo(0, vHeight / 2);
+//			pathUp.close();
+//			// canvas.drawPath(pathUp, paint);
+//
+//			// 下半部分的圆
+//			pathDown.moveTo((vWidth + minWidth) / 2, vHeight / 2);
+//			pathDown.addArc(rect, 0, 180);
+//			pathDown.lineTo(0, vHeight / 2);
+//			pathDown.lineTo(0, vHeight);
+//			pathDown.lineTo(vWidth, vHeight);
+//			pathDown.lineTo(vWidth, vHeight / 2);
+//			pathDown.close();
+//
+//			// 将两个path合并
+//			pathDown.addPath(pathUp);
+//
+//			paint.setColor(cropBgColor);
+//			paint.setStyle(Paint.Style.FILL);
+//			canvas.drawPath(pathDown, paint);
+//
+//			// 绘制圆圈的颜色
+//			paint.setColor(cropLineColor);
+//			paint.setStyle(Paint.Style.STROKE);
+//			canvas.drawCircle(vWidth / 2, vHeight / 2, minWidth / 2, paint);
+//
+//			canvas.restore();
+		}
+
+	}
+
+	/** Determine the space between the first two fingers */
+	private float spacing(MotionEvent event) {
+		float x = event.getX(0) - event.getX(1);
+		float y = event.getY(0) - event.getY(1);
+		return FloatMath.sqrt(x * x + y * y);
+	}
+
+	private float spacing(PointF p1, PointF p2) {
+		return FloatMath.sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y)
+				* (p1.y - p2.y));
+	}
+
+	/** Calculate the mid point of the first two fingers */
+	private void midPoint(PointF point, MotionEvent event) {
+		float x = event.getX(0) + event.getX(1);
+		float y = event.getY(0) + event.getY(1);
+		point.set(x / 2, y / 2);
+	}
+
+	private synchronized void postScale(float scale, float sx, float sy) {
+		savedMatrix.set(matrix);
+		matrix.postScale(scale, scale, sx, sy);
+
+		float[] values = new float[9];
+		matrix.getValues(values);
+		float msx = values[Matrix.MSCALE_X];
+		if (msx > maxScale) {
+			scale = maxScale / currentScale;
+			matrix.set(savedMatrix);
+			matrix.postScale(scale, scale, sx, sy);
+		} else if (msx < minScale) {
+			scale = minScale / currentScale;
+			matrix.set(savedMatrix);
+			matrix.postScale(scale, scale, sx, sy);
+		}
+		matrix.getValues(values);
+		currentScale = values[Matrix.MSCALE_X];
+	}
+
+	private synchronized void postTranslate(float dx, float dy) {
+		savedMatrix.set(matrix);
+		matrix.postTranslate(dx, dy);
+	}
+
+	private void check() {
+		float[] values = new float[9];
+		matrix.getValues(values);
+
+		float left = values[Matrix.MTRANS_X];
+		float top = values[Matrix.MTRANS_Y];
+		float sx = values[Matrix.MSCALE_X];
+		float sy = values[Matrix.MSCALE_Y];
+
+		float width = bWidth * sx;
+		float height = bHeight * sy;
+		float right = left + width;
+		float bottom = top + height;
+
+		float deltaX = 0;// 重新计算x偏移量
+		float deltaY = 0;// 重新计算y偏移量
+		if (cropType == 0) {// 没有设置剪切
+			// 计算x偏移量
+			if (width <= vWidth) {
+				if (left < 0) {
+					deltaX = -left;
+				} else if (right > vWidth) {
+					deltaX = vWidth - right;
+				}
+			} else {
+				if (left > 0) {
+					deltaX = -left;
+				} else if (right < vWidth) {
+					deltaX = vWidth - right;
+				}
+			}
+
+			// 计算y偏移量
+			if (height <= vHeight) {
+				if (top < 0) {
+					deltaY = -top;
+				} else if (bottom > vHeight) {
+					deltaY = vHeight - bottom;
+				}
+			} else {
+				if (top > 0) {
+					deltaY = -top;
+				} else if (bottom < vHeight) {
+					deltaY = vHeight - bottom;
+				}
+			}
+		} else {// 如果设置了剪切变量
+			// 计算剪切的边缘
+			float cropL = (vWidth - minWidth) / 2;
+			float cropR = (vWidth + minWidth) / 2;
+			float cropT = (vHeight - minHeight) / 2;
+			float cropB = (vHeight + minHeight) / 2;
+
+			// 计算x偏移量
+			if (left > cropL) {
+				deltaX = cropL - left;
+			} else if (right < cropR) {
+				deltaX = cropR - right;
+			}
+
+			// 计算y偏移量
+			if (top > cropT) {
+				deltaY = cropT - top;
+			} else if (bottom < cropB) {
+				deltaY = cropB - bottom;
+			}
+		}
+
+		savedMatrix.set(matrix);
+		matrix.postTranslate(deltaX, deltaY);
+	}
+
+	/**
+	 * 初始化界面
+	 */
+	public void initSize() {
+		vWidth = getWidth() + getPaddingLeft() + getPaddingRight();
+		vHeight = getHeight() + getPaddingTop() + getPaddingBottom();
+		if (vWidth < 0 || vHeight < 0) {
+			return;
+		}
+
+		Bitmap bitmap = getImageBitmap();
+		if (bitmap == null) {
+			return;
+		}
+
+		matrix = new Matrix();
+		bWidth = bitmap.getWidth();
+		bHeight = bitmap.getHeight();
+
+		minScale = Math.max(minWidth / bWidth, minHeight / bHeight);
+		maxScale = Math.max(maxScale,
+				Math.max(minWidth / bWidth, minHeight / bHeight) * 3);
+
+		float dx = (vWidth - bWidth) / 2;
+		float dy = (vHeight - bHeight) / 2;
+		postTranslate(dx, dy);
+
+		if (bWidth > vWidth && bHeight > vHeight) {
+			// 图片宽高都大于当前窗口宽高
+			float scale = 1;
+			if (bWidth * vHeight > vWidth * bHeight) {// 图片更宽, 则按高度缩放
+				scale = vHeight / bHeight;
+			} else {// 图片更高, 按宽计算缩放比例
+				scale = vWidth / bWidth;
+			}
+			postScale(scale, vWidth / 2, vHeight / 2);
+		} else if (cropType == CROP_TYPE_RECT || cropType == CROP_TYPE_CIRCLE) {
+			postScale(minScale, vWidth / 2, vHeight / 2);
+		}
+
+		this.setImageMatrix(matrix);
+		invalidate();
+	}
+
+	private Bitmap getImageBitmap() {
+		Drawable drawable = getDrawable();
+		BitmapDrawable bd = (BitmapDrawable) drawable;
+		if (bd != null)
+			return bd.getBitmap();
+
+		return null;
+	}
+
+	private void click() {
+		// 单击事件处理
+		if (listener != null) {
+			listener.onClick(this);
+		}
+	}
+
+	public interface OnClickListener {
+		public void onClick(View v);
+	}
+
+	public void setListener(OnClickListener l) {
+		this.listener = l;
+	}
+
+	@Override
+	public void setImageBitmap(Bitmap bitmap) {
+		super.setImageBitmap(bitmap);
+		initSize();
+	}
+
+	public void setImageBitmap(Bitmap bitmap, boolean resize) {
+		super.setImageBitmap(bitmap);
+		if (resize) {
+			initSize();
+		}
+	}
+}

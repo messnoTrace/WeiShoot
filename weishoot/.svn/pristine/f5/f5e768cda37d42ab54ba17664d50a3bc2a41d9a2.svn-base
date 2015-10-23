@@ -1,0 +1,117 @@
+
+package com.NationalPhotograpy.weishoot.activity.photograph;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+
+import com.NationalPhotograpy.weishoot.R;
+import com.NationalPhotograpy.weishoot.activity.BaseActivity;
+import com.NationalPhotograpy.weishoot.net.HttpUrl;
+import com.NationalPhotograpy.weishoot.storage.Constant;
+import com.NationalPhotograpy.weishoot.utils.WeiShootToast;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+
+/**
+ * 添加翻译页面
+ */
+public class AddCaptionActivity extends BaseActivity implements OnClickListener {
+
+    private LinearLayout layout_back;
+
+    private Button btn_right;
+
+    private EditText et_content;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.at_add_caption);
+        initView();
+        initData();
+        setListener();
+    }
+
+    private void initView() {
+        layout_back = (LinearLayout) findViewById(R.id.layout_back);
+        btn_right = (Button) findViewById(R.id.btn_right);
+        et_content = (EditText) findViewById(R.id.et_content);
+    }
+
+    private void initData() {
+
+    }
+
+    private void setListener() {
+        layout_back.setOnClickListener(this);
+        btn_right.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.layout_back:
+                finish();
+                break;
+            case R.id.btn_right:
+                String et_string = et_content.getText().toString().trim();
+                if (et_string.length() > 0) {
+                    requestTranslation(et_string);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 获取翻译请求
+     */
+    private void requestTranslation(String string) {
+        HttpUtils httpUtils = new HttpUtils(1000 * 20);
+        String captionString = HttpUrl.url_BDTranslation + "?client_id=8PN7KsytYq6ai7QSya0R5MsX&q="
+                + string + "&from=zh&to=en";
+        httpUtils.send(HttpMethod.GET, captionString, new RequestCallBack<Object>() {
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                e.printStackTrace();
+                WeiShootToast.makeErrorText(AddCaptionActivity.this,
+                        getString(R.string.http_timeout), WeiShootToast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(ResponseInfo<Object> objectResponseInfo) {
+                String temp = (String) objectResponseInfo.result;
+                // {"from":"zh","to":"en","trans_result":[{"src":"\u4f60\u597d","dst":"Hello"}]}
+                try {
+                    JSONObject json = new JSONObject(temp);
+                    JSONArray trans_result = json.optJSONArray("trans_result");
+                    JSONObject jsonObj = trans_result.optJSONObject(0);
+                    String src = jsonObj.optString("src");
+                    String dst = jsonObj.optString("dst");
+                    Intent it = new Intent();
+                    it.putExtra("src", src);
+                    it.putExtra("dst", dst);
+                    setResult(Constant.RESULT_CAPTION, it);
+                    finish();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+}

@@ -1,0 +1,172 @@
+
+package com.NationalPhotograpy.weishoot.activity.photograph;
+
+import java.util.ArrayList;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.NationalPhotograpy.weishoot.R;
+import com.NationalPhotograpy.weishoot.activity.BaseActivity;
+import com.NationalPhotograpy.weishoot.adapter.photograph.AlbumViewPagerLocat;
+import com.NationalPhotograpy.weishoot.storage.Constant;
+import com.NationalPhotograpy.weishoot.utils.WeiShootToast;
+import com.NationalPhotograpy.weishoot.view.album.MatrixImageView.OnSingleTapListener;
+
+/**
+ * 选择图片预览
+ */
+public class AdvancePicActivity extends BaseActivity implements OnClickListener,
+        OnSingleTapListener {
+
+    private ImageButton ibn_popback;
+
+    private TextView tv_picCount;
+
+    private Button btn_delete, btn_popok;
+
+    private AlbumViewPagerLocat popViewPager;
+
+    private RelativeLayout layout_poptop, layout_popbottom;
+
+    private int currentIndex;
+
+    private ArrayList<String> mSelectedImage;
+
+    private boolean FlagEdit;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.at_advance_pic);
+        initView();
+        initData();
+        setListener();
+    }
+
+    private void initView() {
+        ibn_popback = (ImageButton) findViewById(R.id.ibn_popback);
+        tv_picCount = (TextView) findViewById(R.id.tv_picCount);
+        btn_popok = (Button) findViewById(R.id.btn_popok);
+        btn_delete = (Button) findViewById(R.id.btn_delete);
+        popViewPager = (AlbumViewPagerLocat) findViewById(R.id.popViewPager);
+        layout_poptop = (RelativeLayout) findViewById(R.id.layout_poptop);
+        layout_popbottom = (RelativeLayout) findViewById(R.id.layout_popbottom);
+    }
+
+    private void initData() {
+        mSelectedImage = getIntent().getStringArrayListExtra("mSelectedImage");
+        popViewPager.setAdapter(popViewPager.new ViewPagerAdapter(mSelectedImage));
+        popViewPager.setCurrentItem(0);
+        tv_picCount.setText(1 + "/" + popViewPager.getAdapter().getCount());
+        btn_popok.setText("完成(" + popViewPager.getAdapter().getCount() + "/10)");
+    }
+
+    private void setListener() {
+        ibn_popback.setOnClickListener(this);
+        btn_popok.setOnClickListener(this);
+        btn_delete.setOnClickListener(this);
+        popViewPager.setOnSingleTapListener(this);
+        popViewPager.setOnPageChangeListener(new OnPageChangeListener() {
+
+            @Override
+            public void onPageSelected(int arg0) {
+                tv_picCount.setText(arg0 + 1 + "/" + popViewPager.getAdapter().getCount());
+                currentIndex = arg0;
+            }
+
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+
+            }
+        });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (FlagEdit) {
+                Intent it = new Intent();
+                it.putStringArrayListExtra("mSelectedImage", mSelectedImage);
+                setResult(Constant.RESULT_ADVANCE_EDIT, it);
+            }
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ibn_popback:
+                finish();
+                break;
+            case R.id.btn_popok:
+                if (mSelectedImage.size() == 0) {
+                    WeiShootToast.makeErrorText(AdvancePicActivity.this, "没有图片",
+                            WeiShootToast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent it = new Intent();
+                it.putStringArrayListExtra("mSelectedImage", mSelectedImage);
+                setResult(Constant.RESULT_ADVANCE_OK, it);
+                finish();
+                break;
+            case R.id.btn_delete:
+                FlagEdit = true;
+                if (currentIndex >= 0 && currentIndex < mSelectedImage.size()) {
+                    mSelectedImage.remove(currentIndex);
+                    popViewPager.setAdapter(popViewPager.new ViewPagerAdapter(mSelectedImage));
+                    if (currentIndex < mSelectedImage.size()) {
+                        popViewPager.setCurrentItem(currentIndex);
+                        tv_picCount.setText(currentIndex + 1 + "/"
+                                + popViewPager.getAdapter().getCount());
+                    } else {
+                        popViewPager.setCurrentItem(currentIndex - 1);
+                        tv_picCount.setText(currentIndex + "/"
+                                + popViewPager.getAdapter().getCount());
+                    }
+                    btn_popok.setText("完成(" + popViewPager.getAdapter().getCount() + "/9)");
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onSingleTap() {
+        // 设置标题以及购买隐藏
+        if (layout_poptop.getVisibility() == View.VISIBLE) {
+            AlphaAnimation animation = new AlphaAnimation(1, 0);
+            animation.setDuration(300);
+            layout_poptop.startAnimation(animation);
+            layout_popbottom.startAnimation(animation);
+            layout_poptop.setVisibility(View.GONE);
+            layout_popbottom.setVisibility(View.GONE);
+        } else {
+            AlphaAnimation animation = new AlphaAnimation(0, 1);
+            animation.setDuration(300);
+            layout_poptop.startAnimation(animation);
+            layout_popbottom.startAnimation(animation);
+            layout_poptop.setVisibility(View.VISIBLE);
+            layout_popbottom.setVisibility(View.VISIBLE);
+        }
+
+    }
+}

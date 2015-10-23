@@ -1,0 +1,209 @@
+
+package com.NationalPhotograpy.weishoot.activity.registered;
+
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.AssetManager;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+
+import com.NationalPhotograpy.weishoot.R;
+import com.NationalPhotograpy.weishoot.activity.BaseActivity;
+import com.NationalPhotograpy.weishoot.activity.MainActivity;
+import com.NationalPhotograpy.weishoot.activity.photograph.WeiShootWebActiivty;
+import com.NationalPhotograpy.weishoot.bean.AdvertisingBean;
+import com.NationalPhotograpy.weishoot.net.HttpUrl;
+import com.NationalPhotograpy.weishoot.storage.SharePreManager;
+import com.NationalPhotograpy.weishoot.storage.StaticInfo;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+
+public class WelcomeActivity extends BaseActivity {
+    private ImageView iv_picture;
+
+    private boolean flag = true;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.at_welcome);
+        initData();
+        importImageInternal();
+        onLoading();
+    }
+
+    private void initData() {
+        iv_picture = (ImageView) findViewById(R.id.iv_picture);
+        DisplayMetrics mDisplayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
+        int W = mDisplayMetrics.widthPixels;
+        int H = mDisplayMetrics.heightPixels;
+        StaticInfo.widthPixels = W;
+        initCa();
+        requestGetAd();
+
+    }
+
+    public void importImageInternal() {
+        new Thread() {
+            public void run() {
+                boolean result = copyFile(getApplicationContext(), "logo.png", "logo.png");
+            }
+        }.start();
+    }
+
+    private void onLoading() {
+        new Thread() {
+            public void run() {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                } finally {
+                    if (flag) {
+                        Intent intent;
+                        intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                }
+            }
+        }.start();
+    }
+
+    public static boolean copyFile(Context context, String srcFilename, String destFilename) {
+        try {
+            FileOutputStream fos = context.openFileOutput(destFilename, Context.MODE_PRIVATE);
+            AssetManager am = context.getAssets();
+            InputStream is = am.open(srcFilename);
+            int len = 0;
+            byte[] buffer = new byte[1024];
+            while ((len = is.read(buffer)) != -1) {
+                fos.write(buffer, 0, len);
+            }
+            fos.flush();
+            fos.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        if (!flag) {
+            Intent intent;
+            intent = new Intent(WelcomeActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    private void initCa() {
+        String temp = SharePreManager.getInstance(this).getAd();
+        AdvertisingBean aInfo = new Gson().fromJson(temp, new TypeToken<AdvertisingBean>() {
+        }.getType());
+        if (aInfo != null && aInfo.result != null) {
+            if ("200".equals(aInfo.result.ResultCode) && aInfo.data != null) {
+                if (aInfo.data.size() > 0) {
+                    ImageLoader.getInstance().displayImage(
+                            aInfo.data.get(0).ImgName,
+                            iv_picture,
+                            new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisc(true)
+                                    .displayer(new RoundedBitmapDisplayer(0))
+                                    .showImageForEmptyUri(R.drawable.welcome).build());
+
+                    final String urlString = aInfo.data.get(0).ALink;
+                    iv_picture.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(WelcomeActivity.this,
+                                    WeiShootWebActiivty.class);
+                            intent.putExtra("url", urlString);
+                            startActivity(intent);
+                            flag = false;
+                        }
+                    });
+                }
+            } else {
+            }
+        } else {
+        }
+    }
+
+    private void requestGetAd() {
+        HttpUtils httpUtils = new HttpUtils(1000 * 20);
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("type", "guide");
+        params.addBodyParameter("TokenKey", HttpUrl.tokenkey);
+        httpUtils.send(HttpMethod.POST, HttpUrl.GetAd, params, new RequestCallBack<Object>() {
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onSuccess(ResponseInfo<Object> objectResponseInfo) {
+                String temp = (String) objectResponseInfo.result;
+                SharePreManager.getInstance(WelcomeActivity.this).setAd(temp);
+                AdvertisingBean aInfo = new Gson().fromJson(temp, new TypeToken<AdvertisingBean>() {
+                }.getType());
+                if (aInfo != null && aInfo.result != null) {
+                    if ("200".equals(aInfo.result.ResultCode) && aInfo.data != null) {
+
+                        if (aInfo.data.size() > 0) {
+
+                            ImageLoader.getInstance().displayImage(
+                                    aInfo.data.get(0).ImgName,
+                                    iv_picture,
+                                    new DisplayImageOptions.Builder().cacheInMemory(true)
+                                            .cacheOnDisc(true)
+                                            .displayer(new RoundedBitmapDisplayer(0))
+                                            .showImageForEmptyUri(R.drawable.welcome).build());
+
+                            final String urlString = aInfo.data.get(0).ALink;
+                            iv_picture.setOnClickListener(new OnClickListener() {
+
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(WelcomeActivity.this,
+                                            WeiShootWebActiivty.class);
+                                    intent.putExtra("url", urlString);
+                                    startActivity(intent);
+                                    flag = false;
+
+                                }
+                            });
+                        }
+
+                    } else {
+
+                    }
+                } else {
+
+                }
+            }
+
+        });
+    }
+
+}

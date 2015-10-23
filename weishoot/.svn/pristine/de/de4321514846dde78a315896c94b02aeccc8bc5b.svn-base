@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="pull_to_load_pull_label">向上滑动加载更多…</string>
+    <string name="pull_to_load_release_label">松手加载更多…</string>
+    <string name="pull_to_load_tap_label">点击刷新…</string>
+    <string name="pull_to_load_loading_label">努力加载中…</string>
+    
+    <string name="pull_to_refresh_pull_label">向下滑动刷新…</string>
+    <string name="pull_to_refresh_release_label">松手刷新…</string>
+    <string name="pull_to_refresh_tap_label">点击刷新…</string>
+    <string name="pull_to_refresh_refreshing_label">努力加载中…</string>
+
+</resources>

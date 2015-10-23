@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutForShare"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/black" >
+
+    <com.NationalPhotograpy.weishoot.view.album.AlbumViewPager
+        android:id="@+id/mViewPager"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <ScrollView
+        android:id="@+id/scrollView_picInfo"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="50dip"
+        android:background="#aa272727"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="50dip" />
+
+            <include layout="@layout/view_pic_info" />
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/layout_top"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dip"
+            android:layout_toLeftOf="@+id/btn_gz"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/ibn_back"
+                android:layout_width="21.8dip"
+                android:layout_height="30dip"
+                android:layout_gravity="center_vertical"
+                android:background="@color/transparent"
+                android:padding="6dip"
+                android:src="@drawable/btn_left" />
+
+            <ImageView
+                android:id="@+id/iv_head"
+                android:layout_width="30dip"
+                android:layout_height="30dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dip"
+                android:scaleType="centerInside"
+                android:src="@drawable/default_head" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dip"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="老黄牛老黄牛老黄牛"
+                    android:textColor="@color/white"
+                    android:textSize="12dip" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dip"
+                    android:singleLine="true"
+                    android:text="2月28日 11:35"
+                    android:textColor="@color/white"
+                    android:textSize="9dip" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_gz"
+            android:layout_width="78dip"
+            android:layout_height="30dip"
+            android:layout_centerInParent="true"
+            android:background="@drawable/icon_gz_w" />
+
+        <TextView
+            android:id="@+id/tv_picSum"
+            android:layout_width="wrap_content"
+            android:layout_height="24dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:background="@color/transparent"
+            android:gravity="bottom"
+            android:text="/24"
+            android:textColor="@color/white"
+            android:textSize="12dip" />
+
+        <TextView
+            android:id="@+id/tv_picCurrent"
+            android:layout_width="wrap_content"
+            android:layout_height="30dip"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="2dp"
+            android:layout_toLeftOf="@+id/tv_picSum"
+            android:background="@color/transparent"
+            android:gravity="bottom"
+            android:text="12"
+            android:textColor="@color/textview_orange"
+            android:textSize="20dip"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dip"
+            android:layout_marginLeft="10dip"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/ibn_picDetail"
+                android:layout_width="115.5dip"
+                android:layout_height="22dip"
+                android:layout_centerInParent="true"
+                android:background="@drawable/pic_detail" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="15dip"
+            android:layout_marginTop="15dip"
+            android:background="@color/line_gray" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dip"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/ibn_picBuy"
+                android:layout_width="78dip"
+                android:layout_height="24dip"
+                android:layout_centerInParent="true"
+                android:background="@drawable/pic_buy" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="15dip"
+            android:layout_marginTop="15dip"
+            android:background="@color/line_gray" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dip"
+            android:layout_weight="1" >
+
+            <Button
+                android:id="@+id/ibn_picShare"
+                android:layout_width="76dip"
+                android:layout_height="25dip"
+                android:layout_centerInParent="true"
+                android:background="@drawable/pic_share" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

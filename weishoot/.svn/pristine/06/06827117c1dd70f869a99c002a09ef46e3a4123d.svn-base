@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fafafa"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dip"
+        android:layout_marginTop="20dp" >
+
+        <ImageButton
+            android:id="@+id/ibtn_edit_head"
+            android:layout_width="75dip"
+            android:layout_height="75dip"
+            android:layout_centerHorizontal="true"
+            android:background="@color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ibtn_head_setting" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="#ffffff" >
+
+        <LinearLayout
+            android:id="@+id/layout_username"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:layout_width="30dip"
+                android:layout_height="30dip"
+                android:layout_gravity="center_vertical"
+                android:background="@color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/edt_img_username" />
+
+            <EditText
+                android:id="@+id/edt_username"
+                android:layout_width="0dp"
+                android:layout_height="50dip"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="请输入您的昵称"
+                android:textColor="#000000"
+                android:textColorHint="@color/textview_gray"
+                android:textCursorDrawable="@null"
+                android:textSize="18dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@id/layout_username"
+            android:background="#f2f2f2" />
+
+        <LinearLayout
+            android:id="@+id/layout_user_sex"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_below="@id/layout_username"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:layout_width="30dip"
+                android:layout_height="30dip"
+                android:layout_gravity="center_vertical"
+                android:background="@color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/select_sex" />
+
+            <TextView
+                android:id="@+id/tv_user_sex"
+                android:layout_width="100dip"
+                android:layout_height="50dip"
+                android:gravity="center"
+                android:text="请选择性别"
+                android:textSize="18dp"
+                android:textColor="#000000" />
+
+            <ImageButton
+                android:id="@+id/ibtn_sex_man"
+                android:layout_width="35dip"
+                android:layout_height="35dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:background="@color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/select_sex_man" />
+
+            <ImageButton
+                android:id="@+id/ibtn_sex_woman"
+                android:layout_width="35dip"
+                android:layout_height="35dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:background="@color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/select_sex_woman" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@id/layout_user_sex"
+            android:background="#f2f2f2" />
+
+        <LinearLayout
+            android:id="@+id/layout_set_password"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_below="@id/layout_user_sex"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:layout_width="30dip"
+                android:layout_height="30dip"
+                android:layout_gravity="center_vertical"
+                android:background="@color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/edt_img_password" />
+
+            <EditText
+                android:id="@+id/edt_password"
+                android:layout_width="0dp"
+                android:layout_height="50dip"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="请输入密码"
+                android:inputType="textPassword"
+                android:textColor="#000000"
+                android:textColorHint="@color/textview_gray"
+                android:textCursorDrawable="@null"
+                android:textSize="18dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@id/layout_set_password"
+            android:background="#f2f2f2" />
+
+        <LinearLayout
+            android:id="@+id/layout_set_password_again"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_below="@id/layout_set_password"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:layout_width="30dip"
+                android:layout_height="30dip"
+                android:layout_gravity="center_vertical"
+                android:background="@color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/edt_img_password" />
+
+            <EditText
+                android:id="@+id/edt_password_again"
+                android:layout_width="0dp"
+                android:layout_height="50dip"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="请再次输入密码"
+                android:inputType="textPassword"
+                android:textColor="#000000"
+                android:textColorHint="@color/textview_gray"
+                android:textCursorDrawable="@null"
+                android:textSize="18dp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_registered"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/btn_registered"
+        android:gravity="center"
+        android:text="注册"
+        android:textColor="#ffffff"
+        android:textSize="18dp" />
+
+</LinearLayout>

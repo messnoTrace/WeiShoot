@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/content_fl"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <com.NationalPhotograpy.weishoot.view.swipelayout.SwipeLayout
+            android:id="@+id/swipe_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white" >
+
+            <LinearLayout
+                android:id="@+id/swipe_btn_ll"
+                android:layout_width="80dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/tv_delete"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="#e40012"
+                    android:gravity="center"
+                    android:text="取消关注"
+                    android:textColor="@color/white"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:id="@+id/img_head"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/default_head" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/tv_user_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textColor="#1a75ba"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/tv_user_signature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textColor="#898989"
+                        android:textSize="16dp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_add_attention"
+                    android:layout_width="65dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/btn_registered"
+                    android:gravity="center"
+                    android:text="+ 关注"
+                    android:textColor="@color/white"
+                    android:textSize="14dip" >
+                </Button>
+            </LinearLayout>
+        </com.NationalPhotograpy.weishoot.view.swipelayout.SwipeLayout>
+    </FrameLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/line_gray" />
+
+</LinearLayout>

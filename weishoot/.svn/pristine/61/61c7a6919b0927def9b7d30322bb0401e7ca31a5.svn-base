@@ -1,0 +1,17 @@
+
+package com.NationalPhotograpy.weishoot.activity;
+
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+
+import com.NationalPhotograpy.weishoot.storage.SharePreManager;
+
+public class BaseActivity extends FragmentActivity {
+    public SharePreManager sp;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sp = SharePreManager.getInstance(this);
+    }
+}

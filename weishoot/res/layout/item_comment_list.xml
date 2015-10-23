@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/rl_comment"
+    android:background="#FFFFFF" >
+
+    <ImageView
+        android:id="@+id/iv_com_head"
+        android:layout_width="33dip"
+        android:layout_height="33dip"
+        android:layout_marginLeft="15dip"
+        android:layout_marginTop="11dip"
+        android:background="@drawable/default_head" />
+
+    <TextView
+        android:id="@+id/tv_com_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginTop="13dip"
+        android:layout_toRightOf="@+id/iv_com_head"
+        android:text="老黄牛"
+        android:textColor="#1a75ba"
+        android:textSize="14dip" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_com_name"
+        android:layout_marginBottom="2dip"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="2dip"
+        android:layout_toRightOf="@+id/iv_com_head"
+        android:text="2月28日 11:35"
+        android:textColor="@color/textview_gray"
+        android:textSize="10dip" />
+
+    <TextView
+        android:id="@+id/tv_com_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_time"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="15dip"
+        android:layout_toRightOf="@+id/iv_com_head"
+        android:text="北冰洋是一片浩瀚的冰封海洋，周围的气候终年寒冷"
+        android:textColor="@color/black"
+        android:textSize="14dip" />
+
+    <Button
+        android:id="@+id/btn_comm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dip"
+        android:layout_marginTop="13dip"
+        android:text="回复"
+        android:padding="5dip"
+        android:background="@color/transparent"
+        android:textColor="#284e80"
+        android:textSize="14dip" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/tv_com_content"
+        android:layout_marginTop="13dip"
+        android:background="@color/line_gray" />
+
+</RelativeLayout>

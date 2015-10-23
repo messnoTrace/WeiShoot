@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/find_gray"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="60dip"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btn_sys"
+                android:layout_width="25dip"
+                android:layout_height="25dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dip"
+                android:background="@drawable/icon_saoyisao1" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="40dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:background="@drawable/edittext" >
+
+                <EditText
+                    android:id="@+id/et_search"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dip"
+                    android:layout_gravity="center_vertical"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:imeOptions="actionSearch"
+                    android:paddingLeft="10dip"
+                    android:paddingRight="10dip"
+                    android:singleLine="true"
+                    android:textColor="@color/textview_gray_dark"
+                    android:textCursorDrawable="@null" />
+
+                <LinearLayout
+                    android:id="@+id/layout_search_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="20dip"
+                        android:layout_height="20dip"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/icon_search" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dip"
+                        android:text="搜索 weishoot"
+                        android:textColor="@color/textview_gray"
+                        android:textSize="14dip" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_ad"
+            android:layout_width="fill_parent"
+            android:layout_height="160dip"
+            android:background="@color/white" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <com.NationalPhotograpy.weishoot.view.adcyclegallery.HomeAdCycleGallery
+                    android:id="@+id/gallery_ad"
+                    android:layout_width="fill_parent"
+                    android:layout_height="160dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_pointAll"
+                android:layout_width="fill_parent"
+                android:layout_height="10dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="5dip"
+                android:layout_marginRight="10dip"
+                android:gravity="center|right"
+                android:orientation="horizontal" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="90dip"
+            android:layout_marginTop="5dip"
+            android:background="@color/white"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/btn_dasai"
+                    android:layout_width="45dip"
+                    android:layout_height="45dip"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dip"
+                    android:background="@drawable/icon_dasai" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dip"
+                    android:text="大赛"
+                    android:textColor="@color/black"
+                    android:textSize="16dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/btn_tudian"
+                    android:layout_width="45dip"
+                    android:layout_height="45dip"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dip"
+                    android:background="@drawable/icon_tudian" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dip"
+                    android:text="图店"
+                    android:textColor="@color/black"
+                    android:textSize="16dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/btn_tupianqiang"
+                    android:layout_width="45dip"
+                    android:layout_height="45dip"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dip"
+                    android:background="@drawable/icon_picqiang" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dip"
+                    android:text="图片墙"
+                    android:textColor="@color/black"
+                    android:textSize="16dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/btn_wsjingpin"
+                    android:layout_width="45dip"
+                    android:layout_height="45dip"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dip"
+                    android:background="@drawable/icon_wsjp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="5dip"
+                    android:text="微摄精品"
+                    android:textColor="@color/black"
+                    android:textSize="16dip" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="10dip"
+            android:text="推荐用户"
+            android:textColor="@color/line_gray_dark"
+            android:textSize="16dip" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="5dip"
+            android:background="#E5E5E5" />
+
+        <LinearLayout
+            android:id="@+id/layout_tuijian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_allCommended"
+            android:layout_width="fill_parent"
+            android:layout_height="40dip"
+            android:background="@color/white"
+            android:text="更多推荐用户"
+            android:textColor="@color/textview_gray"
+            android:textSize="16dip"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="10dip"
+            android:text="热门搜索"
+            android:textColor="@color/line_gray_dark"
+            android:textSize="16dip" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="5dip"
+            android:background="#E5E5E5" />
+
+        <LinearLayout
+            android:id="@+id/layout_hot"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+             >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="45dip"
+                android:background="@color/white"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:layout_width="20dip"
+                        android:layout_height="20dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dip"
+                        android:background="@drawable/icon_red_circle"
+                        android:text="1"
+                        android:textColor="@color/white"
+                        android:textSize="14dip" />
+
+                    <TextView
+                        android:id="@+id/tv_1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dip"
+                        android:gravity="center|left"
+                        android:text="人像"
+                        android:textColor="@color/black"
+                        android:textSize="16dip" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:layout_width="20dip"
+                        android:layout_height="20dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dip"
+                        android:background="@drawable/icon_red_circle"
+                        android:text="2"
+                        android:textColor="@color/white"
+                        android:textSize="14dip" />
+
+                    <TextView
+                        android:id="@+id/tv_2"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dip"
+                        android:gravity="center|left"
+                        android:text="创意"
+                        android:textColor="@color/black"
+                        android:textSize="16dip" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:background="@color/line_gray" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="45dip"
+                android:background="@color/white"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:layout_width="20dip"
+                        android:layout_height="20dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dip"
+                        android:background="@drawable/icon_red_circle"
+                        android:text="3"
+                        android:textColor="@color/white"
+                        android:textSize="14dip" />
+
+                    <TextView
+                        android:id="@+id/tv_3"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dip"
+                        android:gravity="center|left"
+                        android:text="人像"
+                        android:textColor="@color/black"
+                        android:textSize="16dip" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:layout_width="20dip"
+                        android:layout_height="20dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dip"
+                        android:background="@drawable/icon_red_circle"
+                        android:text="4"
+                        android:textColor="@color/white"
+                        android:textSize="14dip" />
+
+                    <TextView
+                        android:id="@+id/tv_4"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dip"
+                        android:gravity="center|left"
+                        android:text="创意"
+                        android:textColor="@color/black"
+                        android:textSize="16dip" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:background="@color/line_gray" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="45dip"
+                android:background="@color/white"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:layout_width="20dip"
+                        android:layout_height="20dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dip"
+                        android:background="@drawable/icon_red_circle"
+                        android:text="5"
+                        android:textColor="@color/white"
+                        android:textSize="14dip" />
+
+                    <TextView
+                        android:id="@+id/tv_5"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dip"
+                        android:gravity="center|left"
+                        android:text="人像"
+                        android:textColor="@color/black"
+                        android:textSize="16dip" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:layout_width="20dip"
+                        android:layout_height="20dip"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dip"
+                        android:background="@drawable/icon_red_circle"
+                        android:text="6"
+                        android:textColor="@color/white"
+                        android:textSize="14dip" />
+
+                    <TextView
+                        android:id="@+id/tv_6"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dip"
+                        android:gravity="center|left"
+                        android:text="创意"
+                        android:textColor="@color/black"
+                        android:textSize="16dip" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:background="@color/line_gray" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="10dip" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

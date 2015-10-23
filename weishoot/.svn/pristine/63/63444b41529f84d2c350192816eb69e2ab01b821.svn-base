@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/rlMLPIItem"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white" >
+
+        <ImageView
+            android:id="@+id/iv01"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/locatie_normal" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dip"
+            android:layout_marginTop="8dip"
+            android:layout_toRightOf="@+id/iv01"
+            android:text="中关村软件园二期
+            djfkdjfkdjfkdjff跌幅较幅较大空间访客登大空间访客登记费"
+            android:textColor="@color/textview_black"
+            android:textSize="15dip" />
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name"
+            android:layout_marginRight="20dip"
+            android:layout_marginTop="3dip"
+            android:layout_toRightOf="@+id/iv01"
+            android:text="北京市海淀区东北旺西路8号北京市海淀区东北旺西路8号北京市海淀区东北旺西路8号北京市海淀区东北旺西路8号"
+            android:textColor="@color/line_gray_dark"
+            android:textSize="13dip" />
+
+        <ImageView
+            android:id="@+id/iv_ok"
+            android:layout_width="15dip"
+            android:layout_height="15dip"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dip"
+            android:layout_marginTop="15dip"
+            android:background="@drawable/icon_duigou" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_below="@+id/tv_address"
+            android:layout_marginTop="8dip"
+            android:background="@color/line_gray_dark" />
+    </RelativeLayout>
+
+</LinearLayout>

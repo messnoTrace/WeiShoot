@@ -1,0 +1,446 @@
+
+package com.NationalPhotograpy.weishoot.view;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PointF;
+import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.util.AttributeSet;
+import android.util.FloatMath;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.ImageView;
+
+import com.NationalPhotograpy.weishoot.R;
+import com.NationalPhotograpy.weishoot.storage.Constant;
+import com.NationalPhotograpy.weishoot.utils.DimensionPixelUtil;
+
+/**
+ * 使用方法跟普通的ImageView类似.<br/>
+ * <br/>
+ * 如果需要切矩形, 需要调用setRect(float width, float height)方法, 设置剪切的矩形宽高.<br/>
+ * 如果需要切圆形, 需要调用setCircle(float diameter)方法, 设置剪切的直径.<br/>
+ * <br/>
+ * 保存剪切的图片, 需要调用saveImage(String path)|saveImage(String path, int width)方法.
+ * 该方法只有在设置了剪切矩形或者剪切圆形后才有效.<br/>
+ * 
+ * @author jingtao.wang
+ */
+public class ScalePictorialView extends ImageView {
+    private static final int NONE = 0;
+
+    private static final int DRAG = 1;
+
+    private static final int ZOOM = 2;
+
+    private int mode = NONE;
+
+    private float bWidth;// 图片宽
+
+    private float bHeight;// 图片高
+
+    private float vWidth;// 当前View宽
+
+    private float vHeight;// 当前view高
+
+    private float currentScale = 1;
+
+    private float maxScale = 3;// 最大放大比例
+
+    private float minScale = 0.04f;
+
+    private float minWidth = 100;// 图片最小宽度
+
+    private float minHeight = 100;// 图片最小高度
+
+    // These matrices will be used to move and zoom image
+    private Matrix matrix = new Matrix();
+
+    private Matrix savedMatrix = new Matrix();
+
+    private PointF downPoint = new PointF();
+
+    private PointF start = new PointF();
+
+    private PointF mid = new PointF();
+
+    private float oldDist = 1f;
+
+    Paint paint = new Paint();
+
+    Path path = new Path();
+
+    Path pathUp = new Path(); // 上半部分的圆
+
+    Path pathDown = new Path();// 下半部分的圆
+
+    private long downTime = 0;
+
+    private OnClickListener listener;
+
+    public ScalePictorialView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        init();
+    }
+
+    public ScalePictorialView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    public ScalePictorialView(Context context) {
+        super(context);
+        init();
+    }
+
+    private void init() {
+        setScaleType(ScaleType.MATRIX);
+        setLongClickable(true);
+    }
+
+    /**
+     * 设置剪切的矩形
+     * 
+     * @param width 矩形的宽(px)
+     * @param height 矩形的高(px)
+     */
+    public void setRect(float width, float height) {
+        this.minWidth = width;
+        this.minHeight = height;
+        invalidate();
+    }
+
+    /**
+     * 设置图片缩放后的最小宽高, 默认最小宽为100px, 高为100px
+     * 
+     * @param minWidth
+     * @param minHeight
+     */
+    public void setMin(float minWidth, float minHeight) {
+        this.minWidth = minWidth;
+        this.minHeight = minHeight;
+    }
+
+    /**
+     * 保存图片(同步)
+     * 
+     * @param path 保存图片的路径
+     * @return
+     */
+    public boolean saveImage(String path) {
+        if (mode != NONE)
+            return false;
+
+        return ImageUtil.saveBitmap(getCroppedBitmap(), path, true);
+    }
+
+    /**
+     * 保存图片(同步)
+     * 
+     * @param path 保存图片的路径
+     * @param expectedWidth 输出图片的期望宽度
+     * @return
+     */
+    public boolean saveImage(String path, int expectedWidth) {
+        if (mode != NONE)
+            return false;
+        Bitmap croped = getCroppedBitmap();
+        if (croped == null)
+            return false;
+
+        int height = croped.getHeight() * expectedWidth / croped.getWidth();
+        Bitmap dest = Bitmap.createScaledBitmap(croped, expectedWidth, height, false);
+        if (dest != croped) {
+            croped.recycle();
+        }
+
+        boolean result = ImageUtil.saveBitmap(dest, path, true);
+        // ImageUtil.scanMedia(getContext(), path);
+        return result;
+    }
+
+    private Bitmap getCroppedBitmap() {
+        Bitmap bmp = getImageBitmap();
+        if (bmp == null)
+            return null;
+
+        float[] values = new float[9];
+        matrix.getValues(values);
+        float scale = values[Matrix.MSCALE_X];
+        float dx = values[Matrix.MTRANS_X];
+        float dy = values[Matrix.MTRANS_Y];
+
+        float destW = minWidth / scale;
+        float destH = minHeight / scale;
+        float destL = Math.max(0, ((vWidth - minWidth) / 2 - dx) / scale);
+        int tempHeight = (int) DimensionPixelUtil.getDimensionPixelSize(1, 50, getContext());
+        float destT = Math.max(0, (tempHeight - dy) / scale);
+        try {
+            return Bitmap.createBitmap(bmp, (int) destL, (int) destT, (int) destW, (int) destH);
+        } catch (RuntimeException e) {
+
+        }
+        return null;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                downTime = System.currentTimeMillis();
+                start.set(event.getX(), event.getY());
+                downPoint.set(event.getX(), event.getY());
+                mode = DRAG;
+                break;
+
+            case MotionEvent.ACTION_POINTER_DOWN:
+                oldDist = spacing(event);
+                if (oldDist > 10f) {
+                    midPoint(mid, event);
+                    mode = ZOOM;
+                }
+                break;
+
+            case MotionEvent.ACTION_UP:
+                long c = System.currentTimeMillis();
+                PointF upPoint = new PointF(event.getX(), event.getY());
+                if (downTime != 0 && c - downTime < 300) {
+                    if (spacing(downPoint, upPoint) < 20) {
+                        click();
+                    }
+                }
+            case MotionEvent.ACTION_POINTER_UP:
+                mode = NONE;
+                check();
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                if (mode == DRAG) {
+                    float x = event.getX();
+                    float y = event.getY();
+                    postTranslate(x - start.x, y - start.y);
+                    start.set(x, y);
+
+                } else if (mode == ZOOM) {
+                    float newDist = spacing(event);
+                    if (Math.abs(newDist - oldDist) > 5f) {
+                        float scale = newDist / oldDist;
+                        postScale(scale, mid.x, mid.y);
+                        oldDist = newDist;
+                    }
+                }
+                break;
+        }
+
+        this.setImageMatrix(matrix);
+        postInvalidate();
+        // check();
+        return true; // indicate event was handled
+    }
+
+    @Override
+    protected void onDraw(final Canvas canvas) {
+        super.onDraw(canvas);
+        int tempHeigntTop = (int) DimensionPixelUtil.getDimensionPixelSize(1, 50, getContext());
+        int tempWidth = (int) DimensionPixelUtil.getDimensionPixelSize(1, 25, getContext());
+        int rectWidth = this.getWidth() - tempWidth * 2;
+        int rectHeight = (int) (rectWidth * Constant.PICTORIAL_SIZE);
+        Paint paint = new Paint();
+        paint.setColor(getContext().getResources().getColor(R.color.transparent_gray));
+        Paint paintLine = new Paint();
+        paintLine.setColor(getContext().getResources().getColor(R.color.white));
+        // top
+        canvas.drawRect(0, 0, this.getWidth(), tempHeigntTop, paint);
+        canvas.drawLine(tempWidth, tempHeigntTop, tempWidth + rectWidth, tempHeigntTop, paintLine);
+        // left
+        canvas.drawRect(0, tempHeigntTop, tempWidth, tempHeigntTop + rectHeight, paint);
+        canvas.drawLine(tempWidth, tempHeigntTop, tempWidth, tempHeigntTop + rectHeight, paintLine);
+        if (clipImage != null) {
+            RectF dst = new RectF(tempWidth, tempHeigntTop, tempWidth + rectWidth, tempHeigntTop
+                    + rectHeight);
+            canvas.drawBitmap(clipImage, null, dst, paint);
+        }
+        // right
+        canvas.drawRect(tempWidth + rectWidth, tempHeigntTop, this.getWidth(), tempHeigntTop
+                + rectHeight, paint);
+        canvas.drawLine(tempWidth + rectWidth, tempHeigntTop, tempWidth + rectWidth, tempHeigntTop
+                + rectHeight, paintLine);
+        // bottom
+        canvas.drawRect(0, tempHeigntTop + rectHeight, this.getWidth(), this.getHeight(), paint);
+        canvas.drawLine(tempWidth, tempHeigntTop + rectHeight, tempWidth + rectWidth, tempHeigntTop
+                + rectHeight, paintLine);
+        canvas.restore();
+
+    }
+
+    /** Determine the space between the first two fingers */
+    private float spacing(MotionEvent event) {
+        float x = event.getX(0) - event.getX(1);
+        float y = event.getY(0) - event.getY(1);
+        return FloatMath.sqrt(x * x + y * y);
+    }
+
+    private float spacing(PointF p1, PointF p2) {
+        return FloatMath.sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
+    }
+
+    /** Calculate the mid point of the first two fingers */
+    private void midPoint(PointF point, MotionEvent event) {
+        float x = event.getX(0) + event.getX(1);
+        float y = event.getY(0) + event.getY(1);
+        point.set(x / 2, y / 2);
+    }
+
+    private synchronized void postScale(float scale, float sx, float sy) {
+        savedMatrix.set(matrix);
+        matrix.postScale(scale, scale, sx, sy);
+
+        float[] values = new float[9];
+        matrix.getValues(values);
+        float msx = values[Matrix.MSCALE_X];
+        if (msx > maxScale) {
+            scale = maxScale / currentScale;
+            matrix.set(savedMatrix);
+            matrix.postScale(scale, scale, sx, sy);
+        } else if (msx < minScale) {
+            scale = minScale / currentScale;
+            matrix.set(savedMatrix);
+            matrix.postScale(scale, scale, sx, sy);
+        }
+        matrix.getValues(values);
+        currentScale = values[Matrix.MSCALE_X];
+    }
+
+    private synchronized void postTranslate(float dx, float dy) {
+        savedMatrix.set(matrix);
+        matrix.postTranslate(dx, dy);
+    }
+
+    private void check() {
+        float[] values = new float[9];
+        matrix.getValues(values);
+
+        float left = values[Matrix.MTRANS_X];
+        float top = values[Matrix.MTRANS_Y];
+        float sx = values[Matrix.MSCALE_X];
+        float sy = values[Matrix.MSCALE_Y];
+
+        float width = bWidth * sx;
+        float height = bHeight * sy;
+        float right = left + width;
+        float bottom = top + height;
+
+        float deltaX = 0;// 重新计算x偏移量
+        float deltaY = 0;// 重新计算y偏移量
+        // 计算剪切的边缘
+        float cropL = (vWidth - minWidth) / 2;
+        float cropR = (vWidth + minWidth) / 2;
+        float cropT = DimensionPixelUtil.getDimensionPixelSize(1, 50, getContext());
+        float cropB = cropT + minHeight;
+
+        // 计算x偏移量
+        if (left > cropL) {
+            deltaX = cropL - left;
+        } else if (right < cropR) {
+            deltaX = cropR - right;
+        }
+
+        // 计算y偏移量
+        if (top > cropT) {
+            deltaY = cropT - top;
+        } else if (bottom < cropB) {
+            deltaY = cropB - bottom;
+        }
+
+        savedMatrix.set(matrix);
+        matrix.postTranslate(deltaX, deltaY);
+    }
+
+    /**
+     * 初始化界面
+     */
+    public void initSize() {
+        vWidth = getWidth() + getPaddingLeft() + getPaddingRight();
+        vHeight = getHeight() + getPaddingTop() + getPaddingBottom();
+        if (vWidth < 0 || vHeight < 0) {
+            return;
+        }
+
+        Bitmap bitmap = getImageBitmap();
+        if (bitmap == null) {
+            return;
+        }
+
+        matrix = new Matrix();
+        bWidth = bitmap.getWidth();
+        bHeight = bitmap.getHeight();
+
+        minScale = Math.max(minWidth / bWidth, minHeight / bHeight);
+        maxScale = Math.max(maxScale, Math.max(minWidth / bWidth, minHeight / bHeight) * 3);
+
+        float dx = (vWidth - bWidth) / 2;
+        float dy = (vHeight - bHeight) / 2;
+        postTranslate(dx, dy);
+
+        if (bWidth > vWidth && bHeight > vHeight) {
+            // 图片宽高都大于当前窗口宽高
+            float scale = 1;
+            if (bWidth * vHeight > vWidth * bHeight) {// 图片更宽, 则按高度缩放
+                scale = vHeight / bHeight;
+            } else {// 图片更高, 按宽计算缩放比例
+                scale = vWidth / bWidth;
+            }
+            postScale(scale, vWidth / 2, vHeight / 2);
+        } else {
+            postScale(minScale, vWidth / 2, vHeight / 2);
+        }
+
+        this.setImageMatrix(matrix);
+        invalidate();
+    }
+
+    private Bitmap getImageBitmap() {
+        Drawable drawable = getDrawable();
+        BitmapDrawable bd = (BitmapDrawable) drawable;
+        if (bd != null)
+            return bd.getBitmap();
+
+        return null;
+    }
+
+    private void click() {
+        // 单击事件处理
+        if (listener != null) {
+            listener.onClick(this);
+        }
+    }
+
+    public interface OnClickListener {
+        public void onClick(View v);
+    }
+
+    public void setListener(OnClickListener l) {
+        this.listener = l;
+    }
+
+    private Bitmap clipImage;
+
+    @Override
+    public void setImageBitmap(Bitmap bm) {
+        this.clipImage = bm;
+        invalidate();
+    }
+
+    public void setImageBitmap(Bitmap bitmap, boolean resize) {
+        super.setImageBitmap(bitmap);
+        if (resize) {
+            initSize();
+        }
+    }
+}

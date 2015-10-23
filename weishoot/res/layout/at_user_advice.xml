@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@color/title_bg_blue" >
+
+        <Button
+            android:id="@+id/btn_left"
+            android:layout_width="10dip"
+            android:layout_height="18dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="5dip"
+            android:background="@drawable/btn_left" />
+
+        <TextView
+            android:id="@+id/tv_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/btn_left"
+            android:textColor="@color/white"
+            android:textSize="16dip" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="18dip" />
+        <TextView
+            android:id="@+id/tv_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="10dip"
+            android:textColor="@color/white"
+            android:textSize="16dip" />
+    </RelativeLayout>
+     <EditText
+            android:id="@+id/et_content"
+            android:layout_width="fill_parent"
+            android:layout_height="170dip"
+            android:layout_margin="10dip"
+            android:background="@null"
+            android:gravity="left"
+            android:maxLines="7"
+            android:textColor="@color/textview_black"
+            android:textColorHint="@color/textview_gray_dark"
+            android:textCursorDrawable="@null"
+            android:textSize="17dip" />
+
+</LinearLayout>

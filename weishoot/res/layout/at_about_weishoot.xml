@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp" >
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/icon_app" />
+
+            <TextView
+                android:id="@+id/tv_weishoot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@id/img"
+                android:text="微摄"
+                android:textColor="@color/white"
+                android:textSize="28dp" />
+
+            <TextView
+                android:id="@+id/tv_introduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tv_weishoot"
+                android:layout_marginLeft="16dp"
+                android:layout_toRightOf="@id/tv_weishoot"
+                android:text="这里有关于摄影与图片的一切"
+                android:textColor="@color/white"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/tv_introduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv_weishoot"
+                android:layout_below="@id/tv_weishoot"
+                android:layout_marginLeft="8dp"
+                android:text="Copyright @ 2015 unpcn inc,all right reserved"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="@string/about_weishoot"
+                android:textColor="@color/white"
+                android:textSize="18dp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

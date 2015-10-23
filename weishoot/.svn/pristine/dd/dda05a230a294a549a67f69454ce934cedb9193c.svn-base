@@ -1,0 +1,143 @@
+
+package com.NationalPhotograpy.weishoot.activity.quanzi;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+
+import com.NationalPhotograpy.weishoot.R;
+import com.NationalPhotograpy.weishoot.activity.BaseActivity;
+import com.NationalPhotograpy.weishoot.adapter.quanzi.FriendsListAdapter;
+import com.NationalPhotograpy.weishoot.adapter.quanzi.SideBar;
+import com.NationalPhotograpy.weishoot.bean.MutualConcernBean;
+import com.NationalPhotograpy.weishoot.bean.ZambiaBean;
+import com.NationalPhotograpy.weishoot.net.HttpUrl;
+import com.NationalPhotograpy.weishoot.storage.SharePreManager;
+import com.NationalPhotograpy.weishoot.utils.StringsUtil;
+import com.NationalPhotograpy.weishoot.utils.WeiShootToast;
+import com.NationalPhotograpy.weishoot.view.ProgressiveDialog;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+
+/**
+ * 圈子-新摄友
+ */
+public class NewFriendsActivity extends BaseActivity implements OnClickListener {
+
+    private LinearLayout layout_back;
+
+    private ListView lvContent;
+
+    private SideBar indexBar;
+
+    private ProgressiveDialog progressDialog;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.at_mutual_concern);
+        initView();
+        initData();
+        setListener();
+    }
+
+    private void initView() {
+        progressDialog = new ProgressiveDialog(this);
+        layout_back = (LinearLayout) findViewById(R.id.layout_back);
+        lvContent = (ListView) findViewById(R.id.lvContent);
+        indexBar = (SideBar) findViewById(R.id.sideBar);
+    }
+
+    private void initData() {
+        requestGetFriendByCode();
+    }
+
+    private void setListener() {
+        layout_back.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.layout_back:
+                finish();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void onRefresh(List<ZambiaBean> data) {
+        FriendsListAdapter friendsAdapter = new FriendsListAdapter(this, "新的摄友");
+        friendsAdapter.setFlag("attention");
+        friendsAdapter.setData(data);
+        lvContent.setAdapter(friendsAdapter);
+        HashSet<Character> set = new HashSet<Character>();
+        for (int i = 0; i < data.size(); i++) {
+            String fanyi = StringsUtil.converterToFirstSpell(data.get(i).NickName
+                    .toUpperCase(Locale.ENGLISH));
+            char[] strChar = fanyi.toCharArray();
+            set.add(strChar[0]);
+        }
+        indexBar.setIndex(set);
+        indexBar.setListView(lvContent);
+    }
+
+    /**
+     * 获取新摄友
+     */
+    private void requestGetFriendByCode() {
+        progressDialog.show();
+        HttpUtils httpUtils = new HttpUtils(1000 * 20);
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("UCode", SharePreManager.getInstance(this).getUserUCode());
+        params.addBodyParameter("TokenKey", HttpUrl.tokenkey);
+        httpUtils.send(HttpMethod.POST, HttpUrl.GetOneWayAttention, params,
+                new RequestCallBack<Object>() {
+
+                    @Override
+                    public void onFailure(HttpException e, String s) {
+                        e.printStackTrace();
+                        progressDialog.dismiss();
+                        WeiShootToast.makeErrorText(NewFriendsActivity.this,
+                                getString(R.string.http_timeout), WeiShootToast.LENGTH_SHORT)
+                                .show();
+                    }
+
+                    @Override
+                    public void onSuccess(ResponseInfo<Object> objectResponseInfo) {
+                        progressDialog.dismiss();
+                        String temp = (String) objectResponseInfo.result;
+                        MutualConcernBean mutualBean = new Gson().fromJson(temp,
+                                new TypeToken<MutualConcernBean>() {
+                                }.getType());
+                        if (mutualBean != null && mutualBean.result != null) {
+                            if ("200".equals(mutualBean.result.ResultCode)) {
+                                onRefresh(mutualBean.data);
+                            } else {
+                                WeiShootToast.makeErrorText(NewFriendsActivity.this,
+                                        mutualBean.result.ResultMsg, WeiShootToast.LENGTH_SHORT)
+                                        .show();
+                            }
+                        } else {
+                            WeiShootToast.makeErrorText(NewFriendsActivity.this,
+                                    getString(R.string.http_timeout), WeiShootToast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    }
+                });
+
+    }
+}

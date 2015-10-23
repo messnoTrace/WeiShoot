@@ -1,0 +1,680 @@
+
+package com.NationalPhotograpy.weishoot.fragment;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+
+import com.NationalPhotograpy.weishoot.R;
+import com.NationalPhotograpy.weishoot.activity.MainActivity;
+import com.NationalPhotograpy.weishoot.activity.photograph.WeiShootWebActiivty;
+import com.NationalPhotograpy.weishoot.activity.registered.LoginActivity;
+import com.NationalPhotograpy.weishoot.activity.shouye.UserInfoDetialActivity;
+import com.NationalPhotograpy.weishoot.adapter.HomeAdapter;
+import com.NationalPhotograpy.weishoot.bean.AdvertisingBean;
+import com.NationalPhotograpy.weishoot.bean.AdvertisingBean.ADBean;
+import com.NationalPhotograpy.weishoot.bean.ReqUploadBean;
+import com.NationalPhotograpy.weishoot.bean.TopCommentBean;
+import com.NationalPhotograpy.weishoot.bean.TopPhotoBean;
+import com.NationalPhotograpy.weishoot.bean.TopicBean;
+import com.NationalPhotograpy.weishoot.bean.TopicBean.TopicData;
+import com.NationalPhotograpy.weishoot.bean.UploadResultBean;
+import com.NationalPhotograpy.weishoot.net.HttpUrl;
+import com.NationalPhotograpy.weishoot.storage.Constant;
+import com.NationalPhotograpy.weishoot.storage.SharePreManager;
+import com.NationalPhotograpy.weishoot.storage.StaticInfo;
+import com.NationalPhotograpy.weishoot.utils.DimensionPixelUtil;
+import com.NationalPhotograpy.weishoot.utils.StringsUtil;
+import com.NationalPhotograpy.weishoot.utils.WeiShootToast;
+import com.NationalPhotograpy.weishoot.utils.UserInfo.UserInfo;
+import com.NationalPhotograpy.weishoot.view.ProgressiveDialog;
+import com.NationalPhotograpy.weishoot.view.adcyclegallery.HomeAdCycleGallery;
+import com.NationalPhotograpy.weishoot.view.adcyclegallery.HomeAdCycleGalleryAdapter;
+import com.NationalPhotograpy.weishoot.view.pullrefresh.PullToRefreshBase;
+import com.NationalPhotograpy.weishoot.view.pullrefresh.PullToRefreshListView;
+import com.NationalPhotograpy.weishoot.view.zxing.MipcaCaptureActivity;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+
+/**
+ * 首页
+ */
+public class FragmentHome extends Fragment implements OnClickListener, OnItemSelectedListener {
+
+    private Button btn_left;
+
+    private ImageView btn_right;
+
+    private PullToRefreshListView lv_pulltorefresh;
+
+    private ListView homeListView;
+
+    private HomeAdapter homeAdapter;
+
+    private String lastDataTime = "";
+
+    private ProgressiveDialog progressDialog;
+
+    private HomeAdCycleGallery gallery_ad;
+
+    private HomeAdCycleGalleryAdapter adCycleGalleryAdapter;
+
+    private LinearLayout layout_pointAll;
+
+    private AdvertisingBean advertisingBean;
+
+    private BroadcastReceiver receiver;
+
+    private ProgressBar mProgressBar;
+
+    private boolean isFinish = true;
+
+    private TopicData tempTopicBean;
+
+    private TopicData resultTopicBean;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View createView = inflater.inflate(R.layout.fragment_home, null, false);
+        initView(createView);
+        initData();
+        setListener();
+        return createView;
+    }
+
+    private void initView(View createView) {
+        progressDialog = new ProgressiveDialog(getActivity());
+        mProgressBar = (ProgressBar) createView.findViewById(R.id.mProgressBar);
+        btn_left = (Button) createView.findViewById(R.id.btn_left);
+        btn_right = (ImageView) createView.findViewById(R.id.btn_right);
+        lv_pulltorefresh = (PullToRefreshListView) createView.findViewById(R.id.lv_pulltorefresh);
+        homeListView = lv_pulltorefresh.getRefreshableView();
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                if ("logout".equals(arg1.getAction())) {
+                    lastDataTime = "";
+                    requestGetTopic();
+                } else if ("comment".equals(arg1.getAction())) {
+                    if (homeAdapter != null) {
+                        TopCommentBean bean = (TopCommentBean) arg1.getSerializableExtra("data");
+                        int position = arg1.getIntExtra("position", -1);
+                        if (position != -1) {
+                            homeAdapter.data.get(position).CommentList.add(0, bean);
+                            homeAdapter.notifyDataSetChanged();
+                        }
+
+                    }
+
+                }
+
+            }
+        };
+
+        IntentFilter filter = new IntentFilter("logout");
+        filter.addAction("comment");
+        getActivity().registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (UserInfo.getInstance(getActivity()).isLogin()) {
+            ImageLoader.getInstance().displayImage(
+                    UserInfo.getInstance(getActivity()).getUserHead(),
+                    btn_right,
+                    new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisc(true)
+                            .displayer(new RoundedBitmapDisplayer(100))
+                            .showImageForEmptyUri(R.drawable.default_head).build());
+        } else {
+            btn_right.setImageResource(R.drawable.default_head);
+        }
+        if (MainActivity.intentRequest != null && MainActivity.intentRequest.length() > 0) {
+            setOnRefresh(MainActivity.uploadBean);
+        }
+        if ("upload".equals(MainActivity.intentRequest)) {
+            MainActivity.intentRequest = "";
+            requestAddTopic(MainActivity.uploadBean);
+        } else if ("movie".equals(MainActivity.intentRequest)) {
+            MainActivity.intentRequest = "";
+            requestAddFilm(MainActivity.uploadBean);
+        } else if ("pictorial".equals(MainActivity.intentRequest)) {
+            MainActivity.intentRequest = "";
+            requestAddCover(MainActivity.uploadBean);
+        }
+    }
+
+    private void setOnRefresh(ReqUploadBean uploadBean) {
+        List<TopPhotoBean> photoList = new ArrayList<TopPhotoBean>();
+        for (int i = 0; i < uploadBean.uploadPic.size(); i++) {
+            photoList.add(new TopPhotoBean("-1", uploadBean.uploadPic.get(i)));
+        }
+        tempTopicBean = new TopicBean().new TopicData(photoList, "-1", uploadBean.str_Title,
+                uploadBean.str_Mark, "刚刚", "Android客户端", uploadBean.TType,
+                uploadBean.str_PicAddress, uploadBean.str_Coordinate, SharePreManager.getInstance(
+                        getActivity()).getUserUCode(), SharePreManager.getInstance(getActivity())
+                        .getUserHead()
+                        + SharePreManager.getInstance(getActivity()).getUserHeadTimestamp(),
+                SharePreManager.getInstance(getActivity()).getUserNickName(), 0, 0,
+                uploadBean.picSortBean.Sort, "1", "-1", "-1");
+        homeAdapter.addData(tempTopicBean);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(receiver);
+    }
+
+    private void initData() {
+        initCacheData();
+        requestGetTopic();
+        requestGetAd();
+
+    }
+
+    private void initCacheData() {
+        String json = SharePreManager.getInstance(getActivity()).getString("home_topic_json");
+        if (json != null) {
+            TopicBean topicBean = new Gson().fromJson(json, new TypeToken<TopicBean>() {
+            }.getType());
+            homeAdapter = new HomeAdapter(getActivity(), topicBean.data, homeListView);
+            homeListView.setAdapter(homeAdapter);
+        }
+    }
+
+    private void setListener() {
+        btn_left.setOnClickListener(this);
+        btn_right.setOnClickListener(this);
+        lv_pulltorefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2() {
+
+            @Override
+            public void onPullDownToRefresh() {
+                // 刷新
+                lastDataTime = "";
+                requestGetTopic();
+            }
+
+            @Override
+            public void onPullUpToRefresh() {
+                // 加载
+                requestGetTopic();
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent it;
+        switch (v.getId()) {
+            case R.id.btn_left:
+                it = new Intent(getActivity(), MipcaCaptureActivity.class);
+                startActivity(it);
+                break;
+            case R.id.btn_right:
+                if (UserInfo.getInstance(getActivity()).isLogin()) {
+                    it = new Intent(getActivity(), UserInfoDetialActivity.class);
+                    it.putExtra(UserInfoDetialActivity.ARG_UCODE,
+                            UserInfo.getInstance(getActivity()).getUserUCode());
+                    it.putExtra(UserInfoDetialActivity.ARG_NIKENAME,
+                            UserInfo.getInstance(getActivity()).getUserNickName());
+                    it.putExtra(UserInfoDetialActivity.ARG_USERHEAD,
+                            UserInfo.getInstance(getActivity()).getUserHead());
+                    startActivity(it);
+                } else {
+                    it = new Intent(getActivity(), LoginActivity.class);
+                    startActivity(it);
+                }
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        refreshPointView(position % advertisingBean.data.size());
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    private void addPointView(int size) {
+        layout_pointAll.removeAllViews();
+        int buttonW = (int) DimensionPixelUtil.getDimensionPixelSize(1, 7, getActivity());
+        int buttonH = (int) DimensionPixelUtil.getDimensionPixelSize(1, 7, getActivity());
+        LinearLayout.LayoutParams lyp = new LinearLayout.LayoutParams(buttonW, buttonH);
+        lyp.setMargins(0, 0, 10, 0);
+        for (int i = 0; i < size; i++) {
+            ImageView imageView = new ImageView(getActivity());
+            imageView.setLayoutParams(lyp);
+            imageView.setBackgroundResource(R.drawable.selector_point);
+            layout_pointAll.addView(imageView);
+        }
+        refreshPointView(0);
+    }
+
+    private void refreshPointView(int position) {
+        if (advertisingBean.data != null) {
+            for (int i = 0; i < advertisingBean.data.size(); i++) {
+                ImageView imageView = (ImageView) layout_pointAll.getChildAt(i);
+                if (i == position) {
+                    imageView.setEnabled(false);
+                } else {
+                    imageView.setEnabled(true);
+                }
+            }
+        }
+    }
+
+    private void progressLoading() {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.setProgress(0);
+        isFinish = false;
+        new Thread() {
+            @Override
+            public void run() {
+                for (int i = 1; i <= 90; i++) {
+                    if (isFinish) {
+                        break;
+                    }
+                    try {
+                        mProgressBar.setProgress(i);
+                        Thread.sleep(500);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
+    }
+
+    private void progressLoadingClose() {
+        isFinish = true;
+        mProgressBar.setProgress(100);
+        progressHandler.sendEmptyMessageDelayed(1, 500);
+
+    }
+
+    private Handler progressHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            mProgressBar.setVisibility(View.GONE);
+        };
+    };
+
+    /**
+     * 获取首页主题
+     */
+    private void requestGetTopic() {
+        progressDialog.show();
+        HttpUtils httpUtils = new HttpUtils(1000 * 20);
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("UCode", UserInfo.getInstance(getActivity()).getUserUCode());
+        params.addBodyParameter("PageSize", "5");
+        params.addBodyParameter("DisplayCom", "5");
+        params.addBodyParameter("DisplayGood", "5");
+        params.addBodyParameter("CurrentUCode", UserInfo.getInstance(getActivity()).getUserUCode());
+        // params.addBodyParameter("TType", "");
+        params.addBodyParameter("CreateDate", lastDataTime);
+        params.addBodyParameter("TokenKey", HttpUrl.tokenkey);
+        httpUtils.send(HttpMethod.POST, HttpUrl.GetTopic, params, new RequestCallBack<Object>() {
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                e.printStackTrace();
+                if (getActivity() == null) {
+                    return;
+                }
+                progressDialog.dismiss();
+                lv_pulltorefresh.onRefreshComplete();
+                WeiShootToast.makeErrorText(getActivity(), getString(R.string.http_timeout),
+                        WeiShootToast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(ResponseInfo<Object> objectResponseInfo) {
+                if (getActivity() == null) {
+                    return;
+                }
+                lv_pulltorefresh.onRefreshComplete();
+                progressDialog.dismiss();
+                String temp = (String) objectResponseInfo.result;
+                TopicBean topicBean = new Gson().fromJson(temp, new TypeToken<TopicBean>() {
+                }.getType());
+                if (topicBean != null && topicBean.result != null) {
+                    if ("200".equals(topicBean.result.ResultCode)) {
+                        SharePreManager.getInstance(getActivity()).setString("home_topic_json",
+                                temp);
+                        if (homeAdapter != null && "".equals(lastDataTime)) {// 刷新操作
+                            homeAdapter.data.clear();
+                            homeAdapter.indexZans.clear();
+                            homeAdapter.indexShouCangs.clear();
+                        }
+                        if (homeAdapter != null) {
+                            homeAdapter.addData(topicBean.data, tempTopicBean, resultTopicBean,
+                                    isFinish);
+                            resultTopicBean = null;
+                        } else {
+                            homeAdapter = new HomeAdapter(getActivity(), topicBean.data,
+                                    homeListView);
+                            homeListView.setAdapter(homeAdapter);
+                        }
+                        if (topicBean.data.size() > 0) {
+                            lastDataTime = StringsUtil.getStringDate(topicBean.data
+                                    .get(topicBean.data.size() - 1).CreateDate);
+                        }
+                    } else {
+                        WeiShootToast.makeErrorText(getActivity(), topicBean.result.ResultMsg,
+                                WeiShootToast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    WeiShootToast.makeErrorText(getActivity(), getString(R.string.http_timeout),
+                            WeiShootToast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 获取广告
+     */
+    private void requestGetAd() {
+        HttpUtils httpUtils = new HttpUtils(1000 * 20);
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("type", "newtop");
+        params.addBodyParameter("TokenKey", HttpUrl.tokenkey);
+        httpUtils.send(HttpMethod.POST, HttpUrl.GetAd, params, new RequestCallBack<Object>() {
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onSuccess(ResponseInfo<Object> objectResponseInfo) {
+                if (getActivity() == null) {
+                    return;
+                }
+                String temp = (String) objectResponseInfo.result;
+                advertisingBean = new Gson().fromJson(temp, new TypeToken<AdvertisingBean>() {
+                }.getType());
+                if (advertisingBean != null && advertisingBean.result != null) {
+                    if ("200".equals(advertisingBean.result.ResultCode)) {
+                        View picView = View.inflate(getActivity(), R.layout.view_pic_market, null);
+                        RelativeLayout layout_ad = (RelativeLayout) picView
+                                .findViewById(R.id.layout_ad);
+                        layout_pointAll = (LinearLayout) picView.findViewById(R.id.layout_pointAll);
+                        gallery_ad = (HomeAdCycleGallery) picView.findViewById(R.id.gallery_ad);
+                        if (StaticInfo.widthPixels == 0) {
+                            DisplayMetrics mDisplayMetrics = new DisplayMetrics();
+                            getActivity().getWindowManager().getDefaultDisplay()
+                                    .getMetrics(mDisplayMetrics);
+                            StaticInfo.widthPixels = mDisplayMetrics.widthPixels;
+                        }
+                        int ADHeight = (int) (StaticInfo.widthPixels * Constant.AD_SIZE);
+                        int tempHeight = (int) DimensionPixelUtil.getDimensionPixelSize(1, 5,
+                                getActivity());
+                        LinearLayout.LayoutParams lyp1 = new LinearLayout.LayoutParams(
+                                RelativeLayout.LayoutParams.FILL_PARENT, ADHeight + tempHeight);
+                        LinearLayout.LayoutParams lyp2 = new LinearLayout.LayoutParams(
+                                RelativeLayout.LayoutParams.FILL_PARENT, ADHeight);
+                        layout_ad.setLayoutParams(lyp1);
+                        gallery_ad.setLayoutParams(lyp2);
+                        gallery_ad.setSoundEffectsEnabled(false);
+                        homeListView.addHeaderView(picView);
+                        adCycleGalleryAdapter = new HomeAdCycleGalleryAdapter(getActivity(),
+                                advertisingBean.data, StaticInfo.widthPixels);
+                        addPointView(advertisingBean.data.size());
+                        gallery_ad.setAdapter(adCycleGalleryAdapter);
+                        gallery_ad.setSelection(adCycleGalleryAdapter.getCount() / 2);
+                        gallery_ad.setOnItemSelectedListener(FragmentHome.this);
+                        gallery_ad.setOnItemClickListener(new OnItemClickListener() {
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+
+                                ADBean adBea = (ADBean) advertisingBean.data.get(position
+                                        % advertisingBean.data.size());
+                                Intent intent = new Intent(getActivity(), WeiShootWebActiivty.class);
+                                intent.putExtra("url", adBea.ALink);
+                                startActivity(intent);
+                            }
+                        });
+                        if (advertisingBean.data.size() > 1) {
+                            gallery_ad.startSwitchTimer();// 开启轮偱
+                        }
+                    } else {
+                    }
+                } else {
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 发微摄
+     */
+    private void requestAddTopic(final ReqUploadBean uploadBean) {
+        progressLoading();
+        HttpUtils httpUtils = new HttpUtils(1000 * 60 * 2);
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("UCode", UserInfo.getInstance(getActivity()).getUserUCode());
+        params.addBodyParameter("Title", uploadBean.str_Title);
+        params.addBodyParameter("Mark", uploadBean.str_Mark);
+        params.addBodyParameter("TType", "1");
+        params.addBodyParameter("CreateFrom", HttpUrl.tokenkey);
+        params.addBodyParameter("SCode", uploadBean.picSortBean.SCode);
+        params.addBodyParameter("PicAddress", uploadBean.str_PicAddress);
+        params.addBodyParameter("Coordinate", uploadBean.str_Coordinate);
+        params.addBodyParameter("NickName", UserInfo.getInstance(getActivity()).getUserNickName());
+        params.addBodyParameter("IsSale", uploadBean.str_IsSale);
+        for (int i = 0; i < uploadBean.uploadPic.size(); i++) {
+            params.addBodyParameter(i + "", new File(uploadBean.uploadPic.get(i)));
+        }
+        params.addBodyParameter("TokenKey", HttpUrl.tokenkey);
+        httpUtils.send(HttpMethod.POST, HttpUrl.AddTopic, params, new RequestCallBack<Object>() {
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                e.printStackTrace();
+                isFinish = true;
+                mProgressBar.setVisibility(View.GONE);
+                homeAdapter.deleteData();
+                WeiShootToast.makeErrorText(getActivity(), getString(R.string.http_timeout),
+                        WeiShootToast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(ResponseInfo<Object> objectResponseInfo) {
+                progressLoadingClose();
+                String temp = (String) objectResponseInfo.result;
+                UploadResultBean resultBean = new Gson().fromJson(temp,
+                        new TypeToken<UploadResultBean>() {
+                        }.getType());
+                if (resultBean != null && resultBean.result != null) {
+                    if ("200".equals(resultBean.result.ResultCode)) {
+                        resultBean.data.PicSort = uploadBean.picSortBean.Sort;
+                        resultBean.data.UserHead = UserInfo.getInstance(getActivity())
+                                .getUserHead();
+                        resultBean.data.CreateFrom = "Android客户端";
+                        resultTopicBean = resultBean.data;
+                        homeAdapter.addData(resultBean.data);
+                    } else {
+                        homeAdapter.deleteData();
+                        WeiShootToast.makeErrorText(getActivity(), resultBean.result.ResultMsg,
+                                WeiShootToast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    homeAdapter.deleteData();
+                    WeiShootToast.makeErrorText(getActivity(), getString(R.string.http_timeout),
+                            WeiShootToast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 发影片
+     */
+    private void requestAddFilm(ReqUploadBean uploadBean) {
+        progressLoading();
+        HttpUtils httpUtils = new HttpUtils(1000 * 40);
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("UCode", UserInfo.getInstance(getActivity()).getUserUCode());
+        params.addBodyParameter("Mark", uploadBean.str_Title);
+        params.addBodyParameter("PicAddress", uploadBean.str_PicAddress);
+        params.addBodyParameter("Coordinate", uploadBean.str_Coordinate);
+        params.addBodyParameter("Cropping", uploadBean.str_Cropping);
+        params.addBodyParameter("Files", new File(uploadBean.uploadPic.get(0)));
+        params.addBodyParameter("PWidth", "1440");
+        params.addBodyParameter("PHeight", "900");
+        params.addBodyParameter("PX", 0 + "");
+        params.addBodyParameter("PY", 0 + "");
+        params.addBodyParameter("CN", uploadBean.str_CN);
+        params.addBodyParameter("EN", uploadBean.str_EN);
+        params.addBodyParameter("TokenKey", HttpUrl.tokenkey);
+        httpUtils.send(HttpMethod.POST, HttpUrl.AddFilm, params, new RequestCallBack<Object>() {
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                e.printStackTrace();
+                isFinish = true;
+                mProgressBar.setVisibility(View.GONE);
+                homeAdapter.deleteData();
+                WeiShootToast.makeErrorText(getActivity(), getString(R.string.http_timeout),
+                        WeiShootToast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(ResponseInfo<Object> objectResponseInfo) {
+                progressLoadingClose();
+                String temp = (String) objectResponseInfo.result;
+                UploadResultBean resultBean = new Gson().fromJson(temp,
+                        new TypeToken<UploadResultBean>() {
+                        }.getType());
+                if (resultBean != null && resultBean.result != null) {
+                    if ("200".equals(resultBean.result.ResultCode)) {
+                        resultBean.data.PicSort = "1";
+                        resultBean.data.CreateFrom = "Android客户端";
+                        resultBean.data.UserHead = UserInfo.getInstance(getActivity())
+                                .getUserHead();
+                        resultBean.data.NickName = UserInfo.getInstance(getActivity())
+                                .getUserNickName();
+                        resultTopicBean = resultBean.data;
+                        homeAdapter.addData(resultBean.data);
+                    } else {
+                        homeAdapter.deleteData();
+                        WeiShootToast.makeErrorText(getActivity(), resultBean.result.ResultMsg,
+                                WeiShootToast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    homeAdapter.deleteData();
+                    WeiShootToast.makeErrorText(getActivity(), getString(R.string.http_timeout),
+                            WeiShootToast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 发送画报
+     */
+    private void requestAddCover(ReqUploadBean uploadBean) {
+        progressLoading();
+        HttpUtils httpUtils = new HttpUtils(1000 * 40);
+        RequestParams params = new RequestParams();
+        params.addBodyParameter("UCode", UserInfo.getInstance(getActivity()).getUserUCode());
+        params.addBodyParameter("Mark", uploadBean.str_Mark);
+        params.addBodyParameter("PicAddress", uploadBean.str_PicAddress);
+        params.addBodyParameter("Coordinate", uploadBean.str_Coordinate);
+        params.addBodyParameter("NickName", UserInfo.getInstance(getActivity()).getUserNickName());
+        params.addBodyParameter("Files", new File(uploadBean.pictorialPic));
+        params.addBodyParameter("PWidth", "1080");
+        params.addBodyParameter("PHeight", "1527");
+        params.addBodyParameter("PX", 0 + "");
+        params.addBodyParameter("PY", 0 + "");
+        params.addBodyParameter("CPId", uploadBean.str_CPId);
+        params.addBodyParameter("TokenKey", HttpUrl.tokenkey);
+        httpUtils.send(HttpMethod.POST, HttpUrl.AddCover, params, new RequestCallBack<Object>() {
+
+            @Override
+            public void onFailure(HttpException e, String s) {
+                e.printStackTrace();
+                isFinish = true;
+                mProgressBar.setVisibility(View.GONE);
+                homeAdapter.deleteData();
+                WeiShootToast.makeErrorText(getActivity(), getString(R.string.http_timeout),
+                        WeiShootToast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(ResponseInfo<Object> objectResponseInfo) {
+                progressLoadingClose();
+                String temp = (String) objectResponseInfo.result;
+                UploadResultBean resultBean = new Gson().fromJson(temp,
+                        new TypeToken<UploadResultBean>() {
+                        }.getType());
+                if (resultBean != null && resultBean.result != null) {
+                    if ("200".equals(resultBean.result.ResultCode)) {
+                        resultBean.data.PicSort = "1";
+                        resultBean.data.CreateFrom = "Android客户端";
+                        resultBean.data.UserHead = UserInfo.getInstance(getActivity())
+                                .getUserHead();
+                        resultBean.data.NickName = UserInfo.getInstance(getActivity())
+                                .getUserNickName();
+                        resultTopicBean = resultBean.data;
+                        homeAdapter.addData(resultBean.data);
+                    } else {
+                        homeAdapter.deleteData();
+                        WeiShootToast.makeErrorText(getActivity(), resultBean.result.ResultMsg,
+                                WeiShootToast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    homeAdapter.deleteData();
+                    WeiShootToast.makeErrorText(getActivity(), getString(R.string.http_timeout),
+                            WeiShootToast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+}

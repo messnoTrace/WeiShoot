@@ -1,0 +1,72 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="145dip"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dip"
+        android:background="@color/find_gray"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="40dip"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="10dip"
+            android:layout_marginTop="10dip" >
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="fill_parent"
+                android:layout_height="40dip"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/edittext"
+                android:gravity="center_vertical"
+                android:imeOptions="actionSearch"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@null"
+                android:textSize="18dip" />
+
+            <LinearLayout
+                android:id="@+id/layout_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="20dip"
+                    android:layout_height="20dip"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/icon_search" />
+
+                <TextView
+                    android:id="@+id/tv_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dip"
+                    android:text="搜索 weishoot"
+                    android:textColor="@color/textview_gray"
+                    android:textSize="14dip" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <com.NationalPhotograpy.weishoot.view.HorizontalListView
+        android:id="@+id/listview_head"
+        android:layout_width="fill_parent"
+        android:layout_height="75dip"
+        android:background="@color/white" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="10dip"
+        android:background="@color/find_gray" />
+
+</LinearLayout>

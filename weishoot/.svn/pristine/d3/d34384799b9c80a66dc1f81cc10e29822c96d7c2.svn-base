@@ -1,0 +1,44 @@
+
+package com.NationalPhotograpy.weishoot.bean;
+
+import java.io.Serializable;
+import java.util.List;
+
+import com.NationalPhotograpy.weishoot.bean.PictureSortBean.PicSortBean;
+
+public class ReqUploadBean implements Serializable {
+
+    public String str_Title;
+
+    public String str_Mark;
+
+    public PicSortBean picSortBean;
+
+    public String str_PicAddress;
+
+    public String str_Coordinate;
+
+    public String str_IsSale;
+
+    public List<String> uploadPic;
+
+    public ReqUploadBean() {
+        super();
+    }
+
+    /**
+     * 发微摄
+     */
+    public ReqUploadBean(String str_Title, String str_Mark, PicSortBean picSortBean,
+            String str_PicAddress, String str_Coordinate, String str_IsSale, List<String> uploadPic) {
+        super();
+        this.str_Title = str_Title;
+        this.str_Mark = str_Mark;
+        this.picSortBean = picSortBean;
+        this.str_PicAddress = str_PicAddress;
+        this.str_Coordinate = str_Coordinate;
+        this.str_IsSale = str_IsSale;
+        this.uploadPic = uploadPic;
+    }
+
+}

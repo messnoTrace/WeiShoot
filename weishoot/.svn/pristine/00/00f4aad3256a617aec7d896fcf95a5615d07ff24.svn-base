@@ -1,0 +1,74 @@
+
+package com.NationalPhotograpy.weishoot.bean;
+
+import java.io.Serializable;
+import java.util.List;
+
+public class TopicBean implements Serializable {
+    public ResultStatus result;
+
+    public List<TopicData> data;
+
+    public class TopicData implements Serializable {
+        public List<TopPhotoBean> PhotoList;
+
+        public List<TopCommentBean> CommentList;
+
+        public List<TopGoodBean> GoodList;
+
+        public String TCode;
+
+        public String Title;
+
+        public String Mark;
+
+        public String CreateDate;
+
+        public String CreateFrom;
+
+        public String TType;
+
+        public String PicAddress;
+
+        public String Coordinate;
+
+        public String UCode;
+
+        public String UserHead;
+
+        public String NickName;
+
+        public int CommentCount;
+
+        public int GoodCount;
+
+        public String PicSort;
+
+        public String IsAttention;
+        
+        public String IsCollection;
+        
+        public String IsGood;
+
+        public class TopPhotoBean implements Serializable {
+            public String PCode;
+
+            public String ImgName;
+
+            public String SortOrder;
+
+            public String IsSale;
+        }
+        public class TopGoodBean implements Serializable {
+            public String GCode;
+
+            public String UCode;
+
+            public String UserHead;
+
+            public String CreateDate;
+
+            public String NickName;
+        }
+    }
+}

@@ -1,0 +1,260 @@
+
+package com.NationalPhotograpy.weishoot.storage;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Build;
+
+/**
+ * 配置管理类 使用SharedPreferences管理
+ */
+public class SharePreManager {
+
+    private static Context mContext;
+
+    private SharedPreferences mSharedPreferences;
+
+    private SharedPreferences.Editor mEditor;
+
+    private static class SettingManagerHolder {
+        private static final SharePreManager instance = new SharePreManager();
+    }
+
+    public static SharePreManager getInstance(Context context) {
+        mContext = context;
+        return SettingManagerHolder.instance;
+    }
+
+    private SharePreManager() {
+        init();
+    }
+
+    public void init() {
+
+        int mode = (Build.VERSION.SDK_INT > Build.VERSION_CODES.FROYO) ? Context.MODE_MULTI_PROCESS
+                : Context.MODE_PRIVATE;
+        mSharedPreferences = mContext.getSharedPreferences("setting", mode);
+        mEditor = mSharedPreferences.edit();
+    }
+
+    public String getAllTag() {
+        return mSharedPreferences.getString("get_all_tag", null);
+    }
+
+    public void setAllTag(String allTag) {
+        mEditor.putString("get_all_tag", allTag).commit();
+    }
+
+    public String getUserInfo() {
+        return mSharedPreferences.getString("get_user_info", null);
+    }
+
+    public void setUserInfo(String infos) {
+        mEditor.putString("get_user_info", infos).commit();
+    }
+
+    public String getUserUCode() {
+        return mSharedPreferences.getString("user_ucode", "");
+    }
+
+    public void setUserUCode(String ucode) {
+        mEditor.putString("user_ucode", ucode).commit();
+    }
+
+    public String getUserNickName() {
+        return mSharedPreferences.getString("user_nickname", "");
+    }
+
+    public void setUserNickName(String nickName) {
+        mEditor.putString("user_nickname", nickName).commit();
+    }
+
+    public String getUserHead() {
+        return mSharedPreferences.getString("user_head", "") + getUserHeadTimestamp();
+    }
+
+    public void setUserHead(String userHead) {
+        mEditor.putString("user_head", userHead).commit();
+    }
+
+    public String getUserSex() {
+        return mSharedPreferences.getString("user_sex", null);
+    }
+
+    public void setUserSex(String userSex) {
+        mEditor.putString("user_sex", userSex).commit();
+    }
+
+    public String getUserIntroduction() {
+        return mSharedPreferences.getString("user_introduction", null);
+    }
+
+    public void setUserIntroduction(String userIntroduction) {
+        mEditor.putString("user_introduction", userIntroduction).commit();
+    }
+
+    public String getUserPassword() {
+        return mSharedPreferences.getString("user_password", null);
+    }
+
+    public void setUserPassword(String userPassword) {
+        mEditor.putString("user_password", userPassword).commit();
+    }
+
+    public String getUserLoginName() {
+        return mSharedPreferences.getString("user_loginName", null);
+    }
+
+    public void setUserLoginName(String userloginName) {
+        mEditor.putString("user_loginName", userloginName).commit();
+    }
+
+    public String getUserTelephone() {
+        return mSharedPreferences.getString("user_telephone", null);
+    }
+
+    public void setUserTelephone(String userTelephone) {
+        mEditor.putString("user_telephone", userTelephone).commit();
+    }
+
+    public boolean userIsLogin() {
+        return mSharedPreferences.getBoolean("user_isLogin", false);
+    }
+
+    public void setUserLoginStatus(boolean isLogin) {
+        mEditor.putBoolean("user_isLogin", isLogin).commit();
+    }
+
+    public void clearUserInfo() {
+        setUserUCode("");
+        setUserNickName("");
+        setUserSex("");
+        setUserHead("");
+        setUserIntroduction("");
+        setUserPassword("");
+        setUserLoginName("");
+    }
+
+    public String getString(String key) {
+        return mSharedPreferences.getString(key, null);
+    }
+
+    /**
+     * home_topic_json 页面_接口名_json
+     */
+    public void setString(String key, String values) {
+        mEditor.putString(key, values).commit();
+    }
+
+    /**
+     * 头像时间戳
+     */
+    public String getUserHeadTimestamp() {
+        return mSharedPreferences.getString("user_head_timestamp", "");
+    }
+
+    /**
+     * 头像时间戳
+     */
+    public void setUserHeadTimestamp(String temp) {
+        mEditor.putString("user_head_timestamp", temp).commit();
+    }
+
+    /**
+     * 融云Token
+     */
+    public String getUserToken() {
+        return mSharedPreferences.getString("user_token", "");
+    }
+
+    /**
+     * 融云Token
+     */
+    public void setUserToken(String temp) {
+        mEditor.putString("user_token", temp).commit();
+    }
+
+    /**
+     * 生成我的二维码
+     */
+    public String getErWeiMa() {
+        return mSharedPreferences.getString("user_erweima", "");
+    }
+
+    /**
+     * 生成我的二维码
+     */
+    public void setErWeiMa(String temp) {
+        mEditor.putString("user_erweima", temp).commit();
+    }
+
+    /**
+     * 二维码图片路径
+     */
+    public String getErWeiMaFile() {
+        return mSharedPreferences.getString("user_erweima_file", "");
+    }
+
+    /**
+     * 二维码图片路径
+     */
+    public void setErWeiMaFile(String temp) {
+        mEditor.putString("user_erweima_file", temp).commit();
+    }
+
+    /**
+     * 存储所有行业
+     */
+    public String getOccupations() {
+        return mSharedPreferences.getString("user_occupations", "");
+    }
+
+    /**
+     * 存储所有行业
+     */
+    public void setOccupations(String occupations) {
+        mEditor.putString("user_occupations", occupations).commit();
+    }
+
+    /**
+     * 存储所有行业
+     */
+    public String getJpString() {
+        return mSharedPreferences.getString("user_jpstring", "");
+    }
+
+    /**
+     * 存储所有行业
+     */
+    public void setJpString(String jpstring) {
+        mEditor.putString("user_jpstring", jpstring).commit();
+    }
+
+    /**
+     * 存储所有行业
+     */
+    public boolean getJpushState() {
+        return mSharedPreferences.getBoolean("jpush_state", true);
+    }
+
+    /**
+     * 存储所有行业
+     */
+    public void setJpushState(boolean flag) {
+        mEditor.putBoolean("jpush_state", flag).commit();
+    }
+
+    /**
+     * 存储首页广告
+     */
+    public String getAd() {
+        return mSharedPreferences.getString("ad_string", "");
+    }
+
+    /**
+     * 存储首页广告
+     */
+    public void setAd(String ad) {
+        mEditor.putString("ad_string", ad).commit();
+    }
+}

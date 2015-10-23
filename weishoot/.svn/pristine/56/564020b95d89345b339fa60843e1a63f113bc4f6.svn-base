@@ -1,0 +1,197 @@
+
+package com.NationalPhotograpy.weishoot.activity.photograph;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.NationalPhotograpy.weishoot.R;
+import com.NationalPhotograpy.weishoot.activity.BaseActivity;
+import com.NationalPhotograpy.weishoot.activity.MainActivity;
+import com.NationalPhotograpy.weishoot.activity.changepassword.LikeStyleActivity;
+import com.NationalPhotograpy.weishoot.bean.PicSortBean;
+import com.NationalPhotograpy.weishoot.bean.ReqUploadBean;
+import com.NationalPhotograpy.weishoot.storage.Constant;
+import com.NationalPhotograpy.weishoot.utils.DimensionPixelUtil;
+import com.NationalPhotograpy.weishoot.utils.ImageLoader;
+import com.NationalPhotograpy.weishoot.utils.ImageLoader.Type;
+import com.NationalPhotograpy.weishoot.utils.Methods;
+import com.NationalPhotograpy.weishoot.utils.WeiShootToast;
+import com.NationalPhotograpy.weishoot.utils.UserInfo.UserInfo;
+import com.NationalPhotograpy.weishoot.view.baidulocation.SelectAddressActivity;
+
+public class CreatePictorialActivity extends BaseActivity implements OnClickListener {
+
+    private LinearLayout layout_back;
+
+    private TextView tv_userName;
+
+    private ImageView iv_pictorial;
+
+    private Button btn_complete;
+
+    private TextView tv_label, tv_locat_hint, tv_location;
+
+    private ImageView iv_label, iv_location;
+
+    private LinearLayout layout_label;
+
+    private StringBuffer reqLabel = new StringBuffer("");
+
+    private String reqAddressName = "", reqAddressNum = "";
+
+    private String CPId;
+
+    private Uri picUri;
+
+    private String picLayoutUri = "";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.at_create_pictorial);
+        initView();
+        initData();
+        setListener();
+    }
+
+    private void initView() {
+        tv_label = (TextView) findViewById(R.id.tv_label);
+        tv_locat_hint = (TextView) findViewById(R.id.tv_locat_hint);
+        tv_location = (TextView) findViewById(R.id.tv_location);
+        iv_label = (ImageView) findViewById(R.id.iv_label);
+        iv_location = (ImageView) findViewById(R.id.iv_location);
+        layout_label = (LinearLayout) findViewById(R.id.layout_label);
+        layout_back = (LinearLayout) findViewById(R.id.layout_back);
+        tv_userName = (TextView) findViewById(R.id.tv_userName);
+        iv_pictorial = (ImageView) findViewById(R.id.iv_pictorial);
+        btn_complete = (Button) findViewById(R.id.btn_complete);
+    }
+
+    private void initData() {
+        picUri = getIntent().getParcelableExtra("picUri");
+        picLayoutUri = getIntent().getStringExtra("picLayoutUri");
+        CPId = getIntent().getStringExtra("CPId");
+        ImageLoader.getInstance(3, Type.LIFO).loadImage(picLayoutUri, iv_pictorial);
+        tv_userName.setText(UserInfo.getInstance(this).getUserNickName());
+    }
+
+    private void setListener() {
+        layout_back.setOnClickListener(this);
+        btn_complete.setOnClickListener(this);
+        iv_label.setOnClickListener(this);
+        iv_location.setOnClickListener(this);
+        tv_location.setOnClickListener(this);
+        layout_label.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent it;
+        switch (v.getId()) {
+            case R.id.layout_back:
+                finish();
+                break;
+            case R.id.layout_label:
+            case R.id.iv_label:
+                it = new Intent(CreatePictorialActivity.this, LikeStyleActivity.class);
+                it.putExtra("ActivityType", "UPLOAD");
+                startActivityForResult(it, 1);
+                break;
+            case R.id.iv_location:
+                it = new Intent(CreatePictorialActivity.this, SelectAddressActivity.class);
+                it.putExtra("ActivityType", "UPLOAD");
+                startActivityForResult(it, 1);
+                break;
+            case R.id.tv_location:
+                it = new Intent(CreatePictorialActivity.this, SelectAddressActivity.class);
+                it.putExtra("ActivityType", "UPLOAD");
+                startActivityForResult(it, 1);
+                break;
+            case R.id.btn_complete:
+                String[] tempArr = reqLabel.toString().split(",");
+                if (tempArr.length < 2) {
+                    WeiShootToast.makeErrorText(CreatePictorialActivity.this, "至少选择2个标签",
+                            WeiShootToast.LENGTH_SHORT).show();
+                    return;
+                }
+                List<String> uploadPic = new ArrayList<String>();
+                uploadPic.add(picLayoutUri);
+                ReqUploadBean uploadBean = new ReqUploadBean("6", reqLabel.toString(),
+                        new PicSortBean("1"), reqAddressName, reqAddressNum, uploadPic,
+                        picUri.getPath(), CPId);
+                it = new Intent(this, MainActivity.class);
+                it.putExtra("Result", "RESULT_UPLOAD_HOME");
+                it.putExtra("Request", "pictorial");
+                it.putExtra("ReqUploadBean", uploadBean);
+                startActivity(it);
+                finish();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case Constant.RESULT_LABEL_UPLOAD:
+
+                ArrayList<String> labelList = data.getStringArrayListExtra("label");
+                if (labelList.size() > 0) {
+                    tv_label.setVisibility(View.GONE);
+                } else {
+                    tv_label.setVisibility(View.VISIBLE);
+                }
+                setLayoutLabel(labelList);
+                for (int i = 0; i < labelList.size(); i++) {
+                    reqLabel.append(labelList.get(i) + ",");
+                }
+                break;
+            case Constant.RESULT_LOCATION_UPLOAD:
+                tv_locat_hint.setVisibility(View.GONE);
+                reqAddressName = data.getStringExtra("addressName");
+                reqAddressNum = data.getStringExtra("addressNum");
+                tv_location.setText(reqAddressName);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void setLayoutLabel(ArrayList<String> labelList) {
+        layout_label.removeAllViews();
+        for (int i = 0; i < labelList.size(); i++) {
+            final TextView label = new TextView(this);
+            LinearLayout.LayoutParams ps = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
+                    (int) DimensionPixelUtil.getDimensionPixelSize(1, 25, this));
+            ps.rightMargin = Methods.dip2px(this, 2);
+            ps.leftMargin = Methods.dip2px(this, 2);
+            label.setLayoutParams(ps);
+            label.setGravity(Gravity.CENTER);
+            label.setSingleLine();
+            label.setEllipsize(TextUtils.TruncateAt.END);
+            label.setText(labelList.get(i));
+            label.setTextSize(16);
+            label.setTextColor(this.getResources().getColor(R.color.white));
+            label.setPadding(Methods.dip2px(this, 8), 0, Methods.dip2px(this, 8), 0);
+            label.setBackgroundColor(Color.parseColor("#8cc11f"));
+            layout_label.addView(label);
+        }
+
+    }
+}
