@@ -53,15 +53,16 @@
 			Pocket         http://getpocket.com/developer/apps/new
     -->
 
-    <ShareSDK AppKey="8ededc4680e8" />
+		<!--  已修改 -->
+    <ShareSDK AppKey="c1649961031e" />
     <!-- 修改成你在sharesdk后台注册的应用的appkey" -->
 
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
-
+	<!--  已修改 -->
     <SinaWeibo
-        AppKey="841065480"
-        AppSecret="31c47a2bb219c354f8c71c5a50912bcd"
+        AppKey="3988939394"
+        AppSecret="087843ba786d44702ed8e122aa5dcb70"
         Enable="true"
         Id="1"
         RedirectUrl="http://weishoot.com/Login/ThirdLogin"
@@ -77,10 +78,10 @@
         SortId="2" />
 
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
-
+	<!--  已修改 -->
     <QZone
-        AppId="1104781484"
-        AppKey="4ckepYnp3uXNOT4L"
+        AppId="1104876827"
+        AppKey="309s8rEHsuzRd5PG"
         Enable="true"
         Id="3"
         ShareByAppClient="true"

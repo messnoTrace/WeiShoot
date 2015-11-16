@@ -22,7 +22,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.changepassword.MyQRcodeActivity;
 import com.NationalPhotograpy.weishoot.activity.registered.LoginActivity;
 import com.NationalPhotograpy.weishoot.activity.shouye.UserInfoDetialActivity;

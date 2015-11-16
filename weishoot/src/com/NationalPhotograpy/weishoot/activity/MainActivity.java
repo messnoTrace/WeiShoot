@@ -1,16 +1,6 @@
 
 package com.NationalPhotograpy.weishoot.activity;
 
-import io.rong.imkit.RongIM;
-import io.rong.imkit.RongIMClientWrapper;
-import io.rong.imkit.fragment.ConversationListFragment;
-import io.rong.imlib.RongIMClient.ConnectCallback;
-import io.rong.imlib.RongIMClient.ConnectionStatusListener;
-import io.rong.imlib.RongIMClient.ErrorCode;
-import io.rong.imlib.RongIMClient.OnReceiveMessageListener;
-import io.rong.imlib.model.Conversation;
-import io.rong.imlib.model.Message;
-import io.rong.imlib.model.UserInfo;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,7 +28,7 @@ import android.widget.TextView;
 import cn.jpush.android.api.JPushInterface;
 import cn.sharesdk.framework.ShareSDK;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.photograph.PhotoHomeActivity;
 import com.NationalPhotograpy.weishoot.activity.quanzi.MutualConcernActivity;
 import com.NationalPhotograpy.weishoot.activity.registered.LoginActivity;
@@ -135,16 +125,16 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         super.onResume();
         if (sp.userIsLogin() && !StaticInfo.OnceFlag) {
             StaticInfo.OnceFlag = true;
-            requestGetFriendByCode();
-            requestGetToken();
-            initPush();
+//            requestGetFriendByCode();
+//            requestGetToken();
+//            initPush();
         }
         if (isConnectionStatus) {
 
         }
         android.os.Message msg = new android.os.Message();
         try {
-            msg.arg1 = RongIM.getInstance().getRongIMClient().getTotalUnreadCount();
+//            msg.arg1 = RongIM.getInstance().getRongIMClient().getTotalUnreadCount();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -208,7 +198,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
         ibtn_sy.setSelected(true);
         addFragment(FR_SY);
-        ShareSDK.initSDK(this);
+//        ShareSDK.initSDK(this);
         // 读取联系人数据库
         QueryAttention();
 //        requestGetNewVersion();
@@ -350,7 +340,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
                 mExitTime = System.currentTimeMillis();
                 return false;
             } else {
-                RongIM.getInstance().logout();
+//                RongIM.getInstance().logout();
                 StaticInfo.OnceFlag = false;
                 finish();
             }
@@ -375,24 +365,6 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
     }
 
-    class MyReceiveMessageListener implements OnReceiveMessageListener {
-
-        /**
-         * 收到消息的处理。
-         * 
-         * @param message 收到的消息实体。
-         * @param left 剩余未拉取消息数目。
-         * @return 收到消息是否处理完成，true 表示走自已的处理方式，false 走融云默认处理方式。
-         */
-        @Override
-        public boolean onReceived(Message message, int left) {
-            // 开发者根据自己需求自行处理
-            android.os.Message msg = new android.os.Message();
-            msg.arg1 = RongIM.getInstance().getRongIMClient().getTotalUnreadCount();
-            sendMsgHandler.sendMessage(msg);
-            return true;
-        }
-    }
 
     private Handler sendMsgHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -490,143 +462,20 @@ public class MainActivity extends BaseActivity implements OnClickListener {
         }).start();
     }
 
-    /**
-     * 封装的代码加载融云的会话列表的 fragment
-     * 
-     * @return
-     */
-    private Fragment initConversationListFragment() {
-        ConversationListFragment fragment = new ConversationListFragment();
-        Uri uri = Uri
-                .parse("rong://" + getApplicationInfo().packageName)
-                .buildUpon()
-                .appendPath("conversationlist")
-                .appendQueryParameter(Conversation.ConversationType.PRIVATE.getName(), "false")
-                // 设置私聊会话是否聚合显示
-                .appendQueryParameter(Conversation.ConversationType.GROUP.getName(), "true")
-                .appendQueryParameter(Conversation.ConversationType.DISCUSSION.getName(), "false")
-                .appendQueryParameter(Conversation.ConversationType.SYSTEM.getName(), "true")
-                .build();
-        fragment.setUri(uri);
-        return fragment;
-    }
 
-    /**
-     * 获取融云Token
-     */
-    private void requestGetToken() {
-        HttpUtils httpUtils = new HttpUtils(1000 * 20);
-        RequestParams params = new RequestParams();
-        params.addBodyParameter("uCode",
-                SharePreManager.getInstance(this).getUserUCode().replace("-", ""));
-        params.addBodyParameter("nickName", SharePreManager.getInstance(this).getUserNickName());
-        params.addBodyParameter("userHead", SharePreManager.getInstance(this).getUserHead());
-        httpUtils.send(HttpMethod.POST, HttpUrl.GetToken, params, new RequestCallBack<Object>() {
 
-            @Override
-            public void onFailure(HttpException e, String s) {
-                e.printStackTrace();
-            }
 
-            @Override
-            public void onSuccess(ResponseInfo<Object> objectResponseInfo) {
-                String temp = (String) objectResponseInfo.result;
-                String resultCode = "-1";
-                try {
-                    JSONObject jsonObj = new JSONObject(temp);
-                    resultCode = jsonObj.optString("code");
-                    if ("200".equals(resultCode)) {
-                        SharePreManager.getInstance(MainActivity.this).setUserToken(
-                                jsonObj.optString("token"));
-                        setRongIMConnect();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-    }
-
-    private void setRongIMConnect() {
-        RongIM.connect(SharePreManager.getInstance(MainActivity.this).getUserToken(),
-                new ConnectCallback() {
-
-                    @Override
-                    public void onError(ErrorCode arg0) {
-                        System.out.println(arg0);
-                    }
-
-                    @Override
-                    public void onSuccess(String userId) {
-                        RongIM.getInstance().setMessageAttachedUserInfo(true);
-                        isConnectionStatus = false;
-                        setUserInfoProvider();
-                        ConnectionStatus();
-                        RongIM.setOnReceiveMessageListener(new MyReceiveMessageListener());
-                    }
-
-                    @Override
-                    public void onTokenIncorrect() {
-
-                    }
-                });
-    }
-
-    private void setUserInfoProvider() {
-        RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
-
-            @Override
-            public UserInfo getUserInfo(String userId) {
-
-                return findUserById(userId);
-            }
-
-        }, true);
-    }
-
-    private void ConnectionStatus() {
-        if (RongIM.getInstance() != null && RongIM.getInstance().getRongIMClient() != null) {
-            RongIM.getInstance().getRongIMClient();
-            /**
-             * 设置连接状态变化的监听器.
-             */
-            RongIMClientWrapper.setConnectionStatusListener(new ConnectionStatusListener() {
-
-                @Override
-                public void onChanged(ConnectionStatus connectionStatus) {
-                    switch (connectionStatus) {
-
-                        case CONNECTED:// 连接成功。
-                            break;
-                        case DISCONNECTED:// 断开连接。
-
-                            break;
-                        case CONNECTING:// 连接中。
-                            break;
-                        case NETWORK_UNAVAILABLE:// 网络不可用。
-
-                            break;
-                        case KICKED_OFFLINE_BY_OTHER_CLIENT:// 用户账户在其他设备登录，本机会被踢掉线
-                            isConnectionStatus = true;
-                            break;
-                    }
-                }
-            });
-        }
-    }
-
-    private UserInfo findUserById(String userId) {
-        UserInfo us = null;
-        for (int i = 0; i < StaticInfo.mutualConcernList.size(); i++) {
-            if (StaticInfo.mutualConcernList.get(i).UCode.replace("-", "").equals(userId)) {
-                ZambiaBean tempBean = StaticInfo.mutualConcernList.get(i);
-                us = new UserInfo(tempBean.UCode.replace("-", ""), tempBean.NickName,
-                        Uri.parse(tempBean.UserHead));
-            }
-        }
-        return us;
-    }
+//    private UserInfo findUserById(String userId) {
+//        UserInfo us = null;
+//        for (int i = 0; i < StaticInfo.mutualConcernList.size(); i++) {
+//            if (StaticInfo.mutualConcernList.get(i).UCode.replace("-", "").equals(userId)) {
+//                ZambiaBean tempBean = StaticInfo.mutualConcernList.get(i);
+//                us = new UserInfo(tempBean.UCode.replace("-", ""), tempBean.NickName,
+//                        Uri.parse(tempBean.UserHead));
+//            }
+//        }
+//        return us;
+//    }
 
     /**
      * 获取联系人
@@ -661,7 +510,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
                                 zamSet.addAll(mutualBean.data);
                                 StaticInfo.mutualConcernList.clear();
                                 StaticInfo.mutualConcernList.addAll(new ArrayList(zamSet));
-                                setUserInfoProvider();
+//                                setUserInfoProvider();
                                 try {
                                     attenDB.deleteAll(ZambiaBean.class);
                                     attenDB.saveAll(StaticInfo.mutualConcernList);

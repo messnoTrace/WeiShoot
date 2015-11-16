@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 
 public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView> {
 

@@ -17,7 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.storage.Constant;
 import com.NationalPhotograpy.weishoot.utils.DimensionPixelUtil;
 

@@ -23,7 +23,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.photograph.SelectPicActivity;
 import com.NationalPhotograpy.weishoot.activity.shouye.UserInfoDetialActivity;
 import com.NationalPhotograpy.weishoot.bean.ShareBean;

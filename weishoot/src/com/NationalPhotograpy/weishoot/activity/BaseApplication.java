@@ -1,11 +1,11 @@
 
 package com.NationalPhotograpy.weishoot.activity;
 
-import io.rong.imkit.RongIM;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.storage.StaticInfo;
 import com.NationalPhotograpy.weishoot.utils.CrashHandler;
 import com.NationalPhotograpy.weishoot.utils.UserInfo.DbCitys;
@@ -23,40 +23,16 @@ public class BaseApplication extends Application {
         super.onCreate();
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(getApplicationContext());
-        SDKInitializer.initialize(this);
-        initRongIM();
-        initLocation();
+//        SDKInitializer.initialize(this);
+//        initLocation();
         initImageLoader(this);
         initImageLoaderLocat(this);
         if (!DbCitys.isExists()) {
             DbCitys.importCitysInternal(this);
-        }
-        ;
+        };
     }
 
-    private void initRongIM() {
-        /*
-         * OnCreate 会被多个进程重入，这段保护代码，确保只有您需要使用 RongIM 的进程和 Push 进程执行了 init。
-         * xxx.xxx.xxx 是您的主进程或者使用了 RongIM 的其他进程
-         */
-        if ("com.NationalPhotograpy.weishoot".equals(getCurProcessName(getApplicationContext()))
-                || "io.rong.push".equals(getCurProcessName(getApplicationContext()))) {
-
-            /* IMKit SDK调用第一步 初始化 */
-            RongIM.init(this);
-
-            /* 必须在使用 RongIM 的进程注册回调、注册自定义消息等 */
-            // if
-            // ("xxx.xxx.xxx".equals(getCurProcessName(getApplicationContext())))
-            // {
-            //
-            // RongIM.setUserInfoProvider(this, true);
-            // RongIM.setConversationBehaviorListener(this);
-            // RongIM.setConversationListBehaviorListener(this);
-            //
-            // }
-        }
-    }
+   
 
     /* 一个获得当前进程的名字的方法 */
     public static String getCurProcessName(Context context) {
@@ -94,6 +70,9 @@ public class BaseApplication extends Application {
 
     public static void initImageLoader(Context context) {
         com.NationalPhotograpy.weishoot.utils.imageloader.core.DisplayImageOptions defaultOptions = new com.NationalPhotograpy.weishoot.utils.imageloader.core.DisplayImageOptions.Builder()
+        		.showImageOnLoading(R.drawable.ic_stub)
+        		.showImageForEmptyUri(R.drawable.ic_error) // resource or drawable
+                .showImageOnFail(R.drawable.ic_error)
                 .cacheInMemory(true).cacheOnDisc(true).build();
         com.NationalPhotograpy.weishoot.utils.imageloader.core.ImageLoaderConfiguration config = new com.NationalPhotograpy.weishoot.utils.imageloader.core.ImageLoaderConfiguration.Builder(
                 context)
@@ -111,6 +90,9 @@ public class BaseApplication extends Application {
 
     public static void initImageLoaderLocat(Context context) {
         com.nostra13.universalimageloader.core.DisplayImageOptions defaultOptions = new com.nostra13.universalimageloader.core.DisplayImageOptions.Builder()
+        .showStubImage(R.drawable.ic_stub)
+		.showImageForEmptyUri(R.drawable.ic_error) // resource or drawable
+        .showImageOnFail(R.drawable.ic_error)
                 .cacheInMemory(true) // 1.8.6包使用时候，括号里面传入参数true
                 .cacheOnDisc(true) // 1.8.6包使用时候，括号里面传入参数true
                 .build();

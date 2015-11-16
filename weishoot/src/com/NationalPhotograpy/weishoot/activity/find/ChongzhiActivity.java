@@ -20,7 +20,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.activity.pay.PayResult;
 import com.NationalPhotograpy.weishoot.activity.pay.SignUtils;

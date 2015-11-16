@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
-
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.adapter.HomeAdapter;
 import com.NationalPhotograpy.weishoot.bean.TopicBean;

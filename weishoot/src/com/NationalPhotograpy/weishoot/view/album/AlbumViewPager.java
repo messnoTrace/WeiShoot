@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.bean.TopPhotoBean;
 import com.NationalPhotograpy.weishoot.net.HttpUrl;
 import com.NationalPhotograpy.weishoot.storage.StaticInfo;

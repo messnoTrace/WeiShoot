@@ -14,7 +14,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.storage.Constant;
 import com.NationalPhotograpy.weishoot.storage.StaticInfo;

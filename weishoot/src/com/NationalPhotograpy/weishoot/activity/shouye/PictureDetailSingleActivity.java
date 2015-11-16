@@ -25,7 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.activity.find.ChongzhiActivity;
 import com.NationalPhotograpy.weishoot.bean.BuyImageBean;
@@ -69,7 +69,7 @@ public class PictureDetailSingleActivity extends BaseActivity implements OnClick
 
     private AlbumViewSinglePager mViewPager;
 
-    private RelativeLayout layout_picDetail, layout_picBuy, layout_picShare;
+    private RelativeLayout layout_picDetail, layout_picShare;
 
     private RelativeLayout layout_top, layoutForShare;
 
@@ -111,7 +111,6 @@ public class PictureDetailSingleActivity extends BaseActivity implements OnClick
         btn_gz = (Button) findViewById(R.id.btn_gz);
         mViewPager = (AlbumViewSinglePager) findViewById(R.id.mViewPager);
         layout_picDetail = (RelativeLayout) findViewById(R.id.layout_picDetail);
-        layout_picBuy = (RelativeLayout) findViewById(R.id.layout_picBuy);
         layout_picShare = (RelativeLayout) findViewById(R.id.layout_picShare);
         layoutForShare = (RelativeLayout) findViewById(R.id.layoutForShare);
         layout_top = (RelativeLayout) findViewById(R.id.layout_top);
@@ -144,16 +143,6 @@ public class PictureDetailSingleActivity extends BaseActivity implements OnClick
         } else {
             btn_gz.setVisibility(View.VISIBLE);
         }
-        if ("1".equals(photoShopBean.IsSale)) {
-            if ("1".equals(photoShopBean.IsBuyed)) {
-                layout_picBuy.setVisibility(View.VISIBLE);
-                // layout_picBuy.setBackgroundResource(resid);//保存图片按钮
-            } else {
-                layout_picBuy.setVisibility(View.VISIBLE);
-            }
-        } else {
-            layout_picBuy.setVisibility(View.GONE);
-        }
         mViewPager.setAdapter(mViewPager.new ViewPagerAdapter(photoShopBean));
         mViewPager.setCurrentItem(0);
         tv_picCurrent.setText("1");
@@ -166,7 +155,6 @@ public class PictureDetailSingleActivity extends BaseActivity implements OnClick
         iv_head.setOnClickListener(this);
         btn_gz.setOnClickListener(this);
         layout_picDetail.setOnClickListener(this);
-        layout_picBuy.setOnClickListener(this);
         layout_picShare.setOnClickListener(this);
         mViewPager.setOnSingleTapListener(this);
         mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
@@ -211,9 +199,6 @@ public class PictureDetailSingleActivity extends BaseActivity implements OnClick
                 } else {
                     scrollView_picInfo.setVisibility(View.VISIBLE);
                 }
-                break;
-            case R.id.layout_picBuy:
-                requestGetCoinAndFee();
                 break;
             case R.id.layout_picShare:
                 ShareBean sharebean = new ShareBean("图片分享自微摄(http://weishoot.com)", "点击查看更多详情",

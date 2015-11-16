@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.NationalPhotograpy.weishoot.R.id;
 import com.NationalPhotograpy.weishoot.bean.CityBean;
 import com.NationalPhotograpy.weishoot.bean.CountyBean;
 import com.NationalPhotograpy.weishoot.bean.ProvinceBean;
@@ -48,14 +47,14 @@ public class DbCitys {
     }
 
     public static boolean isExists() {
-        File file = new File("/data/data/com.NationalPhotograpy.weishoot/files/city.db");
+        File file = new File("/data/data/com.Dailyfood.meirishejian/files/city.db");
 
         return file.exists();
     }
 
     public static List<ProvinceBean> getCitys() {
         SQLiteDatabase database = SQLiteDatabase.openDatabase(
-                "/data/data/com.NationalPhotograpy.weishoot/files/city.db", null, 0);
+                "/data/data/com.Dailyfood.meirishejian/files/city.db", null, 0);
 
         List<ProvinceBean> provinceBeans = new ArrayList<ProvinceBean>();
         // 修改结果集中的id列的列名为_id

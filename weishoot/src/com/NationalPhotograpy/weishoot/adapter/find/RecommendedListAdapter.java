@@ -21,7 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.registered.LoginActivity;
 import com.NationalPhotograpy.weishoot.activity.shouye.UserInfoDetialActivity;
 import com.NationalPhotograpy.weishoot.bean.UserInfosBean.UserInfos;

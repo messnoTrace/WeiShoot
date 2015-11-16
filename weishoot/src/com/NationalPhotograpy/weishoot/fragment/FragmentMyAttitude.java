@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.shouye.MyAttitudeActivity;
 import com.NationalPhotograpy.weishoot.bean.CommonBean;
 import com.NationalPhotograpy.weishoot.net.HttpUrl;

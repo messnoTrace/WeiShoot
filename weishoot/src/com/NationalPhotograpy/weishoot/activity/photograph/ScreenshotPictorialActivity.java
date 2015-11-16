@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.adapter.photograph.ScreenshotPictorialAdapter;
 import com.NationalPhotograpy.weishoot.bean.PicTemplateChildBean;

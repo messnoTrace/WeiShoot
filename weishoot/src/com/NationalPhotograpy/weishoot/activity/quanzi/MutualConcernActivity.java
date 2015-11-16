@@ -1,7 +1,6 @@
 
 package com.NationalPhotograpy.weishoot.activity.quanzi;
 
-import io.rong.imkit.RongIM;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,7 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.adapter.quanzi.FriendsListAdapter;
 import com.NationalPhotograpy.weishoot.adapter.quanzi.SideBar;
@@ -96,8 +95,8 @@ public class MutualConcernActivity extends BaseActivity implements OnClickListen
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                RongIM.getInstance().startPrivateChat(MutualConcernActivity.this,
-                        data.get(position).UCode.replace("-", ""), data.get(position).NickName);
+//                RongIM.getInstance().startPrivateChat(MutualConcernActivity.this,
+//                        data.get(position).UCode.replace("-", ""), data.get(position).NickName);
             }
         });
         et_search.addTextChangedListener(new TextWatcher() {

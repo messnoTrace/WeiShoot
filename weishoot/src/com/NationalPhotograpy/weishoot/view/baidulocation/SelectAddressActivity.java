@@ -23,7 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.storage.Constant;
 import com.NationalPhotograpy.weishoot.storage.StaticInfo;
 import com.NationalPhotograpy.weishoot.utils.WeiShootToast;

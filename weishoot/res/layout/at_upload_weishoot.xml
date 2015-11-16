@@ -221,6 +221,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="50dip"
+           android:visibility="gone"
         android:background="@color/white" >
 
         <View
@@ -258,6 +259,7 @@
             android:layout_toRightOf="@+id/tv_text_location"
             android:gravity="center_vertical"
             android:singleLine="true"
+         
             android:textColor="@color/black"
             android:textSize="13dip" />
 

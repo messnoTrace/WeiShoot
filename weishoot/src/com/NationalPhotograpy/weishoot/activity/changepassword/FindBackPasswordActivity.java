@@ -24,10 +24,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.net.HttpUrl;
 import com.NationalPhotograpy.weishoot.storage.Constant;
@@ -116,22 +114,7 @@ public class FindBackPasswordActivity extends BaseActivity implements OnClickLis
     }
 
     private void initData() {
-        SMSSDK.initSDK(this, Constant.SMS_APPKEY, Constant.SMS_APPSECRET);
-        EventHandler eh = new EventHandler() {
-
-            @Override
-            public void afterEvent(int event, int result, Object data) {
-
-                Message msg = new Message();
-                msg.what = 200;
-                msg.arg1 = event;
-                msg.arg2 = result;
-                msg.obj = data;
-                handler.sendMessage(msg);
-            }
-
-        };
-        SMSSDK.registerEventHandler(eh);
+     
 
         String text = "上一步输入的用户名，未绑定手机或邮箱请您拨打电话010-68391604，联系工作人员找回密码";
         SpannableString spStr = new SpannableString(text);
@@ -176,26 +159,6 @@ public class FindBackPasswordActivity extends BaseActivity implements OnClickLis
                 break;
             case R.id.btn_get_code:
 
-                if ("下一步".equals(btn_get_code.getText().toString())) {
-
-                    if (TextUtils.isEmpty(et_message_code.getText().toString())) {
-                        WeiShootToast.makeErrorText(this, "验证码不能为空", WeiShootToast.LENGTH_SHORT)
-                                .show();
-                        return;
-                    }
-
-                    SMSSDK.submitVerificationCode("86", phone, et_message_code.getText().toString());
-                    dialog.show();
-                }
-
-                if ("获取验证码".equals(btn_get_code.getText().toString())) {
-                    // 发送验证码给手机号给 phone
-
-                    SMSSDK.getVerificationCode("86", phone);
-                    dialog.show();
-
-                }
-
                 break;
 
             case R.id.btn_ok:
@@ -231,56 +194,13 @@ public class FindBackPasswordActivity extends BaseActivity implements OnClickLis
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SMSSDK.unregisterAllEventHandler();
     }
 
     int totalTime = 60;
 
     @Override
     public boolean handleMessage(Message msg) {
-        int what = msg.what;
-        int event = msg.arg1;
-        int result = msg.arg2;
-        Object data = msg.obj;
-        Log.e("event", "event=" + event);
-        if (what == 200) {
-            if (result == SMSSDK.RESULT_COMPLETE) {
-                // 短信注册成功后，返回MainActivity,然后提示新好友
-                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {// 提交验证码成功
-                    // requestRegist(passwordAgain);
-                    dialog.dismiss();
-                    view_container.removeAllViews();
-                    view_container.addView(new_password_view);
-                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
-                    WeiShootToast.makeText(this, "验证码已经发送", WeiShootToast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                    Message message = Message.obtain();
-                    message.what = 100;
-                    handler.sendMessageDelayed(message, 0);
-                    layout_code.setVisibility(View.VISIBLE);
-                    btn_get_code.setText("下一步");
-
-                }
-            } else {
-                WeiShootToast.makeText(this, "验证码输入有误", WeiShootToast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        }
-
-        if (what == 100) {
-            if (totalTime >= 0) {
-                tv_code_countdown.setText(totalTime + "秒后重发");
-                Message message = Message.obtain();
-                message.what = 100;
-                handler.sendMessageDelayed(message, 1000);
-                totalTime--;
-            } else {
-                totalTime = 60;
-                tv_code_countdown.setText("请重新获取");
-                btn_get_code.setText("获取验证码");
-
-            }
-        }
+     
 
         return false;
     }

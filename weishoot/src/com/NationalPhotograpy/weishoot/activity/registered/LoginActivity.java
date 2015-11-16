@@ -27,7 +27,7 @@ import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.activity.changepassword.FindBackPasswordActivity;
 import com.NationalPhotograpy.weishoot.bean.UserInfosBean;
@@ -75,7 +75,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener, Plat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ShareSDK.initSDK(this);
+//        ShareSDK.initSDK(this);
         initView();
         setListener();
 
@@ -83,7 +83,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener, Plat
 
     @Override
     protected void onDestroy() {
-        ShareSDK.stopSDK(this);
+//        ShareSDK.stopSDK(this);
         super.onDestroy();
     }
 

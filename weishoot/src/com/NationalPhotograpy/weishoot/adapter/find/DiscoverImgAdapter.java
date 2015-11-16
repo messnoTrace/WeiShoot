@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.shouye.PictureDetailSingleActivity;
 import com.NationalPhotograpy.weishoot.bean.PhotoShopTypeBean.PhotoShopBean;
 import com.NationalPhotograpy.weishoot.utils.imageloader.core.ImageLoader;

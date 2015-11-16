@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.ImageView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.view.pullrefresh.PullToRefreshBase;
 
 public class MyPullZoomListView extends PullToRefreshBase<PullToZoomListView> {

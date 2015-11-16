@@ -2,7 +2,7 @@ package com.NationalPhotograpy.weishoot.fragment;
 
 import com.NationalPhotograpy.weishoot.FindPeopleActivity;
 import com.NationalPhotograpy.weishoot.LookAroundActivity;
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.find.DiscoverImgActivity;
 import com.NationalPhotograpy.weishoot.view.zxing.MipcaCaptureActivity;
 

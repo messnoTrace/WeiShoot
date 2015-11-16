@@ -1,6 +1,6 @@
 package com.NationalPhotograpy.weishoot.view;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 
 import android.app.Activity;
 import android.app.Dialog;

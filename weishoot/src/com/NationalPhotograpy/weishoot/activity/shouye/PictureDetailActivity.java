@@ -25,7 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.activity.find.ChongzhiActivity;
 import com.NationalPhotograpy.weishoot.bean.BuyImageBean;
@@ -71,9 +71,9 @@ public class PictureDetailActivity extends BaseActivity implements OnClickListen
 
     private AlbumViewPager mViewPager;
 
-    private Button ibn_picDetail, ibn_picBuy, ibn_picShare;
+    private Button ibn_picDetail, ibn_picShare;
 
-    private RelativeLayout layout_top, layoutForShare, layout_picBuy;
+    private RelativeLayout layout_top, layoutForShare;
 
     private LinearLayout layout_bottom;
 
@@ -115,10 +115,8 @@ public class PictureDetailActivity extends BaseActivity implements OnClickListen
         btn_gz = (Button) findViewById(R.id.btn_gz);
         mViewPager = (AlbumViewPager) findViewById(R.id.mViewPager);
         ibn_picDetail = (Button) findViewById(R.id.ibn_picDetail);
-        ibn_picBuy = (Button) findViewById(R.id.ibn_picBuy);
         ibn_picShare = (Button) findViewById(R.id.ibn_picShare);
         layout_top = (RelativeLayout) findViewById(R.id.layout_top);
-        layout_picBuy = (RelativeLayout) findViewById(R.id.layout_picBuy);
         layoutForShare = (RelativeLayout) findViewById(R.id.layoutForShare);
         layout_bottom = (LinearLayout) findViewById(R.id.layout_bottom);
         scrollView_picInfo = (ScrollView) findViewById(R.id.scrollView_picInfo);
@@ -157,16 +155,7 @@ public class PictureDetailActivity extends BaseActivity implements OnClickListen
         } else {
             btn_gz.setVisibility(View.VISIBLE);
         }
-        if ("1".equals(topicData.PhotoList.get(0).IsSale)) {
-            if ("1".equals(topicData.PhotoList.get(0).IsBuyed)) {
-                layout_picBuy.setVisibility(View.VISIBLE);
-                // layout_picBuy.setBackgroundResource(resid);//保存图片按钮
-            } else {
-                layout_picBuy.setVisibility(View.VISIBLE);
-            }
-        } else {
-            layout_picBuy.setVisibility(View.GONE);
-        }
+   
         mViewPager.setAdapter(mViewPager.new ViewPagerAdapter(topicData.PhotoList));
         mViewPager.setCurrentItem(current);
         viewPagerIndex = current;
@@ -180,7 +169,6 @@ public class PictureDetailActivity extends BaseActivity implements OnClickListen
         iv_head.setOnClickListener(this);
         btn_gz.setOnClickListener(this);
         ibn_picDetail.setOnClickListener(this);
-        ibn_picBuy.setOnClickListener(this);
         ibn_picShare.setOnClickListener(this);
         mViewPager.setOnSingleTapListener(this);
         mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
@@ -189,16 +177,7 @@ public class PictureDetailActivity extends BaseActivity implements OnClickListen
             public void onPageSelected(int arg0) {
                 viewPagerIndex = arg0;
                 tv_picCurrent.setText(arg0 + 1 + "");
-                if ("1".equals(topicData.PhotoList.get(arg0).IsSale)) {
-                    if ("1".equals(topicData.PhotoList.get(arg0).IsBuyed)) {
-                        layout_picBuy.setVisibility(View.VISIBLE);
-                        // layout_picBuy.setBackgroundResource(resid);//保存图片按钮
-                    } else {
-                        layout_picBuy.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    layout_picBuy.setVisibility(View.GONE);
-                }
+
                 requestGetExifByCode(topicData.PhotoList.get(arg0).PCode);
             }
 
@@ -238,9 +217,9 @@ public class PictureDetailActivity extends BaseActivity implements OnClickListen
                     scrollView_picInfo.setVisibility(View.VISIBLE);
                 }
                 break;
-            case R.id.ibn_picBuy:
-                requestGetCoinAndFee();
-                break;
+//            case R.id.ibn_picBuy:
+//                requestGetCoinAndFee();
+//                break;
             case R.id.ibn_picShare:
                 String shareUrl = "http://weishoot.com/Content/Images/logo@2x.png";
                 if (topicData.PhotoList != null && topicData.PhotoList.size() > 0) {

@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.activity.shouye.UserInfoDetialActivity;
 import com.NationalPhotograpy.weishoot.storage.SharePreManager;
@@ -68,12 +68,12 @@ public class MyQRcodeActivity extends BaseActivity implements OnClickListener {
             if (erweimaFile.length() > 0) {
                 iv_qrcode.setImageBitmap(BitmapFactory.decodeFile(erweimaFile));
             } else {
-                createQRImage("http://a.app.qq.com/o/simple.jsp?pkgname=com.NationalPhotograpy.weishoot&u="
+                createQRImage("http://a.app.qq.com/o/simple.jsp?pkgname=com.Dailyfood.meirishejian&u="
                         + erweima);
                 SharePreManager.getInstance(MyQRcodeActivity.this).setErWeiMa(erweima);
             }
         } else {
-            createQRImage("http://a.app.qq.com/o/simple.jsp?pkgname=com.NationalPhotograpy.weishoot&u="
+            createQRImage("http://a.app.qq.com/o/simple.jsp?pkgname=com.Dailyfood.meirishejian&u="
                     + erweima);
             SharePreManager.getInstance(MyQRcodeActivity.this).setErWeiMa(erweima);
         }

@@ -12,7 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.baidu.mapapi.search.core.PoiInfo;
 
 public class SelectAddressAdapter extends BaseAdapter {

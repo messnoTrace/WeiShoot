@@ -4,7 +4,7 @@ package com.NationalPhotograpy.weishoot.activity.shouye;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 
 /**

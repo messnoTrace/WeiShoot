@@ -15,7 +15,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.adapter.photograph.AlbumViewPagerLocat;
 import com.NationalPhotograpy.weishoot.storage.Constant;

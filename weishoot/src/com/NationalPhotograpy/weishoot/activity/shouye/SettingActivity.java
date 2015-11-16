@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import cn.jpush.android.api.JPushInterface;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.activity.photograph.WeiShootWebActiivty;
 import com.NationalPhotograpy.weishoot.storage.SharePreManager;

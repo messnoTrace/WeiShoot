@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.utils.ImageLoader;
 import com.NationalPhotograpy.weishoot.utils.ImageLoader.Type;
 import com.NationalPhotograpy.weishoot.utils.WeiShootToast;

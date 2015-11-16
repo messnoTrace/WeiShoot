@@ -17,7 +17,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.find.SearchWeishootActivity;
 import com.NationalPhotograpy.weishoot.adapter.CommomAdapter;
 import com.NationalPhotograpy.weishoot.adapter.CommomViewHolder;

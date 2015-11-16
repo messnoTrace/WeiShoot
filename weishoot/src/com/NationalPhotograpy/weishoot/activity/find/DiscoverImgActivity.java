@@ -10,7 +10,7 @@ import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.adapter.find.DiscoverImgAdapter;
 import com.NationalPhotograpy.weishoot.bean.PhotoShopTypeBean.PhotoShopBean;

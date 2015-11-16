@@ -1,10 +1,9 @@
 package com.NationalPhotograpy.weishoot;
 
 import java.util.List;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.activity.find.RecommendedActivity;
 import com.NationalPhotograpy.weishoot.activity.find.SearchWeishootActivity;
@@ -28,7 +27,6 @@ import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;

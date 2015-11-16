@@ -101,7 +101,7 @@ public class StringsUtil {
             Drawable drawable = context.getResources().getDrawable(
                     context.getResources().getIdentifier(
                             matcher.group().substring(1, matcher.group().length() - 1), "drawable",
-                            "com.NationalPhotograpy.weishoot"));
+                            "com.Dailyfood.meirishejian"));
             drawable.setBounds(0, 0, 30, 30);// 这里设置图片的大小
             ImageSpan imageSpan = new ImageSpan(drawable, ImageSpan.ALIGN_BOTTOM);
             builder.setSpan(imageSpan, matcher.start(), matcher.end(),

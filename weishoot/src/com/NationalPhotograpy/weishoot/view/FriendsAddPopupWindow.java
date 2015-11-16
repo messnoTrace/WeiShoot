@@ -12,7 +12,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.quanzi.NewFriendsActivity;
 import com.NationalPhotograpy.weishoot.view.zxing.MipcaCaptureActivity;
 

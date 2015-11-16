@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="招人"
+            android:text="找人"
             android:textColor="#000"
             android:textSize="20sp" />
 

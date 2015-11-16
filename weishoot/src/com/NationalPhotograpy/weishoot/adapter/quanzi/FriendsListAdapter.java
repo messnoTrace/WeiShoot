@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.bean.ZambiaBean;
 import com.NationalPhotograpy.weishoot.net.HttpUrl;
 import com.NationalPhotograpy.weishoot.storage.StaticInfo;

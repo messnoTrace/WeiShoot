@@ -33,7 +33,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.find.DiscoverImgActivity;
 import com.NationalPhotograpy.weishoot.activity.find.PictureMarketActivity;
 import com.NationalPhotograpy.weishoot.activity.find.RecommendedActivity;

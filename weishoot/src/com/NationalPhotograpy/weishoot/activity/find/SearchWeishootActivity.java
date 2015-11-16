@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.activity.shouye.UserInfoDetialActivity;
 import com.NationalPhotograpy.weishoot.adapter.HomeAdapter;

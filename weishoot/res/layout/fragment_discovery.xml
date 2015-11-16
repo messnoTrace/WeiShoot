@@ -40,7 +40,7 @@
                 android:layout_height="45dip"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dip"
-                android:background="@drawable/icon_dasai" />
+                android:background="@drawable/icon_photowall" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
                 android:layout_height="45dip"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dip"
-                android:background="@drawable/icon_dasai" />
+                android:background="@drawable/icon_hotweishoot" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -88,7 +88,7 @@
                 android:layout_height="45dip"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dip"
-                android:background="@drawable/icon_dasai" />
+                android:background="@drawable/icon_searchperson" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -118,7 +118,7 @@
                 android:layout_height="45dip"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dip"
-                android:background="@drawable/icon_dasai" />
+                android:background="@drawable/icon_sao" />
 
             <TextView
                 android:layout_width="wrap_content"

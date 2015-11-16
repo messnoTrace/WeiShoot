@@ -17,10 +17,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.net.HttpUrl;
 import com.NationalPhotograpy.weishoot.storage.Constant;
@@ -80,22 +78,6 @@ public class ChangeBindPhoneActivity extends BaseActivity implements OnClickList
         if (!TextUtils.isEmpty(phone)) {
             tv_user_bind_phone_num.setText("********" + phone.substring(8, 11));
         }
-        SMSSDK.initSDK(this, Constant.SMS_APPKEY, Constant.SMS_APPSECRET);
-        EventHandler eh = new EventHandler() {
-
-            @Override
-            public void afterEvent(int event, int result, Object data) {
-
-                Message msg = new Message();
-                msg.what = 200;
-                msg.arg1 = event;
-                msg.arg2 = result;
-                msg.obj = data;
-                handler.sendMessage(msg);
-            }
-
-        };
-        SMSSDK.registerEventHandler(eh);
     }
 
     private void setListener() {
@@ -118,7 +100,6 @@ public class ChangeBindPhoneActivity extends BaseActivity implements OnClickList
                 }
 
                 String btnText = btn_get_code.getText().toString().trim();
-                if (("获取验证码").equals(btnText)) {
                     newPhone = et_new_phone_num.getText().toString();
                     if (TextUtils.isEmpty(newPhone)) {
                         WeiShootToast.makeErrorText(this, "请输入新手机号", WeiShootToast.LENGTH_SHORT)
@@ -126,22 +107,7 @@ public class ChangeBindPhoneActivity extends BaseActivity implements OnClickList
                         return;
                     }
                     requestLogin(phone, password);
-
-                } else if (("确定").equals(btnText)) {
                     String code = et_new_phone_num.getText().toString();
-                    if (TextUtils.isEmpty(code)) {
-                        WeiShootToast.makeErrorText(this, "请输入验证码", WeiShootToast.LENGTH_SHORT)
-                                .show();
-                        return;
-                    }
-
-                    SMSSDK.submitVerificationCode("86", newPhone, code);
-                    // 校验验证码完成后
-
-                } else if (("重新获取验证码").equals(btnText)) {
-                    SMSSDK.getVerificationCode("86", newPhone);
-                }
-
                 break;
 
             default:
@@ -153,7 +119,6 @@ public class ChangeBindPhoneActivity extends BaseActivity implements OnClickList
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SMSSDK.unregisterAllEventHandler();
     }
 
     private void initUi() {
@@ -170,51 +135,6 @@ public class ChangeBindPhoneActivity extends BaseActivity implements OnClickList
 
     int totalTime = 60;
 
-    @Override
-    public boolean handleMessage(Message msg) {
-
-        int what = msg.what;
-        int event = msg.arg1;
-        int result = msg.arg2;
-        Object data = msg.obj;
-        Log.e("event", "event=" + event);
-        if (what == 200) {
-            if (result == SMSSDK.RESULT_COMPLETE) {
-                // 短信注册成功后，返回MainActivity,然后提示新好友
-                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {// 提交验证码成功
-                    // requestRegist(passwordAgain);
-                    requestChangePhone();
-
-                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
-                    WeiShootToast.makeText(this, "验证码已经发送", WeiShootToast.LENGTH_SHORT).show();
-                    Message message = Message.obtain();
-                    message.what = 100;
-                    handler.sendMessageDelayed(message, 0);
-
-                    initUi();
-
-                }
-            } else {
-                WeiShootToast.makeText(this, "验证码输入有误", WeiShootToast.LENGTH_SHORT).show();
-            }
-        }
-        if (what == 100) {
-            if (totalTime >= 0) {
-                tv_code_countdown.setText(totalTime + "秒后重发");
-                Message message = Message.obtain();
-                message.what = 100;
-                handler.sendMessageDelayed(message, 1000);
-                totalTime--;
-            } else {
-                totalTime = 60;
-                tv_code_countdown.setText("请重新获取");
-                btn_get_code.setText("重新获取验证码");
-
-            }
-        }
-
-        return true;
-    }
 
     private void requestLogin(String user, String password) {
         dialog.show();
@@ -238,28 +158,6 @@ public class ChangeBindPhoneActivity extends BaseActivity implements OnClickList
             @Override
             public void onSuccess(ResponseInfo<Object> objectResponseInfo) {
                 dialog.dismiss();
-                String temp = (String) objectResponseInfo.result;
-                if (!TextUtils.isEmpty(temp)) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(temp);
-                        JSONObject jObject = jsonObject.getJSONObject("result");
-                        if ("200".equals(jObject.optString("ResultCode"))) {
-                            // 发送验证码给newPhone
-                            SMSSDK.getVerificationCode("86", newPhone);
-
-                        } else {
-                            WeiShootToast.makeErrorText(ChangeBindPhoneActivity.this,
-                                    jObject.optString("ResultMsg"), WeiShootToast.LENGTH_SHORT)
-                                    .show();
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    WeiShootToast.makeErrorText(ChangeBindPhoneActivity.this,
-                            getString(R.string.http_timeout), WeiShootToast.LENGTH_SHORT).show();
-                }
 
             }
         });
@@ -323,5 +221,11 @@ public class ChangeBindPhoneActivity extends BaseActivity implements OnClickList
             }
         });
     }
+
+	@Override
+	public boolean handleMessage(Message msg) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

@@ -13,7 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.adapter.HomeAdapter;
 import com.NationalPhotograpy.weishoot.bean.TopCommentBean;

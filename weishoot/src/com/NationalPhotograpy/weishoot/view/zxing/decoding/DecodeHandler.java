@@ -24,7 +24,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.view.zxing.MipcaCaptureActivity;
 import com.NationalPhotograpy.weishoot.view.zxing.camera.CameraManager;
 import com.NationalPhotograpy.weishoot.view.zxing.camera.PlanarYUVLuminanceSource;

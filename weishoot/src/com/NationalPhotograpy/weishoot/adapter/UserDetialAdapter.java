@@ -26,7 +26,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.registered.LoginActivity;
 import com.NationalPhotograpy.weishoot.activity.shouye.CommentListActivity;
 import com.NationalPhotograpy.weishoot.activity.shouye.CreateCommentActivity;

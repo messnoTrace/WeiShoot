@@ -30,7 +30,7 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.view.zxing.camera.CameraManager;
 import com.google.zxing.ResultPoint;
 

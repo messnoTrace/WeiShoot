@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.bean.PhotoShopTypeBean.PhotoShopBean;
 import com.NationalPhotograpy.weishoot.utils.imageloader.core.assist.FailReason;
 import com.NationalPhotograpy.weishoot.utils.imageloader.core.listener.ImageLoadingListener;

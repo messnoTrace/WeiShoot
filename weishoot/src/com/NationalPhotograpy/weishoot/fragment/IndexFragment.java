@@ -20,12 +20,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.TopicDetailActivity;
 import com.NationalPhotograpy.weishoot.activity.shouye.UserInfoDetialActivity;
 import com.NationalPhotograpy.weishoot.adapter.CommomAdapter;
@@ -34,6 +35,7 @@ import com.NationalPhotograpy.weishoot.bean.BannerBean;
 import com.NationalPhotograpy.weishoot.bean.BannerBean.Banner;
 import com.NationalPhotograpy.weishoot.net.HttpUrl;
 import com.NationalPhotograpy.weishoot.storage.Constant;
+import com.NationalPhotograpy.weishoot.utils.ImageLoader;
 import com.NationalPhotograpy.weishoot.utils.ViewUtil;
 import com.NationalPhotograpy.weishoot.utils.WeiShootToast;
 import com.NationalPhotograpy.weishoot.view.AutoScrollViewPager;
@@ -178,33 +180,7 @@ public class IndexFragment  extends Fragment{
 
 	                int width=Constant.SCREEN_WIDTH/2-20;
 	                params.width=width;
-
-
-	                 com.nostra13.universalimageloader.core.ImageLoader.getInstance().loadImage(item.ImgUrl, new ImageLoadingListener() {
-	                     @Override
-	                     public void onLoadingStarted(String s, View view) {
-
-	                     }
-
-	                     @Override
-	                     public void onLoadingFailed(String s, View view, FailReason failReason) {
-
-	                     }
-
-	                     @Override
-	                     public void onLoadingComplete(String s, View view, Bitmap bitmap) {
-
-	                         params.height = bitmap.getHeight();
-	                         imageView.setImageBitmap(bitmap);
-	                         mHolder.setVisiblility(R.id.tv_item_indexuser_name, View.GONE);
-	                     }
-
-	                     @Override
-	                     public void onLoadingCancelled(String s, View view) {
-
-	                     }
-	                 });
-
+	                params.height=(int)(width*1.3);
 	                com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(item.ImgUrl, imageView);
 
 
@@ -219,7 +195,15 @@ public class IndexFragment  extends Fragment{
 	                int width=Constant.SCREEN_WIDTH/2-20;
 	                params.width=width;
 	                params.height=width;
-	                com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(item.ImgUrl, imageView);
+	                imageView.setScaleType(ScaleType.FIT_CENTER);
+	                com.nostra13.universalimageloader.core.DisplayImageOptions defaultOptions = new com.nostra13.universalimageloader.core.DisplayImageOptions.Builder()
+	                .showStubImage(R.drawable.default_head)
+	        		.showImageForEmptyUri(R.drawable.ic_error) // resource or drawable
+	                .showImageOnFail(R.drawable.ic_error)
+	                        .cacheInMemory(true) // 1.8.6包使用时候，括号里面传入参数true
+	                        .cacheOnDisc(true) // 1.8.6包使用时候，括号里面传入参数true
+	                        .build();
+	                com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(item.ImgUrl, imageView,defaultOptions);
 	                mHolder.setText(R.id.tv_item_indexuser_name, item.Title);
 	            }
 	        };

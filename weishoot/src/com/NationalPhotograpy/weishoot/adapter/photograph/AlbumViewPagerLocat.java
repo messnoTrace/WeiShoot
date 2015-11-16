@@ -11,7 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.view.album.MatrixImageView;
 import com.NationalPhotograpy.weishoot.view.album.MatrixImageView.OnMovingListener;
 import com.NationalPhotograpy.weishoot.view.album.MatrixImageView.OnSingleTapListener;

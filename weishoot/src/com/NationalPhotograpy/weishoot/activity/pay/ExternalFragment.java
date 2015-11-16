@@ -1,6 +1,6 @@
 package com.NationalPhotograpy.weishoot.activity.pay;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

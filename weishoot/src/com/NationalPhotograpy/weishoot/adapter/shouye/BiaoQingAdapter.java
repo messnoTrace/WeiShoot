@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 
 public class BiaoQingAdapter extends BaseAdapter {
 
@@ -50,7 +50,7 @@ public class BiaoQingAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.imageview.setBackgroundResource(mContext.getResources().getIdentifier(
-                biaoqingList.get(position), "drawable", "com.NationalPhotograpy.weishoot"));
+                biaoqingList.get(position), "drawable", "com.Dailyfood.meirishejian"));
         return convertView;
     }
 

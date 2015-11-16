@@ -27,7 +27,7 @@ import cn.sharesdk.tencent.qzone.QZone;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.bean.ShareBean;
 import com.NationalPhotograpy.weishoot.utils.WeiShootToast;
 

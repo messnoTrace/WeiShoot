@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 
 public class EditUserInfoDialog extends Dialog {
     private TextView dialog_title_view;

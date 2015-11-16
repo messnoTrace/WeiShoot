@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.find.DiscoverImgActivity;
 import com.NationalPhotograpy.weishoot.activity.shouye.PictureDetailSingleActivity;
 import com.NationalPhotograpy.weishoot.bean.PhotoShopTypeBean.PhotoShopBean;

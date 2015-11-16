@@ -26,7 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.adapter.UserDetialAdapter;
 import com.NationalPhotograpy.weishoot.bean.TopCommentBean;
 import com.NationalPhotograpy.weishoot.bean.TopicBean;

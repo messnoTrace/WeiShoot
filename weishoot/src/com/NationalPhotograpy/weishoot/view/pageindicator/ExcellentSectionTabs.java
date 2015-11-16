@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.registered.ThirdLoginActivity;
 import com.NationalPhotograpy.weishoot.adapter.registered.FragmentTabAdapter;
 

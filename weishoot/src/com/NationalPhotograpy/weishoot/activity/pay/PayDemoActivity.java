@@ -15,7 +15,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.alipay.sdk.app.PayTask;
 
 public class PayDemoActivity extends FragmentActivity {

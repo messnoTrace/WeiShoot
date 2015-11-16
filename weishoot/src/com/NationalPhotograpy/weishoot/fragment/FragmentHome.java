@@ -28,7 +28,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.MainActivity;
 import com.NationalPhotograpy.weishoot.activity.photograph.PhotoHomeActivity;
 import com.NationalPhotograpy.weishoot.activity.photograph.SelectPicActivity;
@@ -207,7 +207,7 @@ public class FragmentHome extends Fragment implements OnClickListener, OnItemSel
         initCacheData();
         lv_pulltorefresh.setRefreshing();
         requestGetTopic();
-        requestGetAd();
+//        requestGetAd();
         
         AllTags.getAllTagForNet(getActivity());
 

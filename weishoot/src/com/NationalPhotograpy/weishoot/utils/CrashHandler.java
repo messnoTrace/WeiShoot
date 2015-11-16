@@ -33,7 +33,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.storage.StaticInfo;
 
 /**

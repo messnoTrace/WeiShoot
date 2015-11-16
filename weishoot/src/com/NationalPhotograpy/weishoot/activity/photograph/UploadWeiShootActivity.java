@@ -24,7 +24,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.activity.MainActivity;
 import com.NationalPhotograpy.weishoot.activity.changepassword.LikeStyleActivity;
@@ -271,11 +271,11 @@ public class UploadWeiShootActivity extends BaseActivity implements OnClickListe
         for (int i = 0; i < picSize; i++) {
             findViewById(
                     getResources().getIdentifier("iv_pic" + i, "id",
-                            "com.NationalPhotograpy.weishoot")).setVisibility(View.VISIBLE);
+                            "com.Dailyfood.meirishejian")).setVisibility(View.VISIBLE);
             ImageLoader.getInstance(3, Type.LIFO).loadImage(
                     uploadPic.get(i),
                     (ImageView) findViewById(getResources().getIdentifier("iv_pic" + i, "id",
-                            "com.NationalPhotograpy.weishoot")));
+                            "com.Dailyfood.meirishejian")));
         }
         tv_picCount.setText(uploadPic.size() + "");
         requestGetPicSort(uploadPic.size());
@@ -298,7 +298,7 @@ public class UploadWeiShootActivity extends BaseActivity implements OnClickListe
             radioButton.setButtonDrawable(android.R.color.transparent);
             radioButton.setBackgroundResource(getResources().getIdentifier(
                     "xx" + data.get(i).Sort.replace("-", "_"), "drawable",
-                    "com.NationalPhotograpy.weishoot"));
+                    "com.Dailyfood.meirishejian"));
             group_picPattern.addView(radioButton);
             if(i==0){
             	radioButton.setChecked(true);
@@ -318,7 +318,7 @@ public class UploadWeiShootActivity extends BaseActivity implements OnClickListe
                         group.getChildAt(i).setBackgroundResource(
                                 getResources().getIdentifier(
                                         "x" + data.get(i).Sort.replace("-", "_"), "drawable",
-                                        "com.NationalPhotograpy.weishoot"));
+                                        "com.Dailyfood.meirishejian"));
                         int scrox = 72 * i - 152;
                         scroll_pattern.scrollTo(dip2px(scrox), 0);
                         reqSCodeBean = data.get(i);
@@ -326,7 +326,7 @@ public class UploadWeiShootActivity extends BaseActivity implements OnClickListe
                         group.getChildAt(i).setBackgroundResource(
                                 getResources().getIdentifier(
                                         "xx" + data.get(i).Sort.replace("-", "_"), "drawable",
-                                        "com.NationalPhotograpy.weishoot"));
+                                        "com.Dailyfood.meirishejian"));
                     }
                 }
             }

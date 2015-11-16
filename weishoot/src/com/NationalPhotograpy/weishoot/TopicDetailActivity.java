@@ -1,5 +1,6 @@
 package com.NationalPhotograpy.weishoot;
 
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.adapter.HomeAdapter;
 import com.NationalPhotograpy.weishoot.bean.TopicBean;
@@ -19,7 +20,6 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;

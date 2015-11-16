@@ -22,7 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.registered.LoginActivity;
 import com.NationalPhotograpy.weishoot.activity.shouye.CreateCommentActivity;
 import com.NationalPhotograpy.weishoot.activity.shouye.UserInfoDetialActivity;

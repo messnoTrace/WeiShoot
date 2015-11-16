@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import cn.sharesdk.framework.i;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.bean.OcBean.OcBeans;
 import com.NationalPhotograpy.weishoot.bean.ProvinceBean;
 

@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.shouye.UserInfoActivity;
 import com.NationalPhotograpy.weishoot.adapter.shouye.CityAdapter;
 import com.NationalPhotograpy.weishoot.adapter.shouye.CityAdapter.CityItemClickListener;

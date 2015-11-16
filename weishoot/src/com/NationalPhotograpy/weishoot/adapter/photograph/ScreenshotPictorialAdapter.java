@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.bean.PicTemplateChildBean.PicTemplateChild;
 import com.NationalPhotograpy.weishoot.storage.Constant;
 import com.NationalPhotograpy.weishoot.utils.DimensionPixelUtil;

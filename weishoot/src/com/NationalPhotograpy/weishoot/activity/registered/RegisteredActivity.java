@@ -25,10 +25,8 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.wechat.friends.Wechat;
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
 
-import com.NationalPhotograpy.weishoot.R;
+import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.activity.BaseActivity;
 import com.NationalPhotograpy.weishoot.bean.UserInfosBean;
 import com.NationalPhotograpy.weishoot.net.HttpUrl;
@@ -85,7 +83,7 @@ public class RegisteredActivity extends BaseActivity implements OnClickListener,
         initView();
         initData();
         setListener();
-        ShareSDK.initSDK(this);
+//        ShareSDK.initSDK(this);
     }
 
     private void initView() {
@@ -103,22 +101,6 @@ public class RegisteredActivity extends BaseActivity implements OnClickListener,
     }
 
     private void initData() {
-        SMSSDK.initSDK(this, Constant.SMS_APPKEY, Constant.SMS_APPSECRET);
-        EventHandler eh = new EventHandler() {
-
-            @Override
-            public void afterEvent(int event, int result, Object data) {
-
-                Message msg = new Message();
-                msg.what = 200;
-                msg.arg1 = event;
-                msg.arg2 = result;
-                msg.obj = data;
-                handler.sendMessage(msg);
-            }
-
-        };
-        SMSSDK.registerEventHandler(eh);
     }
 
     private void setListener() {
@@ -185,10 +167,10 @@ public class RegisteredActivity extends BaseActivity implements OnClickListener,
                             .show();
                     return;
                 }
-                if (TextUtils.isEmpty(code)) {
-                    WeiShootToast.makeErrorText(this, "验证码不能为空", WeiShootToast.LENGTH_SHORT).show();
-                    return;
-                }
+//                if (TextUtils.isEmpty(code)) {
+//                    WeiShootToast.makeErrorText(this, "验证码不能为空", WeiShootToast.LENGTH_SHORT).show();
+//                    return;
+//                }
 //                if (totalTime == 60) {
 //                    WeiShootToast.makeErrorText(this, "请获取验证码", WeiShootToast.LENGTH_SHORT).show();
 //                    return;
@@ -268,8 +250,6 @@ public class RegisteredActivity extends BaseActivity implements OnClickListener,
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SMSSDK.unregisterAllEventHandler();
-        ShareSDK.stopSDK(this);
     }
 
     int totalTime = 60;
@@ -281,24 +261,6 @@ public class RegisteredActivity extends BaseActivity implements OnClickListener,
         int result = msg.arg2;
         Object data = msg.obj;
         Log.e("event", "event=" + event);
-        if (what == 200) {
-            if (result == SMSSDK.RESULT_COMPLETE) {
-                // 短信注册成功后，返回MainActivity,然后提示新好友
-                if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {// 提交验证码成功
-                    requestRegist(passwordAgain);
-                } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
-                    dialog.dismiss();
-                    WeiShootToast.makeText(this, "验证码已经发送", WeiShootToast.LENGTH_SHORT).show();
-                    Message message = Message.obtain();
-                    message.what = 100;
-                    handler.sendMessageDelayed(message, 0);
-
-                }
-            } else {
-                WeiShootToast.makeText(this, "验证码输入有误", WeiShootToast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        }
 
         if (what == 100) {
             if (totalTime >= 0) {
@@ -491,16 +453,7 @@ public class RegisteredActivity extends BaseActivity implements OnClickListener,
                                 JSONObject jsonObject = new JSONObject(temp);
                                 JSONObject jObject = jsonObject.getJSONObject("result");
                                 if ("200".equals(jObject.optString("resultCode"))) {
-
                                     JSONObject object = jsonObject.getJSONObject("data");
-                                    if ("1".equals(object.optString("data"))) {
-                                        WeiShootToast.makeErrorText(RegisteredActivity.this,
-                                                "手机号被占用", WeiShootToast.LENGTH_SHORT).show();
-                                    } else if ("0".equals(object.optString("data"))) {
-
-                                        SMSSDK.getVerificationCode("86", phone);
-                                        dialog.show();
-                                    }
 
                                 } else {
                                     WeiShootToast.makeErrorText(RegisteredActivity.this,
