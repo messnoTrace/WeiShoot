@@ -144,8 +144,8 @@ public class UploadWeiShootActivity extends BaseActivity implements OnClickListe
                     return;
                 }
                 String[] tempArr = reqLabel.toString().split(",");
-                if (tempArr.length < 2) {
-                    WeiShootToast.makeErrorText(UploadWeiShootActivity.this, "至少选择2个标签",
+                if (tempArr.length < 1) {
+                    WeiShootToast.makeErrorText(UploadWeiShootActivity.this, "至少选择1个标签",
                             WeiShootToast.LENGTH_SHORT).show();
                     return;
                 }

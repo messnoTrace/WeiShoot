@@ -39,5 +39,7 @@ public class UserInfosBean implements Serializable {
         public String Cover;
         
         public String Passwords;
+        
+        public String IsRCMD;
     }
 }

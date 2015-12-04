@@ -13,6 +13,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -89,6 +90,7 @@ public class UserInfoDetialActivity extends Activity implements OnClickListener 
 
     private TextView tv_zy,tv_sc, tv_td, tv_wdzl, tv_zy_hide, 
              tv_sc_hide, tv_td_hide, tv_wdzl_hide;
+    private ImageView iv_v;
 
     private View view_zy,view_sc, view_td, view_wdzl, view_zy_hide,
             view_sc_hide, view_td_hide, view_wdzl_hide;
@@ -157,6 +159,7 @@ public class UserInfoDetialActivity extends Activity implements OnClickListener 
         view_td_hide = findViewById(R.id.view_td_hide);
         view_sc_hide = findViewById(R.id.view_sc_hide);
         view_wdzl_hide = findViewById(R.id.view_wdzl_hide);
+        
 
         mHeadView = LayoutInflater.from(this).inflate(R.layout.view_userinfo_issue, null);
         layout_tab = (LinearLayout) mHeadView.findViewById(R.id.layout_tab);
@@ -178,6 +181,7 @@ public class UserInfoDetialActivity extends Activity implements OnClickListener 
         view_td = mHeadView.findViewById(R.id.view_td);
         view_sc = mHeadView.findViewById(R.id.view_sc);
         view_wdzl = mHeadView.findViewById(R.id.view_wdzl);
+        iv_v=(ImageView) mHeadView.findViewById(R.id.iv_v);
 
         detialAdapter = new UserDetialAdapter(this, listView);
         listView.setAdapter(detialAdapter);
@@ -489,6 +493,12 @@ public class UserInfoDetialActivity extends Activity implements OnClickListener 
                 if (uInfo != null && uInfo.result != null) {
                     if ("200".equals(uInfo.result.ResultCode) && uInfo.data != null) {
 
+                    	if("2".equals(uInfo.data.IsRCMD)){
+                    		iv_v.setVisibility(View.VISIBLE);
+                    	}else {
+                    		iv_v.setVisibility(View.INVISIBLE);
+						}
+                    	
                         tv_name.setText(uInfo.data.NickName);
 
                         ImageLoader.getInstance().displayImage(

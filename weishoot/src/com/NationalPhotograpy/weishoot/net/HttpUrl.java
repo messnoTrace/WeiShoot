@@ -5,7 +5,7 @@ public class HttpUrl {
 
 //    public static final String url_base = "http://openapi.weishoot.com";
     
-    public static final String url_base="http://115.28.91.139:8089";
+    public static final String url_base="http://115.28.91.139:8088";
 
     // Android授权码
     public static final String tokenkey = "FE4311EB-330B-4007-BAFD-6A844F4D21C7";

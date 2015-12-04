@@ -114,7 +114,8 @@ public class IndexFragment  extends Fragment{
         uslv_photo=(UnScrollableListView) parentView.findViewById(R.id.uslv_index_photo);
 
         init();
-
+        uslv_user.setFocusable(false);
+        uslv_photo.setFocusable(false);
         loadData(currentPage);
 	}
 	
@@ -170,19 +171,27 @@ public class IndexFragment  extends Fragment{
 	        list_photo=new ArrayList<Banner>();
 
 
-	        adapter_photo=new CommomAdapter<Banner>(mContext,list_photo,R.layout.item_index_user) {
+	        adapter_photo=new CommomAdapter<Banner>(mContext,list_photo,R.layout.item_index_photo) {
 	            @Override
 	            public void convert(final CommomViewHolder mHolder, Banner item, int position) {
 
-	            mHolder.setVisiblility(R.id.tv_item_indexuser_name, View.INVISIBLE);
-	               final ImageView imageView= (ImageView) mHolder.getConvertView().findViewById(R.id.iv_item_indexuser_pic);
-	               final RelativeLayout.LayoutParams params= (RelativeLayout.LayoutParams) imageView.getLayoutParams();
-
+	            com.nostra13.universalimageloader.core.DisplayImageOptions defaultOptions = new com.nostra13.universalimageloader.core.DisplayImageOptions.Builder()
+                .showStubImage(R.drawable.ic_stubirght)
+        		.showImageForEmptyUri(R.drawable.ic_stubirght) // resource or drawable
+                .showImageOnFail(R.drawable.ic_stubirght)
+                        .cacheInMemory(true) // 1.8.6包使用时候，括号里面传入参数true
+                        .cacheOnDisc(true) // 1.8.6包使用时候，括号里面传入参数true
+                        .build();
+	               final ImageView imageView= (ImageView) mHolder.getConvertView().findViewById(R.id.iv_item_index_photo);
+	               final LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) imageView.getLayoutParams();
+	               
 	                int width=Constant.SCREEN_WIDTH/2-20;
 	                params.width=width;
-	                params.height=(int)(width*1.3);
-	                com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(item.ImgUrl, imageView);
+	                params.height=width;
+//	                params.height=(int)(width*0.5f);
+	                com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(item.ImgUrl, imageView,defaultOptions);
 
+	                mHolder.setText(R.id.tv_item_index_photo_des, item.imgDesc);
 
 	            }
 	        };
@@ -191,20 +200,26 @@ public class IndexFragment  extends Fragment{
 	            @Override
 	            public void convert(CommomViewHolder mHolder, Banner item, int position) {
 	                ImageView imageView= (ImageView) mHolder.getConvertView().findViewById(R.id.iv_item_indexuser_pic);
-	                RelativeLayout.LayoutParams params= (RelativeLayout.LayoutParams) imageView.getLayoutParams();
+	                LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) imageView.getLayoutParams();
 	                int width=Constant.SCREEN_WIDTH/2-20;
 	                params.width=width;
 	                params.height=width;
 	                imageView.setScaleType(ScaleType.FIT_CENTER);
 	                com.nostra13.universalimageloader.core.DisplayImageOptions defaultOptions = new com.nostra13.universalimageloader.core.DisplayImageOptions.Builder()
-	                .showStubImage(R.drawable.default_head)
-	        		.showImageForEmptyUri(R.drawable.ic_error) // resource or drawable
-	                .showImageOnFail(R.drawable.ic_error)
+	                .showStubImage(R.drawable.ic_stubirght)
+	        		.showImageForEmptyUri(R.drawable.ic_stubleft) // resource or drawable
+	                .showImageOnFail(R.drawable.ic_stubleft)
 	                        .cacheInMemory(true) // 1.8.6包使用时候，括号里面传入参数true
 	                        .cacheOnDisc(true) // 1.8.6包使用时候，括号里面传入参数true
 	                        .build();
 	                com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(item.ImgUrl, imageView,defaultOptions);
-	                mHolder.setText(R.id.tv_item_indexuser_name, item.Title);
+	                mHolder.setText(R.id.tv_item_index_user_name,item.Title);
+	                mHolder.setText(R.id.tv_item_index_user_introduction, item.imgDesc);
+	                if(item.Rcmd.equals("2")){
+	                	mHolder.setVisiblility(R.id.iv_item_indexuser_v, View.VISIBLE);
+	                }else {
+	                	mHolder.setVisiblility(R.id.iv_item_indexuser_v, View.GONE);
+					}
 	            }
 	        };
 

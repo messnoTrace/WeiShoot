@@ -4,15 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 
 public class BannerBean {
-	
-	
-	
+
 	public ResultStatus result;
-	
-	public List<Banner>data;
-	
-	public class Banner implements Serializable{
-		
+
+	public List<Banner> data;
+
+	public class Banner implements Serializable {
+
 		public String ID;
 		public String imgDesc;
 		public String ImgUrl;
@@ -22,8 +20,8 @@ public class BannerBean {
 		public String Ucode;
 		public String Url;
 		public String Tcode;
-		
+		public String Rcmd;
+
 	}
-	
 
 }

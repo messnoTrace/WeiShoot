@@ -44,6 +44,14 @@
             android:layout_marginTop="50dip"
             android:background="@drawable/default_head"
             android:scaleType="centerCrop" />
+        <ImageView 
+            android:id="@+id/iv_v"
+            android:layout_alignRight="@id/iv_head"
+            android:layout_alignBottom="@id/iv_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/icon_v"
+            />
 
         <Button
             android:id="@+id/btn_gz"

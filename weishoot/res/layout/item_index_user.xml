@@ -1,34 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
     <ImageView
-        android:layout_centerInParent="true"
         android:id="@+id/iv_item_indexuser_pic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:scaleType="fitXY"
-        android:src="@drawable/icon_error"
-        />
+        android:src="@drawable/icon_error" />
 
-
-
-    <TextView
-        android:id="@+id/tv_item_indexuser_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/iv_item_indexuser_pic"
-        android:layout_alignRight="@id/iv_item_indexuser_pic"
-        android:text="name"
-        android:gravity="center_vertical|right"
-        android:background="#88F8F7F7"
-        android:textColor="#000"
-        android:layout_alignBottom="@id/iv_item_indexuser_pic"
+        android:background="#fff"
+        android:orientation="horizontal" >
 
+        <ImageView
+            android:id="@+id/iv_item_indexuser_v"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_v" />
 
-        />
+        <TextView
+            android:id="@+id/tv_item_index_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="name"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:textColor="#000" />
+        <RelativeLayout 
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+           
+            
+            >
+            
+            <TextView 
+                android:id="@+id/tv_item_index_user_introduction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="金牌主持人"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                />
+            
+        </RelativeLayout>
+        
+        
+    </LinearLayout>
 
-
-</RelativeLayout>
+</LinearLayout>
