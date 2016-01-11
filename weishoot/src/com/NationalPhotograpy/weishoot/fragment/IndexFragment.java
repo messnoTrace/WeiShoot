@@ -96,6 +96,7 @@ public class IndexFragment  extends Fragment{
 		View view=inflater.inflate(R.layout.fragment_index, null);
 		initView(view);
 		bindListener();
+        loadBanner();
 		return view;
 	}
 
@@ -230,7 +231,7 @@ public class IndexFragment  extends Fragment{
 	    private void loadData(int page)
 	    {
 
-	        loadBanner();
+
 	        loadUser(page);
 	        loadPhoto(page);
 	    }

@@ -201,7 +201,7 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 //        ShareSDK.initSDK(this);
         // 读取联系人数据库
         QueryAttention();
-//        requestGetNewVersion();
+        requestGetNewVersion();
     }
 
     private void QueryAttention() {

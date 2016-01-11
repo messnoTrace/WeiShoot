@@ -15,6 +15,7 @@
         android:id="@+id/tv_item_index_photo_des"
         android:layout_width="match_parent"
         android:background="#fff"
+        android:textColor="#000"
         android:layout_height="wrap_content"
         android:text="des" />
 
