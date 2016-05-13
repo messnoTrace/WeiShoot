@@ -72,7 +72,7 @@ public class WelcomeActivity extends BaseActivity {
         new Thread() {
             public void run() {
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(6000);
                 } catch (InterruptedException e) {
                 } finally {
                     if (flag) {

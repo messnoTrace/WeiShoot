@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.VpnService;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -28,9 +29,12 @@ import android.widget.Toast;
 
 import com.Dailyfood.meirishejian.R;
 import com.NationalPhotograpy.weishoot.TopicDetailActivity;
+import com.NationalPhotograpy.weishoot.activity.WebActivity;
 import com.NationalPhotograpy.weishoot.activity.shouye.UserInfoDetialActivity;
 import com.NationalPhotograpy.weishoot.adapter.CommomAdapter;
 import com.NationalPhotograpy.weishoot.adapter.CommomViewHolder;
+import com.NationalPhotograpy.weishoot.adapter.LocalImageHolderView;
+import com.NationalPhotograpy.weishoot.adapter.NetworkImageHolderView;
 import com.NationalPhotograpy.weishoot.bean.BannerBean;
 import com.NationalPhotograpy.weishoot.bean.BannerBean.Banner;
 import com.NationalPhotograpy.weishoot.net.HttpUrl;
@@ -44,6 +48,9 @@ import com.NationalPhotograpy.weishoot.view.FinalScrollView.OnScrollChangedListe
 import com.NationalPhotograpy.weishoot.view.LazyScrollView;
 import com.NationalPhotograpy.weishoot.view.LazyScrollView.OnScrollListener;
 import com.NationalPhotograpy.weishoot.view.UnScrollableListView;
+import com.NationalPhotograpy.weishoot.view.convenientbanner.ConvenientBanner;
+import com.NationalPhotograpy.weishoot.view.convenientbanner.holder.CBViewHolderCreator;
+import com.NationalPhotograpy.weishoot.view.convenientbanner.listener.OnItemClickListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.HttpUtils;
@@ -54,8 +61,9 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
-public class IndexFragment  extends Fragment{
+public class IndexFragment  extends Fragment implements OnItemClickListener{
 	
 
     private SwipeRefreshLayout sfl_index;
@@ -77,6 +85,8 @@ public class IndexFragment  extends Fragment{
     private List<Banner>list_user;
     private List<Banner>list_photo;
     
+    private ConvenientBanner convenienbanner;
+    
     
     private FinalScrollView scrollview;
 
@@ -88,6 +98,8 @@ public class IndexFragment  extends Fragment{
 
     private int currentPage=1;
     
+    
+    private List<String>imagelist;
     
 	
 	@Override
@@ -113,6 +125,9 @@ public class IndexFragment  extends Fragment{
 
         uslv_user=(UnScrollableListView) parentView.findViewById(R.id.uslv_index_user);
         uslv_photo=(UnScrollableListView) parentView.findViewById(R.id.uslv_index_photo);
+        
+        convenienbanner=(ConvenientBanner) parentView.findViewById(R.id.convenientBanner);
+        
 
         init();
         uslv_user.setFocusable(false);
@@ -182,6 +197,7 @@ public class IndexFragment  extends Fragment{
                 .showImageOnFail(R.drawable.ic_stubirght)
                         .cacheInMemory(true) // 1.8.6包使用时候，括号里面传入参数true
                         .cacheOnDisc(true) // 1.8.6包使用时候，括号里面传入参数true
+                        .imageScaleType(ImageScaleType.NONE)
                         .build();
 	               final ImageView imageView= (ImageView) mHolder.getConvertView().findViewById(R.id.iv_item_index_photo);
 	               final LinearLayout.LayoutParams params= (LinearLayout.LayoutParams) imageView.getLayoutParams();
@@ -211,7 +227,8 @@ public class IndexFragment  extends Fragment{
 	        		.showImageForEmptyUri(R.drawable.ic_stubleft) // resource or drawable
 	                .showImageOnFail(R.drawable.ic_stubleft)
 	                        .cacheInMemory(true) // 1.8.6包使用时候，括号里面传入参数true
-	                        .cacheOnDisc(true) // 1.8.6包使用时候，括号里面传入参数true
+	                        .cacheOnDisc(true)// 1.8.6包使用时候，括号里面传入参数true
+	                        .imageScaleType(ImageScaleType.NONE)
 	                        .build();
 	                com.nostra13.universalimageloader.core.ImageLoader.getInstance().displayImage(item.ImgUrl, imageView,defaultOptions);
 	                mHolder.setText(R.id.tv_item_index_user_name,item.Title);
@@ -266,8 +283,8 @@ public class IndexFragment  extends Fragment{
 	                  }.getType());
 	                  
 	                  if(bannerBean!=null){
-	                	  List<Banner> data=bannerBean.data;
-	                	  initBanner(data);
+	                	  list_banners=bannerBean.data;
+	                	  initBanner(list_banners);
 	                  }
 
 	              }
@@ -373,80 +390,112 @@ public class IndexFragment  extends Fragment{
 	     * init banner
 	     */
 	    private void initBanner(List<Banner> list){
-
-	        if(bannerView!=null){
-	            bannerView.removeAllViews();
-	        }else {
-	            bannerView=new RelativeLayout(mContext);
-	        }
-
+	    	imagelist=new ArrayList<String>();
+	    	for(Banner banner:list)
+	    	{
+	    		imagelist.add(banner.ImgUrl);
+	    	}
+	    	convenienbanner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
+                @Override
+                public NetworkImageHolderView createHolder() {
+                    return new NetworkImageHolderView();
+                }
+            }, imagelist)
+	    	.setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
+	    	 .setPageIndicator(new int[]{R.drawable.ic_focus_select, R.drawable.ic_focus})
+	    	 .setOnItemClickListener(this);;
+	    	
+	    	
+//	        if(bannerView!=null){
+//	            bannerView.removeAllViews();
+//	        }else {
+//	            bannerView=new RelativeLayout(mContext);
+//	        }
 
 	        double width = Constant.SCREEN_WIDTH;
 
 	        double height=Constant.SCREEN_HEIGHT/8*2;
-	        LinearLayout ll = new LinearLayout(mContext);
-	        ll.setOrientation(LinearLayout.HORIZONTAL);
-	        ll.setPadding(ViewUtil.dip2px(mContext,10), 0, ViewUtil.dip2px(mContext,10), 0);
-
-	        // 初始化点
-	        ArrayList<View> dots = new ArrayList<View>();
-	        ArrayList<String> pics = new ArrayList<String>();
-
-	        //TODO 测试，加载本地图片
-	        int[]respic=new int[list.size()];
-	        String[] titles = new String[list.size()];
-
-	        // 初始化标题
-	        TextView tv = new TextView(mContext);
-	        tv.setTextColor(Color.BLACK);
-	        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-	        tv.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
-	        tv.setLines(1);
-	        tv.setEllipsize(TextUtils.TruncateAt.END);
-	        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-	        lp2.weight = 1;
-	        ll.addView(tv, lp2);
-
-	        lp2 = new LinearLayout.LayoutParams(ViewUtil.dip2px(mContext, 6), ViewUtil.dip2px(mContext,6));
-	        lp2.gravity = Gravity.CENTER_VERTICAL;
-	        lp2.leftMargin = ViewUtil.dip2px(mContext,4);
-	        for (int i = 0; i < list.size(); i++) {
-	            pics.add(list.get(i).ImgUrl);
-//	            respic[i]=R.drawable.ic_launcher;
-	            //TODO 将标题注释掉
-//				titles[i] = list.get(i).getTitle();
-	            titles[i]="";
-	            View view = new View(mContext);
-	            view.setBackgroundResource(R.drawable.ic_focus_select);
-	            ll.addView(view, lp2);
-	            dots.add(view);
-	        }
-
-	        autoViewPager = new AutoScrollViewPager(mContext, dots, R.drawable.ic_focus_select, R.drawable.ic_focus, new AutoScrollViewPager.OnPagerClickCallback() {
-	            @Override
-	            public void onPagerClick(int position) {
-
-	                // item点击事件
-	            }
-	        });
-
-	        //TODO
-	        autoViewPager.setUriList(pics);
-//	        autoViewPager.setResImageIds(respic);
-	        autoViewPager.setTitle(tv, titles);
-
-	        autoViewPager.startRoll();
-	        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (int) height);
-	        bannerView.addView(autoViewPager, lp);
-
-	        // 添加标题和点
-	        RelativeLayout.LayoutParams lp3 = new RelativeLayout.LayoutParams((int) width, ViewUtil.dip2px(mContext,30));
-	        lp3.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-	        bannerView.addView(ll, lp3);
-	        bannerView.setGravity(Gravity.CENTER_HORIZONTAL);
-	        fl_index_content.removeAllViews();
-	        fl_index_content.addView(bannerView);
+	        
+	        fl_index_content.getLayoutParams().height=(int)height;
+	        
+//	        LinearLayout ll = new LinearLayout(mContext);
+//	        ll.setOrientation(LinearLayout.HORIZONTAL);
+//	        ll.setPadding(ViewUtil.dip2px(mContext,10), 0, ViewUtil.dip2px(mContext,10), 0);
+//
+//	        // 初始化点
+//	        ArrayList<View> dots = new ArrayList<View>();
+//	        ArrayList<String> pics = new ArrayList<String>();
+//
+//	        //TODO 测试，加载本地图片
+//	        int[]respic=new int[list.size()];
+//	        String[] titles = new String[list.size()];
+//
+//	        // 初始化标题
+//	        TextView tv = new TextView(mContext);
+//	        tv.setTextColor(Color.BLACK);
+//	        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+//	        tv.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+//	        tv.setLines(1);
+//	        tv.setEllipsize(TextUtils.TruncateAt.END);
+//	        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+//	        lp2.weight = 1;
+//	        ll.addView(tv, lp2);
+//
+//	        lp2 = new LinearLayout.LayoutParams(ViewUtil.dip2px(mContext, 6), ViewUtil.dip2px(mContext,6));
+//	        lp2.gravity = Gravity.CENTER_VERTICAL;
+//	        lp2.leftMargin = ViewUtil.dip2px(mContext,4);
+//	        for (int i = 0; i < list.size(); i++) {
+//	            pics.add(list.get(i).ImgUrl);
+////	            respic[i]=R.drawable.ic_launcher;
+//	            //TODO 将标题注释掉
+////				titles[i] = list.get(i).getTitle();
+//	            titles[i]="";
+//	            View view = new View(mContext);
+//	            view.setBackgroundResource(R.drawable.ic_focus_select);
+//	            ll.addView(view, lp2);
+//	            dots.add(view);
+//	        }
+//
+//	        autoViewPager = new AutoScrollViewPager(mContext, dots, R.drawable.ic_focus_select, R.drawable.ic_focus, new AutoScrollViewPager.OnPagerClickCallback() {
+//	            @Override
+//	            public void onPagerClick(int position) {
+//
+//	                // item点击事件
+//	            	Intent intent=new Intent();
+//	            	intent.setClass(mContext, WebActivity.class);
+//	            	intent.putExtra("title", list_banners.get(position).Title);
+//	            	intent.putExtra("url", list_banners.get(position).Url);
+//	            	startActivity(intent);
+//	            }
+//	        });
+//
+//	        //TODO
+//	        autoViewPager.setUriList(pics);
+////	        autoViewPager.setResImageIds(respic);
+//	        autoViewPager.setTitle(tv, titles);
+//
+//	        autoViewPager.startRoll();
+//	        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, (int) height);
+//	        bannerView.addView(autoViewPager, lp);
+//
+//	        // 添加标题和点
+//	        RelativeLayout.LayoutParams lp3 = new RelativeLayout.LayoutParams((int) width, ViewUtil.dip2px(mContext,30));
+//	        lp3.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+//	        bannerView.addView(ll, lp3);
+//	        bannerView.setGravity(Gravity.CENTER_HORIZONTAL);
+//	        fl_index_content.removeAllViews();
+//	        fl_index_content.addView(bannerView);
 
 
 	    }
+
+
+		@Override
+		public void onItemClick(int position) {
+        	Intent intent=new Intent();
+        	intent.setClass(mContext, WebActivity.class);
+        	intent.putExtra("title", list_banners.get(position).Title);
+        	intent.putExtra("url", list_banners.get(position).Url);
+        	startActivity(intent);
+		}
 }

@@ -12,5 +12,6 @@
     <string name="title_activity_find_people">FindPeopleActivity</string>
     <string name="title_activity_look_around">LookAroundActivity</string>
     <string name="title_activity_topic_detail">TopicDetailActivity</string>
+    <string name="title_activity_web">WebActivity</string>
 
 </resources>

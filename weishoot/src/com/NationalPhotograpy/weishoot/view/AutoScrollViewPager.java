@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -73,7 +74,12 @@ public class AutoScrollViewPager extends ViewPager {
 				long duration = System.currentTimeMillis() - start;
 				if (duration <= 400) {
 					if (onPagerClickCallback != null)
+					{
+						Log.d("===========", "currentItem="+currentItem);
+						Log.d("===========", "currentItem % size="+currentItem % size);
 						onPagerClickCallback.onPagerClick(currentItem % size);
+					}
+
 				}
 				startRoll();
 				break;
@@ -218,7 +224,7 @@ public class AutoScrollViewPager extends ViewPager {
 		}
 
 		handler.removeCallbacks(viewPagerTask);
-		handler.postDelayed(viewPagerTask, 3000);
+		handler.postDelayed(viewPagerTask, 6000);
 	}
 
 	public void stopRoll() {
@@ -275,6 +281,13 @@ public class AutoScrollViewPager extends ViewPager {
 			((ViewPager) container).addView(view);
 			view.setScaleType(ScaleType.FIT_XY);
 			view.setOnTouchListener(myOnTouchListener);
+//			view.setOnClickListener(new OnClickListener() {
+//				
+//				@Override
+//				public void onClick(View v) {
+//					onPagerClickCallback.onPagerClick(position);
+//				}
+//			});
 			// ImageView imageView = (ImageView) view.findViewById(R.id.image);
 			if (isShowResImage) {
 				// imageView.setImageResource(resImageIds[position%size]);

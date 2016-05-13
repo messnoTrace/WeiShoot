@@ -25,5 +25,9 @@
             <enum name="pull_out" value="1" />
         </attr>
     </declare-styleable>
+    
+        <declare-styleable name="ConvenientBanner">
+        <attr name="canLoop" format="boolean" />
+    </declare-styleable>
 
 </resources>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.Dailyfood.meirishejian"
-    android:versionCode="100"
-    android:versionName="1.0.0" >
+    android:versionCode="220"
+    android:versionName="2.2.0" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -17,7 +17,6 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="fK9ZfkLAK756WGfGF0Xgqmx3" />
-
         <meta-data
             android:name="AuthorizeAdapter"
             android:value=".adapter.MyShareAdapter" />
@@ -184,8 +183,7 @@
 
                 <data
                     android:host="com.NationalPhotograpy.weishoot"
-                    android:pathPrefix="/conversationlist"
-                   />
+                    android:pathPrefix="/conversationlist" />
             </intent-filter>
         </activity>
         <activity
@@ -199,8 +197,7 @@
 
                 <data
                     android:host="com.NationalPhotograpy.weishoot"
-                    android:pathPrefix="/conversation/"
-                     />
+                    android:pathPrefix="/conversation/" />
             </intent-filter>
         </activity>
         <activity
@@ -242,6 +239,7 @@
                 <action android:name="cn.jpush.android.intent.PUSH_TIME" />
             </intent-filter>
         </service>
+
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
             android:enabled="true" >
@@ -292,9 +290,6 @@
             android:name="JPUSH_APPKEY"
             android:value="4f3a2829e53af22481c923fa" />
 
-     
-
-
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -328,6 +323,10 @@
         <activity
             android:name="com.NationalPhotograpy.weishoot.TopicDetailActivity"
             android:label="@string/title_activity_topic_detail" >
+        </activity>
+        <activity
+            android:name="com.NationalPhotograpy.weishoot.activity.WebActivity"
+            android:label="@string/title_activity_web" >
         </activity>
     </application>
 

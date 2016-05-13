@@ -38,4 +38,5 @@
   <item type="id" name="split">false</item>
   
   <item type="id" name="mylist"/>
+      <item name="cb_item_tag" type="id"></item>
 </resources>
